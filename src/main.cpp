@@ -527,7 +527,8 @@ void preExchange(arMasterSlaveFramework& framework) {
 	
 	
 	// Detect right hand collisions.
-	rightHand.detectCollisions(rightHand, objects);
+//	rightHand.detectCollisions(rightHand, objects);
+	rightHand.extend(rightHand, objects);
 	// Extend left ray to collision point.
 	leftHand.extend(leftHand, objects);
 	// Update input state (placement matrix & button states) of our effectors.

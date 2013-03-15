@@ -238,101 +238,68 @@ void LeftVirtualHand::draw() //const
 	// Always finish with glPopMatrix to match glPushMatrix above.
 	glPopMatrix();
 	
-//TODO move the following to a drawTablet method
+	drawTablet();
+}
+
+void LeftVirtualHand::drawTablet() const
+{
 	glPushMatrix();
-		//float distance = -2.f;
-		//glLoadIdentity();
+		//tablet position
 		glMultMatrixf(getBaseMatrix().v);
-		//glLoadMatrixf(getBaseMatrix().v);
-		//glTranslatef(0.0f, -2.0f, 0.0f); // Push eveything 5 units back into the scene, otherwise we won't see the primitive  
-		//glScalef(1.0/10.0, 1.0/10.0, 1.0/10.0);
-		glRotatef(90, 0.0,1.0,0.0);
+		glRotatef(90, 0.0,1.0,0.0); //tablet rotation
+		GLfloat tabletyPos = 2.0;
+		glTranslatef(0.0,tabletyPos,0.0); //set y position
+
 		glPushAttrib(GL_COLOR_BUFFER_BIT);
-		glClearColor(0, 0, 0, 0);
-		
-		//glScalef(2.0/12.0, 2.0/12.0, _currentLength);
-		
-		//GLfloat matrix[];
-		//matrix = getBaseMatrix().v;
-		
-		GLfloat navx = ar_getNavMatrix().v[12];
-		GLfloat navy = ar_getNavMatrix().v[13];
-		GLfloat navz = ar_getNavMatrix().v[14];
-		
-		
-		GLfloat x = getBaseMatrix().v[12]-navx;
-		GLfloat y = getBaseMatrix().v[13]-navy;
-		GLfloat z = getBaseMatrix().v[14]-navz;
-		
-		//glTranslatef(x, y, z);
-		//glTranslatef(navx, navy, navz);
-		glTranslatef(0.0,2.0,0.0);
-		//glScalef(12.0/2.0, 12.0/2.0, 1/_currentLength);
-		//glutSolidCube(1.0);
-		
-		GLfloat height = 0.5f;
-		GLfloat width = 1.f;
-		
-		glBegin(GL_QUADS); // Start drawing a quad primitive  
-		
-		glVertex3f(-width, -height, +0.0f); // The bottom left corner  
-		glVertex3f(-width,  height, +0.0f); // The top left corner  
-		glVertex3f( width,  height, +0.0f); // The top right corner  
-		glVertex3f( width, -height, +0.0f); // The bottom right corner  
-		  
-		glEnd();  
+			glClearColor(0, 0, 0, 0); //tablet color
+			
+			GLfloat height = 0.5f;
+			GLfloat width = 1.f;
+			
+			glBegin(GL_QUADS); // Start drawing a quad primitive  
+				glVertex3f(-width, -height, +0.0f); // The bottom left corner  
+				glVertex3f(-width,  height, +0.0f); // The top left corner  
+				glVertex3f( width,  height, +0.0f); // The top right corner  
+				glVertex3f( width, -height, +0.0f); // The bottom right corner  
+			glEnd();  
+			
 		glPopAttrib();
-		//string hihi = "hihi";
-		drawText(0.0f, string("hihi"));
+		
+		//TODO, set text for tablet ie get from menu
+		drawText(0.0f, string("settings"));
+		drawText(200.0f, string("import"));
 	glPopMatrix();
+
 }
 
 void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 {
 	glPushMatrix();
-		glPushAttrib(GL_COLOR_BUFFER_BIT);
-		glColor3f(1, 1, 1);
-		//glLoadIdentity(); // Load the Identity Matrix to reset our drawing locations  
-		  
-		//glTranslatef(0.0f, 0.0, distance); // Push eveything 5 units back into the scene, otherwise we won't see the primitive  
-		
 		glScalef(0.001, 0.001, 0.001);
 		glTranslatef(0.0, ypos, 1.5);
-		//glRotatef(-20, 1.0, 0.0, 0.0);
-		
-
-//cout << "starting vd.draw4\n" << flush;
-
+		glPushAttrib(GL_COLOR_BUFFER_BIT);
+		glColor3f(1, 1, 1);			
 			int lenghOfQuote = min((int)text.length(),300);
-			glPushMatrix();
-			//glTranslatef(-(lenghOfQuote*37), 0.0, 0.0);
-			glTranslatef(-770, 0.0, 0.0);
-			if(selected)
-			{
-				glPushAttrib(GL_COLOR_BUFFER_BIT);
-				glColor3f(1, 0, 0);
-			}
-			//cout << "starting vd.draw5\n" << flush;
-			if(lenghOfQuote < 300)
-			{
-			for (int i = 0; i < lenghOfQuote; i++)
-			{
-			//cout << "starting vd.draw6   " << lenghOfQuote << flush;
-			//cout << "text:" << text[i] << "\n" << flush;
-				//glColor3f((UpwardsScrollVelocity/10)+300+(l*10),(UpwardsScrollVelocity/10)+300+(l*10),0.0);
-				glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
-			//	cout << "end vd.draw6\n" << flush;
-			}
-			}
-			if(selected)
-			{
-				glPopAttrib();
-			}
-			//cout << "end vd.draw5\n" << flush;
+			glPushMatrix();			
+				glTranslatef(-770, 0.0, 0.0);
+				if(selected)
+				{
+					glPushAttrib(GL_COLOR_BUFFER_BIT);
+					glColor3f(1, 0, 0);
+				}
+				if(lenghOfQuote < 300)
+				{
+					for (int i = 0; i < lenghOfQuote; i++)
+					{
+						glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+					}
+				}
+				if(selected)
+				{
+					glPopAttrib();
+				}
 			glPopMatrix();
-			//cout << "end vd.draw4\n" << flush;
-		glPopAttrib();
-			
+		glPopAttrib();			
 	glPopMatrix();
 }
 

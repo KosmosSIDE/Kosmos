@@ -74,6 +74,7 @@ class LeftVirtualHand:public arEffector {
 		// Draw a representation for the right hand.
 		void draw(); //const;
 		void drawText(float ypos, string text, bool selected = false) const;
+		void drawTablet() const;
 		
 		float getLength();
 	

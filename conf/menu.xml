@@ -1,0 +1,24 @@
+<menus>
+	<menu>
+		<name>main</name>
+		<options>
+			<option>
+				<type>menu</type>
+				<name>settings</name>
+			</option>
+		</options>
+	</menu>
+	<menu>
+		<name>settings</name>
+		<options>
+			<option>
+				<type>menu</type>
+				<name>gravity</name>
+			</option>
+			<option>
+				<type>toggle</type>
+				<name>collision</name>
+			</option>
+		</options>
+	</menu>
+</menus>

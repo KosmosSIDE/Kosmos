@@ -14,7 +14,7 @@
 class RightVirtualHand:public arEffector {
 
 	public:
-	
+		bool ray;
 		// Default constructor. 
 		// Parameters for arEffector are:
 		//		matrixIndex - index of matrix to use as position (1 is the right hand)
@@ -33,15 +33,25 @@ class RightVirtualHand:public arEffector {
 			}
 		}
 		
-		
+			ray = true;
 			// Set "tip" or point of interaction. This is primarily for rays.
 			setTipOffset(arVector3(0, 0, 0));
 			
 			// Set to interact with closest object within 0.5 ft. of tip using a distance selector.
 			// See szg/src/interaction/arInteractionSelector.h for alternative selectors.
 			_size = 0.5;
-			_selector.setMaxDistance(_size);
-			setInteractionSelector(_selector);
+			if(!ray)
+			{
+				_selector.setMaxDistance(_size);
+				setInteractionSelector(_selector);
+			}
+			else
+			{
+				_currentLength = 5.0;
+				setTipOffset(arVector3(0, 0, -_currentLength));
+				_interactionDistance = 0.5;
+				setInteractionSelector(arDistanceInteractionSelector(_interactionDistance));
+			}
 			
 			// Create grab condition when "A" button is pressed more than 0.5 to 
 			// translate the selected object without rotating it.
@@ -66,12 +76,16 @@ class RightVirtualHand:public arEffector {
 		
 		// Resizes distance selector for basic collision detection.
 		void detectCollisions(arEffector& self, vector<arInteractable*>& objects);
+		void extend(arEffector& self, arInteractable* object, float maxLength = 15.0);
+		void extend(arEffector& self, vector<arInteractable*>& objects, float maxLength = 15.0);
 		
 		// Draw a representation for the right hand.
 		void draw() ;//const;
 	
 	private:
-	
+		float _currentLength;
+		float _interactionDistance;
+		
 		float _size;								// effector size (length, height, and width)
 		arDistanceInteractionSelector _selector;	// distance selector
 	

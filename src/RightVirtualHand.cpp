@@ -83,6 +83,43 @@ void RightVirtualHand::detectCollisions(arEffector& self, vector<arInteractable*
 	}
 }
 
+void RightVirtualHand::extend(arEffector& self, arInteractable* object, float maxLength) {
+
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+
+	// Reset tip to 0.0 ft. length.
+	_currentLength = 0.0;
+	setTipOffset(arVector3(0, 0, -_currentLength));
+
+	// Check if the maximum length has been reached or an object has been touched.
+	while(_currentLength < maxLength && !ar_pollingInteraction(self, object)) {
+		// If not, increase tip length by interaction distance.
+		_currentLength += _interactionDistance;
+		setTipOffset(arVector3(0, 0, -_currentLength));
+	}
+}
+
+
+void RightVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects, float maxLength) {
+
+	list<arInteractable*> objectlist;
+	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
+
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+
+	// Reset tip to 0.0 ft. length.
+	_currentLength = 0.0;
+	setTipOffset(arVector3(0, 0, -_currentLength));
+
+	// Check if the maximum length has been reached or an object has been touched.
+	while(_currentLength < maxLength && !ar_pollingInteraction(self, objectlist)) {
+		// If not, increase tip length by interaction distance.
+		_currentLength += _interactionDistance;
+		setTipOffset(arVector3(0, 0, -_currentLength));
+	}
+}
 
 // Right hand effector's draw function.
 void RightVirtualHand::draw() //const {
@@ -93,19 +130,27 @@ void RightVirtualHand::draw() //const {
 	glPushMatrix();
 		// Set to center of effector.
 		glMultMatrixf(getCenterMatrix().v);
-		// Scale to make 1 ft. cube into a 0.5 ft. cube to match interaction distance.
-	//	glScalef(0.5, 0.5, 0.5);
-		// Draw the right hand red.
-	//	glColor3f(1.0, 0.0, 0.0);
-		// Create the 1 ft. cube.
-	//	glutSolidCube(1.0);
-		// Superimpose slightly larger black wireframe cube to make it easier to see shape.
-	//	glColor3f(0.0, 0.0, 0.0);
-	//	glutWireCube(1.01);
-		glRotatef(180,0,1,0);
-		glRotatef(90,0,0,1);
-		glScalef(-1,1,1);
-		loadedOBJ.draw();
+		if(!ray)
+		{
+			glRotatef(180,0,1,0);
+			glRotatef(90,0,0,1);
+			glScalef(-1,1,1);
+			loadedOBJ.draw();
+		}
+		else
+		{
+			glPushAttrib(GL_COLOR_BUFFER_BIT);
+			
+			glScalef(2.0/12.0, 2.0/12.0, _currentLength);
+			// Draw the left hand red.
+			glColor3f(1.0, 0.0, 0.0);
+			// Create the 1 ft. cube.
+			glutSolidCube(1.0);
+			glColor3f(0.0, 0.0, 0.0);
+			glutWireCube(1.01);
+			
+			glPopAttrib();
+		}
 	
 	// Always finish with glPopMatrix to match glPushMatrix above.
 	glPopMatrix();
