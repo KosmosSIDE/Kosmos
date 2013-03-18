@@ -33,7 +33,7 @@ class RightVirtualHand:public arEffector {
 			}
 		}
 		
-			ray = true;
+			ray = false;
 			// Set "tip" or point of interaction. This is primarily for rays.
 			setTipOffset(arVector3(0, 0, 0));
 			

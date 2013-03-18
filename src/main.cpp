@@ -527,8 +527,15 @@ void preExchange(arMasterSlaveFramework& framework) {
 	
 	
 	// Detect right hand collisions.
-//	rightHand.detectCollisions(rightHand, objects);
-	rightHand.extend(rightHand, objects);
+	if(rightHand.ray)
+	{
+		rightHand.extend(rightHand, objects);
+	}
+	else
+	{
+		rightHand.detectCollisions(rightHand, objects);
+	}
+	
 	// Extend left ray to collision point.
 	leftHand.extend(leftHand, objects);
 	// Update input state (placement matrix & button states) of our effectors.
@@ -801,15 +808,16 @@ void renderPrimitive (float distance, bool separationLines = true)
 	  
 	glTranslatef(0.0f, 0.0f, distance); // Push eveything 5 units back into the scene, otherwise we won't see the primitive  
 	glPushAttrib(GL_COLOR_BUFFER_BIT);
-	glClearColor(0, 0, 0, 0);
-	glBegin(GL_QUADS); // Start drawing a quad primitive  
-	  
-	glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
-	glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
-	glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
-	glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
-	  
-	glEnd();  
+	//glClearColor(0, 0, 0, 0);
+	glColor3f(0.0, 0.0, 0.0);
+		glBegin(GL_QUADS); // Start drawing a quad primitive  
+		  
+			glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
+			glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
+			glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
+			glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
+		  
+		glEnd();  
 	glPopAttrib();
 	/*
 	Thanks to Gavin: http://www.opengl.org/discussion_boards/showthread.php/124875-How-to-draw-a-line-using-OpenGL-programme

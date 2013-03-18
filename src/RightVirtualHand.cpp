@@ -139,7 +139,7 @@ void RightVirtualHand::draw() //const {
 		}
 		else
 		{
-			glPushAttrib(GL_COLOR_BUFFER_BIT);
+			//glPushAttrib(GL_COLOR_BUFFER_BIT);
 			
 			glScalef(2.0/12.0, 2.0/12.0, _currentLength);
 			// Draw the left hand red.
@@ -149,7 +149,7 @@ void RightVirtualHand::draw() //const {
 			glColor3f(0.0, 0.0, 0.0);
 			glutWireCube(1.01);
 			
-			glPopAttrib();
+			//glPopAttrib();
 		}
 	
 	// Always finish with glPopMatrix to match glPushMatrix above.

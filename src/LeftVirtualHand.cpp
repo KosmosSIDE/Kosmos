@@ -251,7 +251,8 @@ void LeftVirtualHand::drawTablet() const
 		glTranslatef(0.0,tabletyPos,0.0); //set y position
 
 		glPushAttrib(GL_COLOR_BUFFER_BIT);
-			glClearColor(0, 0, 0, 0); //tablet color
+			//glClearColor(0, 0, 0, 0); //tablet color
+			glColor3f(0.0, 0.0, 0.0);
 			
 			GLfloat height = 0.5f;
 			GLfloat width = 1.f;
@@ -277,14 +278,14 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 	glPushMatrix();
 		glScalef(0.001, 0.001, 0.001);
 		glTranslatef(0.0, ypos, 1.5);
-		glPushAttrib(GL_COLOR_BUFFER_BIT);
+		//glPushAttrib(GL_COLOR_BUFFER_BIT);
 		glColor3f(1, 1, 1);			
 			int lenghOfQuote = min((int)text.length(),300);
 			glPushMatrix();			
 				glTranslatef(-770, 0.0, 0.0);
 				if(selected)
 				{
-					glPushAttrib(GL_COLOR_BUFFER_BIT);
+					//glPushAttrib(GL_COLOR_BUFFER_BIT);
 					glColor3f(1, 0, 0);
 				}
 				if(lenghOfQuote < 300)
@@ -296,10 +297,10 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 				}
 				if(selected)
 				{
-					glPopAttrib();
+					//glPopAttrib();
 				}
 			glPopMatrix();
-		glPopAttrib();			
+		//glPopAttrib();			
 	glPopMatrix();
 }
 
