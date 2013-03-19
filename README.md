@@ -3,7 +3,7 @@ Kosmos
 
 the kosmos project!
 
-An <a hrref="http://syzygy.isl.uiuc.edu/aszgard/index.html" title="Aszgard page">Aszgard</a> application.
+An <a href="http://syzygy.isl.uiuc.edu/aszgard/index.html" title="Aszgard page">Aszgard</a> application.
 The above link is the homepage for Aszgard which in theory will run this application, however we are using a modified version.
 
 This project is an IDE for developing Aszgard applications. 
