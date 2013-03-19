@@ -26,14 +26,15 @@ class RightVirtualHand:public arEffector {
 		//		loAxis - index in device array of desired first axis, (0 for right Wiimote)
 		//				 which gets mapped to virtual axis index 0 by default
 		//		axisOffset - offset for mapping virtual axes (0 for no offset)
-		RightVirtualHand(const string& filename = ""):arEffector(1, 11, 0, 0, 2, 0, 0) {
+		RightVirtualHand(bool rayray, const string& filename = ""):arEffector(1, 11, 0, 0, 2, 0, 0) {
 		if(filename != "") {
 			if(!loadedOBJ.readOBJ(filename, "data/obj")) { 
 				cout << "Cound not load OBJ file: " << filename << '\n';
 			}
 		}
 		
-			ray = false;
+			ray = rayray;
+			cout << "ray:" << ray << "\n" << flush;
 			// Set "tip" or point of interaction. This is primarily for rays.
 			setTipOffset(arVector3(0, 0, 0));
 			
@@ -78,6 +79,8 @@ class RightVirtualHand:public arEffector {
 		void detectCollisions(arEffector& self, vector<arInteractable*>& objects);
 		void extend(arEffector& self, arInteractable* object, float maxLength = 15.0);
 		void extend(arEffector& self, vector<arInteractable*>& objects, float maxLength = 15.0);
+		
+		void reInitialize(bool rayray, const string& filename = "");
 		
 		// Draw a representation for the right hand.
 		void draw() ;//const;

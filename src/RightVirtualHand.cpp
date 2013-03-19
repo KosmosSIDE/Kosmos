@@ -157,3 +157,53 @@ void RightVirtualHand::draw() //const {
 }
 
 
+void RightVirtualHand::reInitialize(bool rayray, const string& filename)
+{
+	if(filename != "") {
+		if(!loadedOBJ.readOBJ(filename, "data/obj")) { 
+			cout << "Cound not load OBJ file: " << filename << '\n';
+		}
+	}
+	
+		ray = rayray;
+		cout << "ray:" << ray << "\n" << flush;
+		// Set "tip" or point of interaction. This is primarily for rays.
+		setTipOffset(arVector3(0, 0, 0));
+		
+		// Set to interact with closest object within 0.5 ft. of tip using a distance selector.
+		// See szg/src/interaction/arInteractionSelector.h for alternative selectors.
+		_size = 0.5;
+		if(!ray)
+		{
+			_selector.setMaxDistance(_size);
+			setInteractionSelector(_selector);
+		}
+		else
+		{
+			_currentLength = 5.0;
+			setTipOffset(arVector3(0, 0, -_currentLength));
+			_interactionDistance = 0.5;
+			setInteractionSelector(arDistanceInteractionSelector(_interactionDistance));
+		}
+		
+		// Create grab condition when "A" button is pressed more than 0.5 to 
+		// translate the selected object without rotating it.
+		// Wiimote index/button pairs:
+		//		0	"2"
+		//		1	"1"
+		//		2	"B"
+		//		3	"A"
+		//		4	"-"
+		//		5	"+"
+		//		6	"L"
+		//		7	"D"
+		//		8	"R"
+		//		9	"U"
+		//		10	"H" or Home
+		setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandTranslationDrag());
+		
+		// Create grab condition when "B" button is pressed more than 0.5 to 
+		// rotate and translate the selected object.
+		setDrag(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), arWandRelativeDrag());
+}
+

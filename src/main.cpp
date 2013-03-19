@@ -58,6 +58,7 @@ static double pressed1 = 0.0;
 const double threshold = 1000.0;    // in millis
 static double pressedImport = 0.0;
 static double dirButtonPress = 0.0;
+static double handButtonPress = 0.0;
 
 
 list<Object*> leftSelectedObjects;
@@ -82,7 +83,7 @@ Object thePiano(3, 2, 2, 2, "piano.obj");
 vector<arInteractable*> objects;
 
 // Global effectors.
-RightVirtualHand rightHand("handy.obj"); // loads obj for hand
+RightVirtualHand rightHand(false, "handy.obj"); // loads obj for hand
 LeftVirtualHand leftHand("staff.obj");
 
 // Global sound variables.
@@ -289,6 +290,17 @@ void preExchange(arMasterSlaveFramework& framework) {
 			pressedImport = currentTime;
 			virtualdirectory.findingFile = false;
 		}
+	}
+	
+	if (rightHand.getOnButton(10) && (currentTime-handButtonPress)>150)
+	{
+		bool tempy = (rightHand.ray==true)?false:true;
+		cout << "changed hand" << tempy << rightHand.ray << "\n" << flush;
+		
+		//rightHand.~RightVirtualHand();
+		//rightHand = new (&rightHand) RightVirtualHand(tempy, "handy.obj"); 
+		rightHand.reInitialize(tempy, "handy.obj");
+		handButtonPress = currentTime;
 	}
 	
 	
