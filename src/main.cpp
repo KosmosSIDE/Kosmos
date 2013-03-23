@@ -78,6 +78,7 @@ VirtualDirectory virtualdirectory;
 Object theCello(3, 0.5, 0.5, 0.5, "cello.obj");
 Object theViolin(3, 0.5, 0.5, 0.5, "violin.obj");
 Object thePiano(3, 2, 2, 2, "piano.obj");
+//Object theUser(2, 0.5, 0.5, 0.5, "user.obj"); //set the user scale to 0.5,0.5,0.5 and the type to 2
 
 // List of objects.
 vector<arInteractable*> objects;
@@ -163,14 +164,15 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	// Initialize application variables here.
 	
 	// Move object's to initial positions.
-	theCello.setMatrix(ar_translationMatrix(0, 4, -8));
-	theViolin.setMatrix(ar_translationMatrix(2, 4, -8));
-	thePiano.setMatrix(ar_translationMatrix(-2, 4, -8));
+	theCello.setMatrix(ar_translationMatrix(0, 4, -4));//(0, 4, -4));
+	theViolin.setMatrix(ar_translationMatrix(2, 4, -4));
+	thePiano.setMatrix(ar_translationMatrix(-2, 4, -4));
+	//theUser.setMatrix(ar_translationMatrix(0, 0, 0)); //set user to 0,0,0
 	// Keep list of objects to interact with.
 	objects.push_back(&theCello);
 	objects.push_back(&theViolin);
 	objects.push_back(&thePiano);
-	
+	//objects.push_back(&theUser);
 	
 	// Create sound transform.
 	soundTransformID = dsTransform("world", framework.getNavNodeName(), ar_scaleMatrix(1.0));
@@ -194,6 +196,9 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	cpvSound = dsLoop("cpv", "world", "cpv.mp3", 1, 1.0, arVector3(0, 5, -6)); 
 	
 	musicNotey.readOBJ("MusicNote.obj","data/obj");
+	
+	ar_navRotate( arVector3(0,1,0), 135 );
+	ar_navTranslate( arVector3(0,0,6) );
 	
 	// Return true if everything is initialized correctly.
 	return true;
