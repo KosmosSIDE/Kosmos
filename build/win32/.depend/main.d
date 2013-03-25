@@ -227,4 +227,7 @@ main.o: ../../src/main.cpp C:/aszgard5/szg/src/language/arPrecompiled.h \
   ../../src/main.h ../../src/Object.h ../../src/LeftVirtualHand.h \
   ../../src/selectedObjects.h ../../src/RightVirtualHand.h \
   ../../src/CallFunction.h ../../src/Import.h \
-  ../../src/VirtualDirectory.h
+  ../../src/VirtualDirectory.h ../../src/ProjectManager.h \
+  ../../src/../lib/rapidxml/rapidxml.hpp \
+  ../../src/../lib/rapidxml/rapidxml_print.hpp \
+  ../../src/../lib/rapidxml/rapidxml.hpp

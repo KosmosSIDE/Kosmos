@@ -30,6 +30,7 @@
 #include "CallFunction.h"
 #include "Import.h"
 #include "VirtualDirectory.h"
+#include "ProjectManager.h"
 
 // Feet to local units conversion.
 // For example, if you use centimeters to create your models, then set this to 12*2.54 or 30.48 to

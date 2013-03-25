@@ -59,7 +59,8 @@ OBJS := \
   RightVirtualHand$(OBJ_SUFFIX) \
   VirtualDirectory$(OBJ_SUFFIX) \
   CallFunction$(OBJ_SUFFIX) \
-  Import$(OBJ_SUFFIX)
+  Import$(OBJ_SUFFIX) \
+  ProjectManager$(OBJ_SUFFIX)
 
 # It is possible to add flags to the compile line like so. All executables
 # and objects will be compiled with this flag.
