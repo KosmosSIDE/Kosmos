@@ -58,6 +58,7 @@ class Object:public arInteractableThing {
 		
 		// Draw the object's representation.
 		void draw();
+		void normalize() { loadedOBJ.normalizeModelSize(); }
 		
 		// Get object's type.
 		int getType() { return _type; }

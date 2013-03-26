@@ -13,9 +13,6 @@
 using namespace std;
 using namespace rapidxml;
 
-string projectName = "kosmosGenerated";
-xml_document<> codeTree;
-
 //removes beginning and end whitespace from a char*
 char *trimwhitespace(char *str)
 {
@@ -308,12 +305,46 @@ void loadProject(string &filename, xml_document<> &doc)
 	//load into environment
 }
 
+/// <summary>
+/// unzips a KIDE file to allow for edits to be made
+/// </summary>
+/// <param name="chosenFile">the filename to be unzipped</param>
+/// <param name="workingPath">path to place the KIDE contents</param>
+void unzipKIDE(string &chosenFile, string &workingPath)
+{
+	STARTUPINFO startinfo; //structure that allows you to, for example, run the program minimized (if it is a window program)
+    ZeroMemory(&startinfo, sizeof(STARTUPINFO)); //initialize the memory and all the members
+    startinfo.cb = sizeof(STARTUPINFO);
+    startinfo.lpReserved = NULL;
+    startinfo.lpDesktop = NULL;
+    startinfo.lpTitle = NULL;
+    startinfo.dwFlags = 0;
+    startinfo.cbReserved2 = 0;
+    startinfo.lpReserved2 = NULL;
+    PROCESS_INFORMATION procinfo; //CreateProcess fills this structure with stuff you can pass to other winapi functions to control the child process
+    ZeroMemory(&procinfo, sizeof(PROCESS_INFORMATION));
+	cout << "starting 7zip process" << "\n" << flush;
+	//TODO would like the path to be relative
+	string process = "C:/aszgard5/szg/projects/Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
+	char* proc = strdup(process.c_str());
+    CreateProcess(NULL, proc, NULL, NULL, false, 0, NULL, NULL, &startinfo, &procinfo); //this is the most important line in the program. it runs the program specified in the command-line argument (argv[1])
+	WaitForSingleObject( procinfo.hProcess, INFINITE );
+	CloseHandle(procinfo.hProcess); //and, clean up after Windows because I don't need the process handles it gives me
+    CloseHandle(procinfo.hThread);
+	free(proc);
+	cout << "finished 7zip process" << "\n" << flush;
+}
+
 /// this function will create a new project at the specified location
-void createNewProject(string &projectFolder, xml_document<> &doc) //, int|string template //TODO
+void createNewProject(string &projectFolder, xml_document<> &doc, string &templateLocation)
 {
 	//cp template
 	//unzip template
-	//loadProject(projectFolder/xmlFile, doc)
+	unzipKIDE(templateLocation, projectFolder);
+	string projectFile = projectFolder + "\\" + projectName + ".kproj";
+	string templateKproj = projectFolder + "\\newProjectTemplate.kproj";
+	rename(templateKproj.c_str(),projectFile.c_str());
+	loadProject(projectFile, doc);
 	//initialize
 	//load into environment
 }
@@ -328,6 +359,27 @@ void saveProject(string &filepath, xml_document<> &doc)
 	myfile << doc;
 	myfile.close();
 }
+
+void findTemplateCallback(vector<string> args)
+{
+	templateName = args[0];
+	cout << "template: " << templateName << "\n" << flush;
+	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
+	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ");
+	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
+}
+
+void findProjectCallback(vector<string> args)
+{
+	projectDir = args[0];
+	unsigned found = projectDir.find_last_of("/\\");
+	string pname = projectDir.substr(found+1);
+	setProjectName(pname);
+	createNewProject(projectDir, codeTree, templateName);
+	
+	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
+}
+
 /*
 int main()
 {

@@ -226,4 +226,6 @@ VirtualDirectory.o: ../../src/VirtualDirectory.cpp \
   C:/aszgard5/szg/src/obj/arOBJSmoothingGroup.h \
   C:/aszgard5/szg/src/graphics/arRay.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
-  ../../src/CallFunction.h
+  ../../src/../lib/rapidxml/rapidxml.hpp \
+  ../../src/../lib/rapidxml/rapidxml_print.hpp \
+  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/CallFunction.h

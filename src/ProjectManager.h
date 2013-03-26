@@ -13,7 +13,10 @@
 //rapid xml library
 #include "../lib/rapidxml/rapidxml.hpp"
 #include "../lib/rapidxml/rapidxml_print.hpp"
+#include <windows.h>
 
+#include "main.h"
+#include "selectedObjects.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -37,9 +40,13 @@ void generateRecur(xml_node<> *node, string &path);
 void initialize(string &filename, xml_document<> &doc);
 /// load a previously created file for editing
 void loadProject(string &filename, xml_document<> &doc);
+void unzipKIDE(string &chosenFile, string &workingPath);
 /// this function will create a new project at the specified location
-void createNewProject(string &projectFolder, xml_document<> &doc);
+void createNewProject(string &projectFolder, xml_document<> &doc, string &templateLocation);
 /// this function saves a project to filepath from doc
 void saveProject(string &filepath, xml_document<> &doc);
+
+void findTemplateCallback(vector<string> args);
+void findProjectCallback(vector<string> args);
 
 #endif

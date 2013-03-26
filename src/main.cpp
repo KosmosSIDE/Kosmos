@@ -32,6 +32,13 @@
 #include "VirtualDirectory.h"
 #include "ProjectManager.h"
 
+using namespace rapidxml;
+
+string projectName = "kosmosGenerated";
+xml_document<> codeTree;
+string templateName = "";
+string projectDir = "";
+
 // Feet to local units conversion.
 // For example, if you use centimeters to create your models, then set this to 12*2.54 or 30.48 to
 // account for 12 inches per foot and 2.54 centimeters per inch.
@@ -107,6 +114,8 @@ int cpvSound;
 //arMatrix4 violinMatrix;
 //arMatrix4 pianoMatrix;
 
+void setProjectName (string &pname) { projectName = pname; }
+
 
 void uselessCallback(vector<string> args)
 {
@@ -128,6 +137,7 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 
 	CallFunction cf;
 	cf.init();
+		
 	
 	// Register shared memory. Not needed for non-cluster-based systems.
 	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);
@@ -269,7 +279,13 @@ void preExchange(arMasterSlaveFramework& framework) {
 	{
 		pressedImport = currentTime;
 		//Import::import("piano.obj");
-		virtualdirectory.startBrowse("import", &Import::importCallback);
+		virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
+	}
+	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
+	{
+		pressedImport = currentTime;
+		//Import::import("piano.obj");
+		virtualdirectory.startBrowse("template", &findTemplateCallback,"Select template file: ");
 	}
 	else if(virtualdirectory.findingFile)
 	{
@@ -284,10 +300,17 @@ void preExchange(arMasterSlaveFramework& framework) {
 			virtualdirectory.downPressed();
 			dirButtonPress = currentTime;
 		}
-		else if (rightHand.getOnButton(4))// && (currentTime-dirButtonPress)>200)
+		else if (leftHand.getOnButton(7))// && (currentTime-dirButtonPress)>200)
 		{
 			pressedImport = currentTime;
 			virtualdirectory.selectFile();
+			dirButtonPress = currentTime;
+			//cout << "wth" << flush;
+		}
+		else if (rightHand.getOnButton(4))// && (currentTime-dirButtonPress)>200)
+		{
+			pressedImport = currentTime;
+			virtualdirectory.selectDirectory();
 			dirButtonPress = currentTime;
 			//cout << "wth" << flush;
 		}
@@ -310,7 +333,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	}
 	
 	
-	if(leftHand.getButton(0) || leftHand.getButton(2) || leftHand.getButton(3) || leftHand.getButton(4) || leftHand.getButton(5) || leftHand.getButton(10))
+	if(leftHand.getButton(2) || leftHand.getButton(3) || leftHand.getButton(4) || leftHand.getButton(5) || leftHand.getButton(10))
 	{
 		selectionMode = 0;
 		coneselection = false;

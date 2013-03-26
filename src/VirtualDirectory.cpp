@@ -12,8 +12,9 @@ Author: Aaron Hardin
 #include <sys/stat.h>
 #include <sys/types.h>
 
-void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>))
+void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley)
 {
+	cout << "startbrowse" << "\n" << flush;
 	currentIndex = 0;
 	currentDir.clear();
 	findingFile = true;
@@ -24,6 +25,15 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	dirName = "c:\\";
 	
 	openDir("c:\\");
+	
+	if (titley != "")
+	{
+		title = titley;
+	}
+	else
+	{
+		title = "";
+	}
 	
 	/*cout << "current directory" << flush;
 	vector<string>::iterator it;
@@ -96,11 +106,51 @@ void VirtualDirectory::selectFile()
 			vector<string> filenamev;
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
-			cf.call(callback,filenamev);
 			findingFile = false;
+			cf.call(callback,filenamev);
+			
 		}
 	}
 }
+
+void VirtualDirectory::selectDirectory()
+{
+	string chosenFile = currentDir[currentIndex];
+	
+	chosenFile = dirName + "\\" + chosenFile;
+	
+	struct stat st;
+	if(stat(chosenFile.c_str(), &st) == -1)
+	{
+		perror("");
+	}
+	else
+	{
+		if(S_ISDIR(st.st_mode))
+		{
+			printf("\t DIRECTORY\n");
+			currentIndex = 0;
+			vector<string> filenamev;
+			filenamev.push_back(chosenFile);
+			filenamev.push_back(dirName);
+			findingFile = false;
+			cf.call(callback,filenamev);
+			
+		}
+		else
+		{
+			printf("\t FILE\n");
+			currentIndex = 0;
+			vector<string> filenamev;
+			filenamev.push_back(chosenFile);
+			filenamev.push_back(dirName);
+			findingFile = false;
+			cf.call(callback,filenamev);
+			
+		}
+	}
+}
+
 
 void VirtualDirectory::openDir(string directory)
 {
@@ -144,20 +194,29 @@ void VirtualDirectory::draw() const
 		//cout << "starting vd.draw2\n" << flush;
 		renderPrimitive(-2.5f, false);
 		//cout << "starting vd.draw3\n" << flush;
+		
+		int yshift = 0;
+		if (title != "")
+		{
+			yshift -= 120;
+			drawText(-2.4f, 800, title,false);
+			--upperbound;
+		}
+		
 		for (int i=currentIndex;i<upperbound;++i)
 		{
 			//display filename
 			if(i==currentIndex)
 			{
-				drawText(-2.4f, 800-(i-currentIndex)*120, currentDir[i%(currentDir.size()+1)],true);
+				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, currentDir[i%(currentDir.size()+1)],true);
 			}
 			else if (i == (int)currentDir.size()) //leave a blank
 			{
-				drawText(-2.4f, 800-(i-currentIndex)*120, "------------------------------", false);
+				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, "------------------------------", false);
 			}
 			else
 			{
-				drawText(-2.4f, 800-(i-currentIndex)*120, currentDir[i%(currentDir.size()+1)], false);
+				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, currentDir[i%(currentDir.size()+1)], false);
 			}
 		}
 		//cout << "end vd.draw3\n" << flush;

@@ -25,6 +25,7 @@ class VirtualDirectory
 		vector<string> currentDir;
 		string dirName;
 		int currentIndex;
+		string title;
 	
 		VirtualDirectory()
 		{
@@ -33,12 +34,14 @@ class VirtualDirectory
 			filename = "";
 			currentIndex = 0;
 			dirName = "c:\\";
+			title = "";
 		}
 		
-		void startBrowse(const string& cb,void(*funPtr)(vector<string>));
+		void startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley = "");
 		void upPressed();
 		void downPressed();
 		void selectFile();
+		void selectDirectory();
 		void draw() const;
 		void drawText(float distance, float ypos, string text, bool selected) const;
 	

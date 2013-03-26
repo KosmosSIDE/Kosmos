@@ -14,13 +14,24 @@
 #include "arGlut.h"
 #include "arOBJ.h"
 
+//rapid xml library
+#include "../lib/rapidxml/rapidxml.hpp"
+#include "../lib/rapidxml/rapidxml_print.hpp"
+
+using namespace rapidxml;
+
 extern double currentTimeGlobal;
 // music note to be used for animation
 extern arOBJRenderer musicNotey;
 extern bool coneselection;
 extern int selectionMode;
 extern vector<arInteractable*> objects;
+extern string projectName;
+extern xml_document<> codeTree;
+extern string templateName;
+extern string projectDir;
 
 void renderPrimitive (float distance, bool separationLines);
+void setProjectName (string &pname);
 
 #endif
