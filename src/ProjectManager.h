@@ -49,4 +49,6 @@ void saveProject(string &filepath, xml_document<> &doc);
 void findTemplateCallback(vector<string> args);
 void findProjectCallback(vector<string> args);
 
+void loadEnvironment(string &filepath, xml_document<> &doc);
+
 #endif

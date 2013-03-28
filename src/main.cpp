@@ -1,5 +1,5 @@
 //************************************************************************************************
-// Name:		musicMaker
+// Name:		Kosmos
 // Version:		0.1.2
 // Description:	This arMasterSlaveFramework application creates instrument objects which can be
 //				turned on and off to make music. An augmentation of the SQUAD selection technique
@@ -82,10 +82,7 @@ VirtualDirectory virtualdirectory;
 
 
 
-// Global objects, instruments
-Object theCello(3, 0.5, 0.5, 0.5, "cello.obj");
-Object theViolin(3, 0.5, 0.5, 0.5, "violin.obj");
-Object thePiano(3, 2, 2, 2, "piano.obj");
+// Global objects
 //Object theUser(2, 0.5, 0.5, 0.5, "user.obj"); //set the user scale to 0.5,0.5,0.5 and the type to 2
 
 // List of objects.
@@ -98,13 +95,6 @@ LeftVirtualHand leftHand("staff.obj");
 // Global sound variables.
 int soundTransformID;
 int clickSound;
-int celloSound;
-int violinSound;
-int pianoSound;
-int cpSound;
-int cvSound;
-int pvSound;
-int cpvSound;
 
 // MasterSlave transfer variables for shared memory. Only used in cluster-based systems. Hence,
 // not needed in our system, but here's some examples.
@@ -164,8 +154,8 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	// Translate along Z-axis (forwards/backwards) if joystick is pressed more than 20% along axis 1.
 	framework.setNavTransCondition('z', AR_EVENT_AXIS, 1, 0.2);
 	// Rotate around Y-axis (vertical) if joystick is pressed more than 20% along axis 0.
-	//framework.setNavRotCondition('y', AR_EVENT_AXIS, 0, 0.2);  //FOR ROTATE
-	framework.setNavTransCondition('x', AR_EVENT_AXIS, 0, 0.2);  //FOR STRAFING
+	framework.setNavRotCondition('y', AR_EVENT_AXIS, 0, 0.2);  //FOR ROTATE
+	//framework.setNavTransCondition('x', AR_EVENT_AXIS, 0, 0.2);  //FOR STRAFING
 	// Set translation speed to 5 feet/second.
 	framework.setNavTransSpeed(5.0);
 	// Set rotation speed to 30 degrees/second.
@@ -175,14 +165,8 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	// Initialize application variables here.
 	
 	// Move object's to initial positions.
-	theCello.setMatrix(ar_translationMatrix(0, 4, -4));//(0, 4, -4));
-	theViolin.setMatrix(ar_translationMatrix(2, 4, -4));
-	thePiano.setMatrix(ar_translationMatrix(-2, 4, -4));
 	//theUser.setMatrix(ar_translationMatrix(0, 0, 0)); //set user to 0,0,0
 	// Keep list of objects to interact with.
-	objects.push_back(&theCello);
-	objects.push_back(&theViolin);
-	objects.push_back(&thePiano);
 	//objects.push_back(&theUser);
 	
 	// Create sound transform.
@@ -195,16 +179,6 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	//		positionVector - vector position of sound origin
 	// Create loop for click sound.
 	clickSound = dsLoop("click", "world", "click.mp3", 0, 1.0, arVector3(0, 0, 0));
-	
-	celloSound = dsLoop("cello", "world", "cello.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	violinSound = dsLoop("violin", "world", "violin.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	pianoSound = dsLoop("piano", "world", "piano.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	
-	cpSound = dsLoop("cp", "world", "cp.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	cvSound = dsLoop("cv", "world", "cv.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	pvSound = dsLoop("pv", "world", "pv.mp3", 1, 1.0, arVector3(0, 5, -6)); 
-	
-	cpvSound = dsLoop("cpv", "world", "cpv.mp3", 1, 1.0, arVector3(0, 5, -6)); 
 	
 	musicNotey.readOBJ("MusicNote.obj","data/obj");
 	
@@ -532,22 +506,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 			{
 				selectionMode = 1; // just entered selection mode
 				coneselection = false;
-				
-				// for now lets just find out if our piano is in the cone
-				/*
-				float x[] = {pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]};
-				float height = leftHand.getLength();
-				float radius = height/2.f;
-				arMatrix4 tp = leftHand.getBaseMatrix();
-				arMatrix4 bm = leftHand.getMatrix();
-				float t[] = {tp[12],tp[13],tp[14]};
-				float b[] = {bm[12],bm[13],bm[14]};
-				cout << "is piano in cone?: " << isLyingInCone(x, t, b, radius, height) << '\n';
-				cout << "x " << x[0] << " " << x[1] << " " << x[2] << '\n';
-				cout << "t " << t[0] << " " << t[1] << " " << t[2] << '\n';
-				cout << "b " << b[0] << " " << b[1] << " " << b[2] << '\n';
-				cout << "radius " << radius << '\n';
-				*/
 			}
 			else //just pointed and clicked but didn't hold down
 			{
@@ -617,169 +575,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 		Object* oby = ((Object*)(*i));
 		oby->matrix = oby->getMatrix();
 	}
-
-	
-	arMatrix4 navMatrix = ar_getNavMatrix();
-	
-	arMatrix4 celloMatrix = ((Object*)objects[0])->matrix;
-	arMatrix4 violinMatrix = ((Object*)objects[1])->matrix;
-	arMatrix4 pianoMatrix = ((Object*)objects[2])->matrix;
-	
-	dsLoop(celloSound, "cello.mp3", 0, 0, arVector3(celloMatrix[12], celloMatrix[13], celloMatrix[14]));
-	dsLoop(violinSound, "violin.mp3", 0, 0, arVector3(violinMatrix[12], violinMatrix[13], violinMatrix[14]));
-	dsLoop(pianoSound, "piano.mp3", 0, 0, arVector3(pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]));
-	dsLoop(cvSound, "cv.mp3", 0, 0, arVector3((violinMatrix[12]+celloMatrix[12])/2, (violinMatrix[13]+celloMatrix[13])/2, (violinMatrix[14]+celloMatrix[14])/2));
-	
-	//assuming distance doesn't matter here
-	dsLoop(cpSound, "cp.mp3", 0, 0, arVector3((violinMatrix[12]+celloMatrix[12])/2, (violinMatrix[13]+celloMatrix[13])/2, (violinMatrix[14]+celloMatrix[14])/2));
-	dsLoop(pvSound, "pv.mp3", 0, 0, arVector3((violinMatrix[12]+celloMatrix[12])/2, (violinMatrix[13]+celloMatrix[13])/2, (violinMatrix[14]+celloMatrix[14])/2));
-	dsLoop(cpvSound, "cpv.mp3", 0, 0, arVector3((violinMatrix[12]+celloMatrix[12])/2, (violinMatrix[13]+celloMatrix[13])/2, (violinMatrix[14]+celloMatrix[14])/2));
-	
-	if(theCello._selected == true && theViolin._selected == true && thePiano._selected == true)
-	{
-		float cSoundDistance = sqrt((navMatrix[12] - celloMatrix[12])*(navMatrix[12] - celloMatrix[12]) +
-								   (navMatrix[13] - celloMatrix[13])*(navMatrix[13] - celloMatrix[13]) +
-								   (navMatrix[14] - celloMatrix[14])*(navMatrix[14] - celloMatrix[14]));
-		float cLoudness = 1.0 - (cSoundDistance / 100.0);
-		
-		float vSoundDistance = sqrt((navMatrix[12] - violinMatrix[12])*(navMatrix[12] - violinMatrix[12]) +
-								   (navMatrix[13] - violinMatrix[13])*(navMatrix[13] - violinMatrix[13]) +
-								   (navMatrix[14] - violinMatrix[14])*(navMatrix[14] - violinMatrix[14]));
-		float vLoudness = 1.0 - (vSoundDistance / 100.0);
-		
-		float pSoundDistance = sqrt((navMatrix[12] - pianoMatrix[12])*(navMatrix[12] - pianoMatrix[12]) +
-								   (navMatrix[13] - pianoMatrix[13])*(navMatrix[13] - pianoMatrix[13]) +
-								   (navMatrix[14] - pianoMatrix[14])*(navMatrix[14] - pianoMatrix[14]));
-		float pLoudness = 1.0 - (pSoundDistance / 100.0);
-		
-		int instrument = 0; //0 for cello, 1 for piano, 2 for violin
-		if(cSoundDistance > pSoundDistance)
-		{
-			instrument = 1;
-		}
-		if(instrument == 1) //cello not closest
-		{
-			if(pSoundDistance > vSoundDistance) //piano is not closest
-			{
-				instrument = 2;
-			}
-			//else, violin is, instrument already = 1
-		}
-		else //closest is cello or violin
-		{
-			if(cSoundDistance > vSoundDistance) //violin closest
-			{
-				instrument = 2;
-			}
-			//else, cello closest, instrument already = 0
-		}
-		
-		if(instrument == 0)
-		{
-			dsLoop(cpvSound, "cpv.mp3", 1, cLoudness, arVector3(celloMatrix[12], celloMatrix[13], celloMatrix[14]));
-		}
-		else if(instrument == 1)
-		{
-			dsLoop(cpvSound, "cpv.mp3", 1, pLoudness, arVector3(pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]));
-		}
-		else
-		{
-			dsLoop(cpvSound, "cpv.mp3", 1, vLoudness, arVector3(violinMatrix[12], violinMatrix[13], violinMatrix[14]));
-		}
-		//dsLoop(cpvSound, "cpv.mp3", 1, cpvLoudness, arVector3((violinMatrix[12]+celloMatrix[12])/2, (violinMatrix[13]+celloMatrix[13])/2, (violinMatrix[14]+celloMatrix[14])/2));
-	}
-	else if(theCello._selected == true && theViolin._selected == false && thePiano._selected == false)
-	{
-		float celloSoundDistance = sqrt((navMatrix[12] - celloMatrix[12])*(navMatrix[12] - celloMatrix[12]) +
-								   (navMatrix[13] - celloMatrix[13])*(navMatrix[13] - celloMatrix[13]) +
-								   (navMatrix[14] - celloMatrix[14])*(navMatrix[14] - celloMatrix[14]));
-		float celloLoudness = 1.0 - (celloSoundDistance / 100.0);
-		
-		dsLoop(celloSound, "cello.mp3", 1, celloLoudness, arVector3(celloMatrix[12], celloMatrix[13], celloMatrix[14]));
-	}
-	else if(theCello._selected == false && theViolin._selected == true && thePiano._selected == false)
-	{
-		float violinSoundDistance = sqrt((navMatrix[12] - violinMatrix[12])*(navMatrix[12] - violinMatrix[12]) +
-								   (navMatrix[13] - violinMatrix[13])*(navMatrix[13] - violinMatrix[13]) +
-								   (navMatrix[14] - violinMatrix[14])*(navMatrix[14] - violinMatrix[14]));
-		float violinLoudness = 1.0 - (violinSoundDistance / 100.0);
-		
-		dsLoop(violinSound, "violin.mp3", 1, violinLoudness, arVector3(violinMatrix[12], violinMatrix[13], violinMatrix[14]));
-	}
-	else if(theCello._selected == false && theViolin._selected == false && thePiano._selected == true)
-	{
-		float pianoSoundDistance = sqrt((navMatrix[12] - pianoMatrix[12])*(navMatrix[12] - pianoMatrix[12]) +
-								   (navMatrix[13] - pianoMatrix[13])*(navMatrix[13] - pianoMatrix[13]) +
-								   (navMatrix[14] - pianoMatrix[14])*(navMatrix[14] - pianoMatrix[14]));
-		float pianoLoudness = 1.0 - (pianoSoundDistance / 100.0);
-		
-		dsLoop(pianoSound, "piano.mp3", 1, pianoLoudness, arVector3(pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]));
-	}
-	else if(theCello._selected == true && theViolin._selected == true && thePiano._selected == false)
-	{
-		float cSoundDistance = sqrt((navMatrix[12] - celloMatrix[12])*(navMatrix[12] - celloMatrix[12]) +
-								   (navMatrix[13] - celloMatrix[13])*(navMatrix[13] - celloMatrix[13]) +
-								   (navMatrix[14] - celloMatrix[14])*(navMatrix[14] - celloMatrix[14]));
-		float cLoudness = 1.0 - (cSoundDistance / 100.0);
-		
-		float vSoundDistance = sqrt((navMatrix[12] - violinMatrix[12])*(navMatrix[12] - violinMatrix[12]) +
-								   (navMatrix[13] - violinMatrix[13])*(navMatrix[13] - violinMatrix[13]) +
-								   (navMatrix[14] - violinMatrix[14])*(navMatrix[14] - violinMatrix[14]));
-		float vLoudness = 1.0 - (vSoundDistance / 100.0);
-		
-		if(cSoundDistance < vSoundDistance)
-		{
-			dsLoop(cvSound, "cv.mp3", 1, cLoudness, arVector3(celloMatrix[12], celloMatrix[13], celloMatrix[14]));
-		}
-		else
-		{
-			dsLoop(cvSound, "cv.mp3", 1, vLoudness, arVector3(violinMatrix[12], violinMatrix[13], violinMatrix[14]));
-		}
-	}
-	else if(theCello._selected == true && theViolin._selected == false && thePiano._selected == true)
-	{
-		float cSoundDistance = sqrt((navMatrix[12] - celloMatrix[12])*(navMatrix[12] - celloMatrix[12]) +
-								   (navMatrix[13] - celloMatrix[13])*(navMatrix[13] - celloMatrix[13]) +
-								   (navMatrix[14] - celloMatrix[14])*(navMatrix[14] - celloMatrix[14]));
-		float cLoudness = 1.0 - (cSoundDistance / 100.0);
-		
-		float pSoundDistance = sqrt((navMatrix[12] - pianoMatrix[12])*(navMatrix[12] - pianoMatrix[12]) +
-								   (navMatrix[13] - pianoMatrix[13])*(navMatrix[13] - pianoMatrix[13]) +
-								   (navMatrix[14] - pianoMatrix[14])*(navMatrix[14] - pianoMatrix[14]));
-		float pLoudness = 1.0 - (pSoundDistance / 100.0);
-		
-		if(cSoundDistance < pSoundDistance)
-		{
-			dsLoop(cpSound, "cp.mp3", 1, cLoudness, arVector3(celloMatrix[12], celloMatrix[13], celloMatrix[14]));
-		}
-		else
-		{
-			dsLoop(cpSound, "cp.mp3", 1, pLoudness, arVector3(pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]));
-		}
-	}
-	else if(theCello._selected == false && theViolin._selected == true && thePiano._selected == true)
-	{
-		float vSoundDistance = sqrt((navMatrix[12] - violinMatrix[12])*(navMatrix[12] - violinMatrix[12]) +
-								   (navMatrix[13] - violinMatrix[13])*(navMatrix[13] - violinMatrix[13]) +
-								   (navMatrix[14] - violinMatrix[14])*(navMatrix[14] - violinMatrix[14]));
-		float vLoudness = 1.0 - (vSoundDistance / 100.0);
-		
-		float pSoundDistance = sqrt((navMatrix[12] - pianoMatrix[12])*(navMatrix[12] - pianoMatrix[12]) +
-								   (navMatrix[13] - pianoMatrix[13])*(navMatrix[13] - pianoMatrix[13]) +
-								   (navMatrix[14] - pianoMatrix[14])*(navMatrix[14] - pianoMatrix[14]));
-		float pLoudness = 1.0 - (pSoundDistance / 100.0);
-		
-		if(vSoundDistance < pSoundDistance)
-		{
-			dsLoop(pvSound, "pv.mp3", 1, vLoudness, arVector3(violinMatrix[12], violinMatrix[13], violinMatrix[14]));
-		}
-		else
-		{
-			dsLoop(pvSound, "pv.mp3", 1, pLoudness, arVector3(pianoMatrix[12], pianoMatrix[13], pianoMatrix[14]));
-		}
-	}
-	//else
-	
 }
 
 
@@ -797,12 +592,7 @@ void postExchange(arMasterSlaveFramework& framework) {
 		rightHand.updateState(framework.getInputState());
 		leftHand.updateState(framework.getInputState());
 		
-		// Synchronize shared memory.
-		//theCello.setMatrix(celloMatrix.v);
-		//theViolin.setMatrix(violinMatrix.v);
-		//thePiano.setMatrix(pianoMatrix.v);
-		
-		
+		// Synchronize shared memory.		
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{
@@ -811,29 +601,6 @@ void postExchange(arMasterSlaveFramework& framework) {
 		}
 		
 	}
-}
-
-void draw_circle(float x, float y, float radius) { 
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glTranslatef(x, y, 0.0f);
-	glClearColor(0, 0, 0, 0);
-    static const int circle_points = 100;
-    static const float angle = 2.0f * 3.1416f / circle_points;
-
-    // this code (mostly) copied from question:
-    glBegin(GL_POLYGON);
-    double angle1=0.0;
-    glVertex2d(radius * cos(0.0) , radius * sin(0.0));
-    int i;
-    for (i=0; i<circle_points; i++)
-    {       
-        glVertex2d(radius * cos(angle1), radius *sin(angle1));
-        angle1 += angle;
-    }
-    glEnd();
-    glPopMatrix();
 }
 
 /*
@@ -903,14 +670,7 @@ void drawObjects(float distance)
 	int count = 0;
 	list<Object*>::iterator i;
 	for(i=leftSelectedObjects.begin(); i != leftSelectedObjects.end(); ++i) 
-	//if(leftSelectedObjects.size() > 0)
 	{
-		/*
-		Object* oby = leftSelectedObjects.front();
-		arOBJRenderer* ren = oby->getOBJ();
-		ren->draw();
-		*/
-		//leftSelectedObjects.front()->getOBJ().draw();
 		glPushMatrix();
 		Object* oby = ((Object*)(*i));
 		

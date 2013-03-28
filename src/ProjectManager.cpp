@@ -164,7 +164,15 @@ void generateCode(xml_node<> *node, ofstream &out)
 		else if ((strcmp(node->first_node("type")->value(),"include") == 0) || (strcmp(node->first_node("type")->value(),"code") == 0))
 		{
 			//cout << node->first_node("code")->value() << "\n"; //TODO make sure you replace &projName; with the real projName, " and & already happen
-			out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
+			xml_node<> *codenode = node->first_node("code");
+			
+			while (codenode != 0)
+			{
+				out << trimtrailingwhitespace(codenode->value()) << "\n" << flush;
+				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
+			}
+			
+			//out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
 		}
 		//out << node value . replace (&projName, projectName) etc.   //. replace (&quot; with ") already happens???
 		//cout << "create code" << "\n";
@@ -378,6 +386,11 @@ void findProjectCallback(vector<string> args)
 	createNewProject(projectDir, codeTree, templateName);
 	
 	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
+}
+
+void loadEnvironment(string &filepath, xml_document<> &doc)
+{
+	//look at obj nodes, then check the doc for the location, then import and position at the correct location
 }
 
 /*
