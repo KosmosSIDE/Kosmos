@@ -1,0 +1,62 @@
+newmtl wiimote:Material__11
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 5.00
+newmtl wiimote:Material__12
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 5.00
+newmtl wiimote:Material__13
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 1.80
+newmtl wiimote:Material__16
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 1.40
+newmtl wiimote:Material__19
+illum 4
+Kd 0.60 0.60 0.60
+Ka 0.60 0.60 0.60
+Tf 0.60 0.60 0.60
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 7.50
+newmtl wiimote:Material__21
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 6.20
+newmtl wiimote:Material__23
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.60 0.60 0.60
+Tf 1.00 1.00 1.00
+map_Kd wiimote.jpg
+Ni 1.00
+Ks 0.90 0.90 0.90
+Ns 0.00
