@@ -397,12 +397,14 @@ void loadEnvironment(xml_document<> &doc)
 	xml_node<> *user = profile->first_node("user");
 	xml_node<> *objecties = profile->first_node("object");
 	//read x y z h p r from user block and place object there
+	
 	cout << "obtained variables..." << "\n" << flush;
 	//look at obj nodes, then check the doc for the location, then import and position at the correct location
 	
 	string path = projectDir + "\\data\\obj";
 	//string filename = objecties->first_node("resourceName")->value();
 	cout << "projdir: " << projectDir << "\n" << flush;
+	vector<string> pathv;
 	vector<string> filenamev;
 	vector<int> objx;
 	vector<int> objy;
@@ -411,6 +413,40 @@ void loadEnvironment(xml_document<> &doc)
 	vector<int> objp;
 	vector<int> objr;
 	//filenamev.push_back(filename);
+	
+	xml_node<> *userlocation = user->first_node("startingLocation");
+	if (userlocation != 0)
+	{
+		int x = atoi(userlocation->first_node("x")->value());
+		int y = atoi(userlocation->first_node("y")->value());
+		int z = atoi(userlocation->first_node("z")->value());
+		int h = atoi(userlocation->first_node("heading")->value());
+		int p = atoi(userlocation->first_node("pitch")->value());
+		int r = atoi(userlocation->first_node("roll")->value());
+		
+		cout << "user set x..." << x << "\n" << flush;
+		cout << "user set y..." << y << "\n" << flush;
+		cout << "user set z..." << z << "\n" << flush;
+		cout << "user set h..." << h << "\n" << flush;
+		cout << "user set p..." << p << "\n" << flush;
+		
+		objx.push_back(x);
+		objy.push_back(y);
+		objz.push_back(z);
+		objh.push_back(h);
+		objp.push_back(p);
+		objr.push_back(r);
+		
+		string filename = "MrBodyWithHands.obj";
+		filenamev.push_back(filename);
+		string pathy = "C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj";
+		pathv.push_back(pathy);
+		//Import::import("cello.obj", x, y, z, h, p, r, "C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj");
+	}
+	
+	
+	
+	
 	while(objecties != 0)
 	{
 		cout << "loading object..." << "\n" << flush;
@@ -424,6 +460,7 @@ void loadEnvironment(xml_document<> &doc)
 		
 		string filename = objecties->first_node("resourceName")->value();
 		filenamev.push_back(filename);
+		pathv.push_back(path);
 		/*int length = filename.length();
 		if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 		{
@@ -481,7 +518,7 @@ void loadEnvironment(xml_document<> &doc)
 	for( int i=0; i<filenamev.size(); ++i)
 	{
 		//Import::import(filenamev[i], path);
-		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], path);
+		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], pathv[i]);
 	}
 }
 
