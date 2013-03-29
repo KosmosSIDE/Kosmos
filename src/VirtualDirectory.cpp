@@ -12,7 +12,7 @@ Author: Aaron Hardin
 #include <sys/stat.h>
 #include <sys/types.h>
 
-void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley)
+void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley, const string &startDir)
 {
 	cout << "startbrowse" << "\n" << flush;
 	currentIndex = 0;
@@ -23,8 +23,20 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	callback = cb;
 	cf.add(cb, funPtr);
 	dirName = "c:\\";
+	if(startDir != "")
+	{
+		dirName = startDir;
+		string opendirectory = ""; //"c:\\aszgard5\\szg\\projects\\Kosmos\\"; //
+		//opendirectory = opendirectory+"projects\\";
+		cout << "startbrowse" << startDir.c_str() << "\n" << flush;
+		opendirectory += startDir.c_str();
+		openDir(opendirectory);//("c:\\aszgard5\\szg\\");
+	}
+	else
+	{
+		openDir("c:\\");
+	}
 	
-	openDir("c:\\");
 	
 	if (titley != "")
 	{

@@ -311,6 +311,8 @@ void loadProject(string &filename, xml_document<> &doc)
 {
 	initialize(filename, doc);
 	//load into environment
+	loadEnvironment(doc);
+	cout << "finished load environment" << "\n" << flush;
 }
 
 /// <summary>
@@ -373,7 +375,7 @@ void findTemplateCallback(vector<string> args)
 	templateName = args[0];
 	cout << "template: " << templateName << "\n" << flush;
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ");
+	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
 }
 
@@ -388,9 +390,99 @@ void findProjectCallback(vector<string> args)
 	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
 }
 
-void loadEnvironment(string &filepath, xml_document<> &doc)
+void loadEnvironment(xml_document<> &doc)
 {
+	cout << "loading environment..." << "\n" << flush;
+	xml_node<> *profile = doc.first_node()->first_node("profile");
+	xml_node<> *user = profile->first_node("user");
+	xml_node<> *objecties = profile->first_node("object");
+	//read x y z h p r from user block and place object there
+	cout << "obtained variables..." << "\n" << flush;
 	//look at obj nodes, then check the doc for the location, then import and position at the correct location
+	
+	string path = projectDir + "\\data\\obj";
+	//string filename = objecties->first_node("resourceName")->value();
+	cout << "projdir: " << projectDir << "\n" << flush;
+	vector<string> filenamev;
+	vector<int> objx;
+	vector<int> objy;
+	vector<int> objz;
+	vector<int> objh;
+	vector<int> objp;
+	vector<int> objr;
+	//filenamev.push_back(filename);
+	while(objecties != 0)
+	{
+		cout << "loading object..." << "\n" << flush;
+		//filename = "";
+		// get xyzhpr and import object
+		cout << "wth: " << objecties->first_node()->value() << "\n" << flush;
+		cout << "wth: " << objecties->first_node("name") << "\n" << flush;
+		cout << "wth: " << objecties->first_node("name")->value() << "\n" << flush;
+		cout << "wth: " << objecties->first_node("resourceName") << "\n" << flush;
+		cout << "wth: " << objecties->first_node("resourceName")->value() << "\n" << flush;
+		
+		string filename = objecties->first_node("resourceName")->value();
+		filenamev.push_back(filename);
+		/*int length = filename.length();
+		if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
+		{
+			cout << "wth file is obj " << "\n" << flush;
+		}*/
+		cout << "set filename..." << filename << "\n" << flush;
+		cout << "setting x..." << objecties->first_node("x")->value() << "\n" << flush;
+		int x = atoi(objecties->first_node("x")->value());
+		cout << "set x..." << x << "\n" << flush;
+		int y = atoi(objecties->first_node("y")->value());
+		cout << "set y..." << y << "\n" << flush;
+		int z = atoi(objecties->first_node("z")->value());
+		cout << "set z..." << z << "\n" << flush;
+		int h = atoi(objecties->first_node("heading")->value());
+		cout << "set h..." << h << "\n" << flush;
+		int p = atoi(objecties->first_node("pitch")->value());
+		cout << "set p..." << p << "\n" << flush;
+		int r = atoi(objecties->first_node("roll")->value());
+		
+		objx.push_back(x);
+		objy.push_back(y);
+		objz.push_back(z);
+		objh.push_back(h);
+		objp.push_back(p);
+		objr.push_back(r);
+		
+		cout << "set xyzhpr..." << x << y << z << h << p << r << "\n" << flush;
+		/*
+			<resourceName>cello.obj</resourceName>
+			<x>0</x>
+			<y>4</y>
+			<z>-4</z>
+			<heading>0</heading>
+			<pitch>0</pitch>
+			<roll>0</roll>
+		*/
+		cout << "importing object..." << "\n" << flush;
+		//Import::import(filename, x, y, z, h, p, r, path);
+		//Import::import(filenamev.back(), path);
+		cout << "object imported..." << "\n" << flush;
+		objecties = objecties->next_sibling();
+		cout << "obtained next object..." << objecties << "\n" << flush;
+		if (objecties == 0)
+		{
+			cout << "break?..." << "\n" << flush;
+			break;
+		}
+	}
+	/*vector<string>::iterator it;
+	for (it=filenamev.begin(); it!=filenamev.end(); ++it)
+	{
+		cout << ' ' << *it << '\n';
+		Import::import(*it, path);
+	}*/
+	for( int i=0; i<filenamev.size(); ++i)
+	{
+		//Import::import(filenamev[i], path);
+		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], path);
+	}
 }
 
 /*

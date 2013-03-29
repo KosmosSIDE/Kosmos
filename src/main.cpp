@@ -259,7 +259,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	{
 		pressedImport = currentTime;
 		//Import::import("piano.obj");
-		virtualdirectory.startBrowse("template", &findTemplateCallback,"Select template file: ");
+		virtualdirectory.startBrowse("template", &findTemplateCallback,"Select template file: ", "c:\\aszgard5\\szg\\projects\\Kosmos\\");
 	}
 	else if(virtualdirectory.findingFile)
 	{

@@ -229,4 +229,5 @@ ProjectManager.o: ../../src/ProjectManager.cpp ../../src/ProjectManager.h \
   C:/aszgard5/szg/src/graphics/arRay.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
   ../../src/selectedObjects.h ../../src/Object.h \
-  ../../src/VirtualDirectory.h ../../src/CallFunction.h
+  ../../src/VirtualDirectory.h ../../src/CallFunction.h \
+  ../../src/Import.h

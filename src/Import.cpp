@@ -12,12 +12,30 @@ Author: Aaron Hardin
 
 void Import::import(const string &filename,const string &path = "data/obj")
 {
+	cout << "attempting to import..." << filename << " from: " << path << "\n" << flush;
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
 		Object* newObj = new Object(2,1,1,1,filename,path);
 		newObj->normalize();
 		newObj->setMatrix(ar_translationMatrix(0, 4, -8)); // initial position
+		objects.push_back(newObj);
+	}
+}
+
+void Import::import(const string &filename, int &x, int &y, int &z, int &h, int &p, int &r, const string &path = "data/obj")
+{
+	cout << "attempting to import..." << filename << " from: " << path << "\n" << flush;
+	int length = filename.length();
+	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
+	{
+		Object* newObj = new Object(2,1,1,1,filename,path);
+		cout << "created object..." << "\n" << flush;
+		newObj->normalize();
+		cout << "normalized object..." << "\n" << flush;
+		newObj->setMatrix(ar_translationMatrix(x, y, z)); // initial position
+		cout << "set object position..." << "\n" << flush;
+		//TODO hpr
 		objects.push_back(newObj);
 	}
 }

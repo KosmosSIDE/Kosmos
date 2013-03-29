@@ -37,7 +37,7 @@ class VirtualDirectory
 			title = "";
 		}
 		
-		void startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley = "");
+		void startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley = "", const string &startDir = "");
 		void upPressed();
 		void downPressed();
 		void selectFile();
