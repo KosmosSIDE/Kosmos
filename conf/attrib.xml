@@ -1,0 +1,26 @@
+<attributes>
+  <attribute>
+		<name>color</name>
+		<values>
+			<value>red</value>
+			<value>green</value>
+			<value>blue</value>
+		</values>
+	</attribute>
+	<attribute>
+		<name>Co-ordinates</name>
+		<values>
+			<value>5</value>
+			<value>10</value>
+			<value>2</value>
+		</values>
+	</attribute>
+	<attribute>
+		<name>Texture</name>
+		<values>
+			<value>texture1</value>
+			<value>texture2</value>
+			<value>texture3</value>
+		</values>
+	</attribute>
+</attributes>
