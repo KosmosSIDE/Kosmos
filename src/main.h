@@ -28,6 +28,7 @@ extern int selectionMode;
 extern vector<arInteractable*> objects;
 extern string projectName;
 extern xml_document<> codeTree;
+extern vector<char> document;
 extern string templateName;
 extern string projectDir;
 

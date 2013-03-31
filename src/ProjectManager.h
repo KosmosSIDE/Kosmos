@@ -38,14 +38,14 @@ void generateCode(xml_node<> *node, ofstream &out);
 /// This function recursively travels the tree writing out to filesystem
 void generateRecur(xml_node<> *node, string &path);
 /// this function initializes doc by populating it with the contents from filename
-void initialize(string &filename, xml_document<> &doc);
+void initialize(string &filename);
 /// load a previously created file for editing
-void loadProject(string &filename, xml_document<> &doc);
+void loadProject(string &filename);
 void unzipKIDE(string &chosenFile, string &workingPath);
 /// this function will create a new project at the specified location
-void createNewProject(string &projectFolder, xml_document<> &doc, string &templateLocation);
+void createNewProject(string &projectFolder, string &templateLocation);
 /// this function saves a project to filepath from doc
-void saveProject(string &filepath, xml_document<> &doc);
+void saveProject(string &filepath);
 
 void findTemplateCallback(vector<string> args);
 void findProjectCallback(vector<string> args);

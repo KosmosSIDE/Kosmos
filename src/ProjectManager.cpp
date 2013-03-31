@@ -1,13 +1,3 @@
-/*#include <iostream>
-#include <fstream>
-#include <vector>
-
-//include for mkdir
-#include <direct.h>
-
-//rapid xml library
-#include "../lib/rapidxml/rapidxml.hpp"
-#include "../lib/rapidxml/rapidxml_print.hpp"*/
 #include "ProjectManager.h"
 
 using namespace std;
@@ -94,40 +84,58 @@ void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName)
 	}
 }
 
-/*
-void searchForParent(rapidxml::xml_node<> *node)
-{
-	if (node->first_attribute() != 0)
-	{
-		rapidxml::xml_attribute<> *attr = node->first_attribute();
-		cout << "Node has attribute: " << attr->name() << ", with value: " << attr->value() << "\n";
-	}
-	
-	if (node->first_node() != 0)
-	{
-		searchForParent(node->first_node());
-	}
-	if (node->next_sibling() != 0)
-	{
-		searchForParent(node->next_sibling());
-	}
-}
-*/
-
 /// this function writes to a header file
 void generateHeader(xml_node<> *node, ofstream &out)
 {
-	//out << node value . replace (&quot; with ") . replace (&projName, projectName) etc.
-	//cout << "create header" << "\n";
 	while(node != 0)
 	{
 		if ((strcmp(node->first_node("type")->value(),"include") == 0) || (strcmp(node->first_node("type")->value(),"code") == 0))
 		{
-			//cout << node->first_node("code")->value() << "\n"; //TODO make sure you replace &projName; with the real projName, " and & already happen
 			out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
 		}
-		//out << node value . replace (&projName, projectName) etc.   //. replace (&quot; with ") already happens???
-		//cout << "create code" << "\n";
+		else if (strcmp(node->first_node("type")->value(),"classDefinition") == 0)
+		{
+			xml_node<> *publiccode = node->first_node("public")->first_node();
+			xml_node<> *constructor = node->first_node("constructor");
+			xml_node<> *privatecode = node->first_node("private")->first_node();
+			
+			out << trimwhitespace(node->first_node("documentation")->value()) << "\n" << flush;
+			out << trimwhitespace(node->first_node("declaration")->value()) << "\n" << flush;
+			out << "{" << flush;
+			while (publiccode != 0)
+			{
+				out << trimtrailingwhitespace(publiccode->value()) << "\n" << flush;
+				publiccode = publiccode->next_sibling(); 
+			}
+			
+			//handle constructor
+			xml_node<> *codenode = constructor->first_node("functioncode")->first_node();
+			
+			out << trimwhitespace(constructor->first_node("documentation")->value()) << "\n" << flush;
+			out << trimwhitespace(constructor->first_node("declaration")->value()) << "\n" << flush;
+			out << "{" << flush;
+			while (codenode != 0)
+			{
+				out << trimtrailingwhitespace(codenode->value()) << "\n" << flush;
+				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
+			}
+			out << "\n";
+			out << "}" << "\n\n" << flush;
+			
+			while (privatecode != 0)
+			{
+				out << trimtrailingwhitespace(privatecode->value()) << "\n" << flush;
+				privatecode = privatecode->next_sibling(); 
+			}
+			out << "\n";
+			out << "};" << "\n\n" << flush;
+			//documentation
+			//declaration
+			//public
+				//code*
+			//private
+				//code*
+		}
 		
 		node = node->next_sibling();
 	}
@@ -174,8 +182,6 @@ void generateCode(xml_node<> *node, ofstream &out)
 			
 			//out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
 		}
-		//out << node value . replace (&projName, projectName) etc.   //. replace (&quot; with ") already happens???
-		//cout << "create code" << "\n";
 		
 		node = node->next_sibling();
 	}
@@ -285,109 +291,38 @@ void generateRecur(xml_node<> *node, string &path)
 	}
 }
 
-/// this function initializes doc by populating it with the contents from filename
-void initialize(string &filename, xml_document<> &doc)
+// this function initializes doc by populating it with the contents from filename
+void initialize(string &filename)
 {
+	//codeTree.clear();
 	ifstream myfile(filename.c_str());
-	vector<char> buffer((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
-	buffer.push_back('\0');
+	vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
+	documenty.push_back('\0');
 	
-	doc.parse<0>(&buffer[0]);
+	document = documenty;
+	
+	//std::ifstream myfile(filename.c_str(), std::ios::binary);
+	//std::vector<char> fileContents;
+	//document.reserve(fileSize);
+	//document.assign(std::istreambuf_iterator<char>(myfile),
+		//				std::istreambuf_iterator<char>());
+		
+		//ifstreambuf_iterator iter(myfile);
+		//std::copy(iter.begin(), iter.end(), std::back_inserter(document));
+	/*	typedef std::istream_iterator<char> istream_iterator;
+
+			myfile >> std::noskipws;
+		std::copy(istream_iterator(myfile), istream_iterator(),
+				  std::back_inserter(document));*/
+	
+	codeTree.parse<0>(&document[0]);
+	//codeTree.parse<parse_full>(&document[0]);
+	
+	cout << "\n\n\n pname: " << codeTree.first_node()->name() << "\n\n\n" << flush;
 	
 	myfile.close();
 	
-	/*
-	//searchForParent(doc.first_node());
-	//cout << doc;
-	//print(cout, doc, 0);
-	//removeNodesWithAttribute(doc.first_node(), "parent");
-	//searchForParent(doc.first_node());
-	//cout << doc;
-	*/
-}
-
-/// load a previously created file for editing
-void loadProject(string &filename, xml_document<> &doc)
-{
-	initialize(filename, doc);
-	//load into environment
-	loadEnvironment(doc);
-	cout << "finished load environment" << "\n" << flush;
-}
-
-/// <summary>
-/// unzips a KIDE file to allow for edits to be made
-/// </summary>
-/// <param name="chosenFile">the filename to be unzipped</param>
-/// <param name="workingPath">path to place the KIDE contents</param>
-void unzipKIDE(string &chosenFile, string &workingPath)
-{
-	STARTUPINFO startinfo; //structure that allows you to, for example, run the program minimized (if it is a window program)
-    ZeroMemory(&startinfo, sizeof(STARTUPINFO)); //initialize the memory and all the members
-    startinfo.cb = sizeof(STARTUPINFO);
-    startinfo.lpReserved = NULL;
-    startinfo.lpDesktop = NULL;
-    startinfo.lpTitle = NULL;
-    startinfo.dwFlags = 0;
-    startinfo.cbReserved2 = 0;
-    startinfo.lpReserved2 = NULL;
-    PROCESS_INFORMATION procinfo; //CreateProcess fills this structure with stuff you can pass to other winapi functions to control the child process
-    ZeroMemory(&procinfo, sizeof(PROCESS_INFORMATION));
-	cout << "starting 7zip process" << "\n" << flush;
-	//TODO would like the path to be relative
-	string process = "C:/aszgard5/szg/projects/Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
-	char* proc = strdup(process.c_str());
-    CreateProcess(NULL, proc, NULL, NULL, false, 0, NULL, NULL, &startinfo, &procinfo); //this is the most important line in the program. it runs the program specified in the command-line argument (argv[1])
-	WaitForSingleObject( procinfo.hProcess, INFINITE );
-	CloseHandle(procinfo.hProcess); //and, clean up after Windows because I don't need the process handles it gives me
-    CloseHandle(procinfo.hThread);
-	free(proc);
-	cout << "finished 7zip process" << "\n" << flush;
-}
-
-/// this function will create a new project at the specified location
-void createNewProject(string &projectFolder, xml_document<> &doc, string &templateLocation)
-{
-	//cp template
-	//unzip template
-	unzipKIDE(templateLocation, projectFolder);
-	string projectFile = projectFolder + "\\" + projectName + ".kproj";
-	string templateKproj = projectFolder + "\\newProjectTemplate.kproj";
-	rename(templateKproj.c_str(),projectFile.c_str());
-	loadProject(projectFile, doc);
-	//initialize
-	//load into environment
-}
-
-/// this function saves a project to filepath from doc
-void saveProject(string &filepath, xml_document<> &doc)
-{
-	//no save as for now...later maybe, needs to cp all external files
-	cout << "saving project file to: " << filepath << "\n";
-	ofstream myfile;
-	myfile.open(filepath.c_str());
-	myfile << doc;
-	myfile.close();
-}
-
-void findTemplateCallback(vector<string> args)
-{
-	templateName = args[0];
-	cout << "template: " << templateName << "\n" << flush;
-	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
-	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-}
-
-void findProjectCallback(vector<string> args)
-{
-	projectDir = args[0];
-	unsigned found = projectDir.find_last_of("/\\");
-	string pname = projectDir.substr(found+1);
-	setProjectName(pname);
-	createNewProject(projectDir, codeTree, templateName);
-	
-	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
+	cout << "\n\n\n pname: " << codeTree.first_node()->name() << "\n\n\n" << flush;
 }
 
 void loadEnvironment(xml_document<> &doc)
@@ -466,18 +401,11 @@ void loadEnvironment(xml_document<> &doc)
 		{
 			cout << "wth file is obj " << "\n" << flush;
 		}*/
-		cout << "set filename..." << filename << "\n" << flush;
-		cout << "setting x..." << objecties->first_node("x")->value() << "\n" << flush;
 		int x = atoi(objecties->first_node("x")->value());
-		cout << "set x..." << x << "\n" << flush;
 		int y = atoi(objecties->first_node("y")->value());
-		cout << "set y..." << y << "\n" << flush;
 		int z = atoi(objecties->first_node("z")->value());
-		cout << "set z..." << z << "\n" << flush;
 		int h = atoi(objecties->first_node("heading")->value());
-		cout << "set h..." << h << "\n" << flush;
 		int p = atoi(objecties->first_node("pitch")->value());
-		cout << "set p..." << p << "\n" << flush;
 		int r = atoi(objecties->first_node("roll")->value());
 		
 		objx.push_back(x);
@@ -487,7 +415,6 @@ void loadEnvironment(xml_document<> &doc)
 		objp.push_back(p);
 		objr.push_back(r);
 		
-		cout << "set xyzhpr..." << x << y << z << h << p << r << "\n" << flush;
 		/*
 			<resourceName>cello.obj</resourceName>
 			<x>0</x>
@@ -497,30 +424,207 @@ void loadEnvironment(xml_document<> &doc)
 			<pitch>0</pitch>
 			<roll>0</roll>
 		*/
-		cout << "importing object..." << "\n" << flush;
-		//Import::import(filename, x, y, z, h, p, r, path);
-		//Import::import(filenamev.back(), path);
-		cout << "object imported..." << "\n" << flush;
 		objecties = objecties->next_sibling();
-		cout << "obtained next object..." << objecties << "\n" << flush;
 		if (objecties == 0)
 		{
-			cout << "break?..." << "\n" << flush;
 			break;
 		}
 	}
-	/*vector<string>::iterator it;
-	for (it=filenamev.begin(); it!=filenamev.end(); ++it)
-	{
-		cout << ' ' << *it << '\n';
-		Import::import(*it, path);
-	}*/
+	
 	for( int i=0; i<filenamev.size(); ++i)
 	{
-		//Import::import(filenamev[i], path);
 		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], pathv[i]);
 	}
+	filenamev.clear();
+	objx.clear();
+	objy.clear();
+	objz.clear();
+	objh.clear();
+	objp.clear();
+	objr.clear();
+	pathv.clear();
 }
+
+// load a previously created file for editing
+void loadProject(string &filename)
+{
+	initialize(filename);
+	//cout << "\n\n\n pname doc: " << doc.first_node()->name() << "\n\n\n" << flush;
+	cout << "\n\n\n pname ctr: " << codeTree.first_node()->name() << "\n\n\n" << flush;
+	//load into environment
+	loadEnvironment(codeTree);
+	cout << "finished load environment" << "\n" << flush;
+}
+
+/// <summary>
+/// unzips a KIDE file to allow for edits to be made
+/// </summary>
+/// <param name="chosenFile">the filename to be unzipped</param>
+/// <param name="workingPath">path to place the KIDE contents</param>
+void unzipKIDE(string &chosenFile, string &workingPath)
+{
+	STARTUPINFO startinfo; //structure that allows you to, for example, run the program minimized (if it is a window program)
+    ZeroMemory(&startinfo, sizeof(STARTUPINFO)); //initialize the memory and all the members
+    startinfo.cb = sizeof(STARTUPINFO);
+    startinfo.lpReserved = NULL;
+    startinfo.lpDesktop = NULL;
+    startinfo.lpTitle = NULL;
+    startinfo.dwFlags = 0;
+    startinfo.cbReserved2 = 0;
+    startinfo.lpReserved2 = NULL;
+    PROCESS_INFORMATION procinfo; //CreateProcess fills this structure with stuff you can pass to other winapi functions to control the child process
+    ZeroMemory(&procinfo, sizeof(PROCESS_INFORMATION));
+	cout << "starting 7zip process" << "\n" << flush;
+	//TODO would like the path to be relative
+	string process = "C:/aszgard5/szg/projects/Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
+	char* proc = strdup(process.c_str());
+    CreateProcess(NULL, proc, NULL, NULL, false, 0, NULL, NULL, &startinfo, &procinfo); //this is the most important line in the program. it runs the program specified in the command-line argument (argv[1])
+	WaitForSingleObject( procinfo.hProcess, INFINITE );
+	CloseHandle(procinfo.hProcess); //and, clean up after Windows because I don't need the process handles it gives me
+    CloseHandle(procinfo.hThread);
+	free(proc);
+	cout << "finished 7zip process" << "\n" << flush;
+}
+enum DirectoryDeletion
+ {
+    CONTENTS = 0x1,
+    DIRECTORY = 0x2,
+    DIRECTORY_AND_CONTENTS = (0x1 | 0x2)
+ };
+ 
+///code taken from Jay Kramer as a solution to a problem posted by Charles on stackoverflow, along with enum above
+///http://stackoverflow.com/questions/1468774/why-am-i-having-problems-recursively-deleting-directories
+bool deleteDirectory(std::string& directoryname, int flags)
+{
+	if(directoryname.at(directoryname.size()-1) !=  '\\') directoryname += '\\';
+
+	if ((flags & CONTENTS) == CONTENTS)
+	{
+		WIN32_FIND_DATAA fdata;
+		HANDLE dhandle;
+		//BUG 1: Adding a extra \ to the directory name..
+		directoryname += "*";
+		dhandle = FindFirstFileA(directoryname.c_str(), &fdata);
+		//BUG 2: Not checking for invalid file handle return from FindFirstFileA
+		if( dhandle != INVALID_HANDLE_VALUE )
+		{
+			// Loop through all the files in the main directory and delete files & make a list of directories
+			while(true)
+			{
+				if(FindNextFileA(dhandle, &fdata))
+				{
+					std::string     filename = fdata.cFileName;
+					if(filename.compare("..") != 0)
+					{
+						//BUG 3: caused by BUG 1 - Removing too many characters from string.. removing 1 instead of 2
+						std::string filelocation = directoryname.substr(0, directoryname.size()-1) + filename;
+
+						// If we've encountered a directory then recall this function for that specific folder.
+
+						//BUG 4: not really a bug, but spurious function call - we know its a directory from FindData already, use it.
+						if( (fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)  
+						{
+							DeleteFileA(filelocation.c_str());
+						}
+						else 
+						{
+							deleteDirectory(filelocation, DIRECTORY_AND_CONTENTS);
+						}
+					}
+				} 
+				else if(GetLastError() == ERROR_NO_MORE_FILES)    
+				{
+					break;
+				}
+			}
+			directoryname = directoryname.substr(0, directoryname.size()-2);
+			//BUG 5: Not closing the FileFind with FindClose - OS keeps handles to directory open.  MAIN BUG
+			FindClose( dhandle );
+		}
+	}
+	if ((flags & DIRECTORY) == DIRECTORY)
+	{
+		HANDLE DirectoryHandle;
+		DirectoryHandle = CreateFileA(directoryname.c_str(),
+				FILE_LIST_DIRECTORY,
+				FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+				NULL,
+				OPEN_EXISTING,
+				FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED,
+				NULL);
+		
+		//BUG 6: Not checking CreateFileA for invalid handle return.
+		if( DirectoryHandle != INVALID_HANDLE_VALUE )
+		{
+			bool DeletionResult = (RemoveDirectoryA(directoryname.c_str()) != 0)?true:false;
+			CloseHandle(DirectoryHandle);
+			return DeletionResult;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	return true;
+}
+
+/// this function will create a new project at the specified location
+void createNewProject(string &projectFolder, string &templateLocation)
+{
+	//cp template
+	//unzip template
+	deleteDirectory(projectFolder, CONTENTS);
+	unzipKIDE(templateLocation, projectFolder);
+	
+	string projectFile = projectFolder + "\\" + projectName + ".kproj";
+	string templateKproj = projectFolder + "\\newProjectTemplate.kproj";
+	rename(templateKproj.c_str(),projectFile.c_str());
+    
+	loadProject(projectFile);
+	//initialize
+	//load into environment
+}
+
+/// this function saves a project to filepath from doc
+void saveProject(string &filepath)
+{
+	//no save as for now...later maybe, needs to cp all external files
+	cout << "saving project file to: " << filepath << "\n";
+	ofstream myfile;
+	myfile.open(filepath.c_str());
+	myfile << codeTree;
+	myfile.close();
+}
+
+void findTemplateCallback(vector<string> args)
+{
+	templateName = args[0];
+	cout << "template: " << templateName << "\n" << flush;
+	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
+	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
+	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
+}
+
+void findProjectCallback(vector<string> args)
+{
+	projectDir = args[0];
+	unsigned found = projectDir.find_last_of("/\\");
+	string pname = projectDir.substr(found+1);
+	setProjectName(pname);
+	createNewProject(projectDir, templateName);
+	
+	string projectFile = projectDir + "\\" + projectName + ".kproj";
+	saveProject(projectFile);
+	
+	//cout << codeTree;
+	
+	cout << "generate recur" << "\n" << flush;
+	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
+	cout << "finished generate recur" << "\n" << flush;
+}
+
+
 
 /*
 int main()
@@ -541,5 +645,14 @@ int main()
 	
 	//export/generate code
 	generateRecur(codeTree.first_node()->first_node()->first_node(), path); //output code, folder, etc	
+	
+	
+	//searchForParent(doc.first_node());
+	//cout << doc;
+	//print(cout, doc, 0);
+	//removeNodesWithAttribute(doc.first_node(), "parent");
+	//searchForParent(doc.first_node());
+	//cout << doc;
+	
 }
 */

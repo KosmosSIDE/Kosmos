@@ -36,6 +36,7 @@ using namespace rapidxml;
 
 string projectName = "kosmosGenerated";
 xml_document<> codeTree;
+vector<char> document;
 string templateName = "";
 string projectDir = "";
 
@@ -184,6 +185,13 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	ar_navRotate( arVector3(0,1,0), 135 );
 	ar_navTranslate( arVector3(0,0,6) );
+	
+	
+	
+		/*templateName = "C:\\aszgard5\\szg\\projects\\Kosmos\\templates\\template3.kide";
+		vector<string> projman;
+		projman.push_back("C:\\aszgard5\\szg\\projects\\newproj");
+		findProjectCallback(projman);*/
 	
 	// Return true if everything is initialized correctly.
 	return true;
