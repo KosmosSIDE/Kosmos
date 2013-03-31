@@ -1,0 +1,30 @@
+<menus>
+  <menu level="0">
+		<options>
+			<option level="1" hasChild="Y">
+				<name>Create</name>
+				<attrList>
+					<attr></attr>
+					<attr></attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="Y">
+						<name>Object</name>
+						<attrList>
+							<attr></attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>Circle</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>	
+					</option>
+				</options>
+			</option>
+		</options>
+	</menu>
+</menus>
