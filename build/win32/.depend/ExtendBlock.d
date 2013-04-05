@@ -1,8 +1,5 @@
-ProjectManager.o: ../../src/ProjectManager.cpp ../../src/ProjectManager.h \
-  ../../src/../lib/rapidxml/rapidxml.hpp \
-  ../../src/../lib/rapidxml/rapidxml_print.hpp \
-  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/main.h \
-  C:/aszgard5/szg/src/language/arPrecompiled.h \
+ExtendBlock.o: ../../src/ExtendBlock.cpp ../../src/ExtendBlock.h \
+  ../../src/main.h C:/aszgard5/szg/src/language/arPrecompiled.h \
   C:/aszgard5/szg/src/framework/arMasterSlaveFramework.h \
   C:/aszgard5/szg/src/language/arDataServer.h \
   C:/aszgard5/szg/src/language/arDataPoint.h \
@@ -228,6 +225,9 @@ ProjectManager.o: ../../src/ProjectManager.cpp ../../src/ProjectManager.h \
   C:/aszgard5/szg/src/obj/arOBJSmoothingGroup.h \
   C:/aszgard5/szg/src/graphics/arRay.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
+  ../../src/../lib/rapidxml/rapidxml.hpp \
+  ../../src/../lib/rapidxml/rapidxml_print.hpp \
+  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/ProjectManager.h \
   ../../src/selectedObjects.h ../../src/Object.h \
   ../../src/VirtualDirectory.h ../../src/CallFunction.h \
-  ../../src/Import.h ../../src/ExtendBlock.h
+  ../../src/Import.h

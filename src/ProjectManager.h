@@ -28,7 +28,7 @@ char *trimwhitespace(char *str);
 char *trimtrailingwhitespace(char *str);//find a string in a string and replace with a string
 int inline findAndReplace(string& source, const string& find, const string& replace);
 //remove a node (and all children) with atrribute name = attributeName
-void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName);
+void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue);
 /// this function writes to a header file
 void generateHeader(xml_node<> *node, ofstream &out);
 /// this function writes to a codefile

@@ -1,4 +1,5 @@
 #include "ProjectManager.h"
+#include "ExtendBlock.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -56,16 +57,16 @@ int inline findAndReplace(string& source, const string& find, const string& repl
     return num;
 }
 
-//remove a node (and all children) with atrribute name = attributeName
-void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName)
+//remove a node (and all children) with atrribute name = attributeName and attribute value = attributeValue
+void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue)
 {
 	rapidxml::xml_node<> *sib = node->next_sibling();
 	bool removed = false;
 	if (node->first_attribute() != 0)
 	{
-		rapidxml::xml_attribute<> *attr = node->first_attribute();
+		rapidxml::xml_attribute<> *attr = node->first_attribute(attributeName);
 		cout << "Node has attribute: " << attr->name() << ", with value: " << attr->value() << "\n";
-		if (strcmp(attributeName, attr->name()) == 0)
+		if (strcmp(attributeValue, attr->value()) == 0)
 		{
 			rapidxml::xml_node<> *parent = node->parent();
 			parent->remove_node(node);
@@ -76,11 +77,11 @@ void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName)
 	
 	if (removed == false && node->first_node() != 0)
 	{
-		removeNodesWithAttribute(node->first_node(), attributeName);
+		removeNodesWithAttribute(node->first_node(), attributeName, attributeValue);
 	}
 	if (sib != 0)
 	{
-		removeNodesWithAttribute(sib, attributeName);
+		removeNodesWithAttribute(sib, attributeName, attributeValue);
 	}
 }
 
@@ -318,11 +319,7 @@ void initialize(string &filename)
 	codeTree.parse<0>(&document[0]);
 	//codeTree.parse<parse_full>(&document[0]);
 	
-	cout << "\n\n\n pname: " << codeTree.first_node()->name() << "\n\n\n" << flush;
-	
 	myfile.close();
-	
-	cout << "\n\n\n pname: " << codeTree.first_node()->name() << "\n\n\n" << flush;
 }
 
 void loadEnvironment(xml_document<> &doc)
@@ -613,6 +610,10 @@ void findProjectCallback(vector<string> args)
 	string pname = projectDir.substr(found+1);
 	setProjectName(pname);
 	createNewProject(projectDir, templateName);
+	
+	/*vector<string> handy;
+	handy.push_back("right");
+	ExtendBlock::insertBlock(handy);*/
 	
 	string projectFile = projectDir + "\\" + projectName + ".kproj";
 	saveProject(projectFile);
