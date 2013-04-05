@@ -1,25 +1,25 @@
-#include "ExtendBlock.h"
+#include "VirtualHandBlock.h"
 
 
 using namespace std;
 
-rapidxml::xml_document<> ExtendBlock::extendblockdoc;
-vector<char> ExtendBlock::extendblockfile;
+rapidxml::xml_document<> VirtualHandBlock::vhandblockdoc;
+vector<char> VirtualHandBlock::vhandblockfile;
 
 /*
 //Example code to call insertBlock
 vector<string> handy;
 handy.push_back("right");
-ExtendBlock::insertBlock(handy);
+VirtualHandBlock::insertBlock(handy);
 */
-void ExtendBlock::insertBlock(vector<string> args)
+void VirtualHandBlock::insertBlock(vector<string> args)
 {
-	ifstream myfile("C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\extendblock.xml");
+	ifstream myfile("C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\virtualhandblock.xml");
 	vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
 	documenty.push_back('\0');
 	
-	extendblockfile = documenty;
-	extendblockdoc.parse<0>(&extendblockfile[0]);
+	vhandblockfile = documenty;
+	vhandblockdoc.parse<0>(&vhandblockfile[0]);
 
 	if (strcmp(args[0].c_str(),"right") == 0)
 	{
@@ -48,7 +48,7 @@ void ExtendBlock::insertBlock(vector<string> args)
 }
 
 
-void ExtendBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName)
+void VirtualHandBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName)
 {
 	if (node->first_attribute() != 0)
 	{
@@ -58,7 +58,7 @@ void ExtendBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* bloc
 			rapidxml::xml_attribute<> *type = node->first_attribute("type");
 			if (type != 0)
 			{			
-				rapidxml::xml_node<>* a = extendblockdoc.first_node();
+				rapidxml::xml_node<>* a = vhandblockdoc.first_node();
 				while ((strcmp(a->first_attribute("type")->value(), type->value()) != 0) && (strcmp(blockName, a->first_attribute("parent")->value()) != 0))
 				{
 					a = a->next_sibling();
