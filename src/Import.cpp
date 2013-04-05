@@ -23,13 +23,13 @@ void Import::import(const string &filename,const string &path = "data/obj")
 	}
 }
 
-void Import::import(const string &filename, int &x, int &y, int &z, int &h, int &p, int &r, const string &path)
+void Import::import(const string &filename, int &x, int &y, int &z, int &h, int &p, int &r, int &scale, const string &path)
 {
 	cout << "attempting to import..." << filename << " from: " << path << "\n" << flush;
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
-		Object* newObj = (path != "")?new Object(2,1,1,1,filename,path):new Object(2,1,1,1,filename);
+		Object* newObj = (path != "")?new Object(2,scale,scale,scale,filename,path):new Object(2,scale,scale,scale,filename);
 		cout << "created object..." << "\n" << flush;
 		newObj->normalize();
 		cout << "normalized object..." << "\n" << flush;

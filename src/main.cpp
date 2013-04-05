@@ -188,10 +188,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		/*templateName = "C:\\aszgard5\\szg\\projects\\Kosmos\\templates\\template3.kide";
+		templateName = "C:\\aszgard5\\szg\\projects\\Kosmos\\templates\\template3.kide";
 		vector<string> projman;
 		projman.push_back("C:\\aszgard5\\szg\\projects\\newproj");
-		findProjectCallback(projman);*/
+		findProjectCallback(projman);
 	
 	// Return true if everything is initialized correctly.
 	return true;

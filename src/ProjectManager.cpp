@@ -344,6 +344,7 @@ void loadEnvironment(xml_document<> &doc)
 	vector<int> objh;
 	vector<int> objp;
 	vector<int> objr;
+	vector<int> objscale;
 	//filenamev.push_back(filename);
 	
 	xml_node<> *userlocation = user->first_node("startingLocation");
@@ -368,6 +369,7 @@ void loadEnvironment(xml_document<> &doc)
 		objh.push_back(h);
 		objp.push_back(p);
 		objr.push_back(r);
+		objscale.push_back(7);
 		
 		string filename = "MrBodyWithHands.obj";
 		filenamev.push_back(filename);
@@ -411,6 +413,7 @@ void loadEnvironment(xml_document<> &doc)
 		objh.push_back(h);
 		objp.push_back(p);
 		objr.push_back(r);
+		objscale.push_back(1);
 		
 		/*
 			<resourceName>cello.obj</resourceName>
@@ -430,7 +433,7 @@ void loadEnvironment(xml_document<> &doc)
 	
 	for( int i=0; i<filenamev.size(); ++i)
 	{
-		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], pathv[i]);
+		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i]);
 	}
 	filenamev.clear();
 	objx.clear();
@@ -439,6 +442,7 @@ void loadEnvironment(xml_document<> &doc)
 	objh.clear();
 	objp.clear();
 	objr.clear();
+	objscale.clear();
 	pathv.clear();
 }
 
