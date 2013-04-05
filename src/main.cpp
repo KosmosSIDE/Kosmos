@@ -191,7 +191,7 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 		templateName = "C:\\aszgard5\\szg\\projects\\Kosmos\\templates\\template3.kide";
 		vector<string> projman;
 		projman.push_back("C:\\aszgard5\\szg\\projects\\newproj");
-		findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);
 	
 	// Return true if everything is initialized correctly.
 	return true;
@@ -267,7 +267,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	{
 		pressedImport = currentTime;
 		//Import::import("piano.obj");
-		virtualdirectory.startBrowse("template", &findTemplateCallback,"Select template file: ", "c:\\aszgard5\\szg\\projects\\Kosmos\\");
+		virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", "c:\\aszgard5\\szg\\projects\\Kosmos\\");
 	}
 	else if(virtualdirectory.findingFile)
 	{

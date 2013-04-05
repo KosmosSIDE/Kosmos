@@ -5,7 +5,7 @@ using namespace std;
 using namespace rapidxml;
 
 //removes beginning and end whitespace from a char*
-char *trimwhitespace(char *str)
+char *ProjectManager::trimwhitespace(char *str)
 {
   char *end;
 
@@ -26,7 +26,7 @@ char *trimwhitespace(char *str)
 }
 
 //removes end whitespace from a char*
-char *trimtrailingwhitespace(char *str)
+char *ProjectManager::trimtrailingwhitespace(char *str)
 {
   char *end;
 
@@ -44,7 +44,7 @@ char *trimtrailingwhitespace(char *str)
 }
 
 //find a string in a string and replace with a string
-int inline findAndReplace(string& source, const string& find, const string& replace)
+int inline ProjectManager::findAndReplace(string& source, const string& find, const string& replace)
 {
     int num=0;
     int fLen = find.size();
@@ -58,7 +58,7 @@ int inline findAndReplace(string& source, const string& find, const string& repl
 }
 
 //remove a node (and all children) with atrribute name = attributeName and attribute value = attributeValue
-void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue)
+void ProjectManager::removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue)
 {
 	rapidxml::xml_node<> *sib = node->next_sibling();
 	bool removed = false;
@@ -86,7 +86,7 @@ void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, c
 }
 
 /// this function writes to a header file
-void generateHeader(xml_node<> *node, ofstream &out)
+void ProjectManager::generateHeader(xml_node<> *node, ofstream &out)
 {
 	while(node != 0)
 	{
@@ -145,7 +145,7 @@ void generateHeader(xml_node<> *node, ofstream &out)
 /// this function writes to a codefile
 /// param node: first codeblock in the file ie file->codeblocks->first codeblock
 /// param out: ofstream connecting to the file to output
-void generateCode(xml_node<> *node, ofstream &out)
+void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 {
 	while(node != 0)
 	{
@@ -189,7 +189,7 @@ void generateCode(xml_node<> *node, ofstream &out)
 }
 
 /// This function recursively travels the tree writing out to filesystem
-void generateRecur(xml_node<> *node, string &path)
+void ProjectManager::generateRecur(xml_node<> *node, string &path)
 {
 	if (strcmp(node->name(),"file") == 0)
 	{
@@ -207,7 +207,7 @@ void generateRecur(xml_node<> *node, string &path)
 			myfile.open(newpath.c_str());
 			string output = string(node->first_node("text")->value());
 			// TODO implement replace findAndReplace(output, "&projName;","kosmos");
-			findAndReplace(output, "&projName;",projectName);
+			ProjectManager::findAndReplace(output, "&projName;",projectName);
 			myfile << output;
 			myfile.close();
 			cout << "write to plaintext file: " << newpath << "\n";
@@ -293,7 +293,7 @@ void generateRecur(xml_node<> *node, string &path)
 }
 
 // this function initializes doc by populating it with the contents from filename
-void initialize(string &filename)
+void ProjectManager::initialize(string &filename)
 {
 	//codeTree.clear();
 	ifstream myfile(filename.c_str());
@@ -322,7 +322,7 @@ void initialize(string &filename)
 	myfile.close();
 }
 
-void loadEnvironment(xml_document<> &doc)
+void ProjectManager::loadEnvironment(xml_document<> &doc)
 {
 	cout << "loading environment..." << "\n" << flush;
 	xml_node<> *profile = doc.first_node()->first_node("profile");
@@ -447,7 +447,7 @@ void loadEnvironment(xml_document<> &doc)
 }
 
 // load a previously created file for editing
-void loadProject(string &filename)
+void ProjectManager::loadProject(string &filename)
 {
 	initialize(filename);
 	//cout << "\n\n\n pname doc: " << doc.first_node()->name() << "\n\n\n" << flush;
@@ -462,7 +462,7 @@ void loadProject(string &filename)
 /// </summary>
 /// <param name="chosenFile">the filename to be unzipped</param>
 /// <param name="workingPath">path to place the KIDE contents</param>
-void unzipKIDE(string &chosenFile, string &workingPath)
+void ProjectManager::unzipKIDE(string &chosenFile, string &workingPath)
 {
 	STARTUPINFO startinfo; //structure that allows you to, for example, run the program minimized (if it is a window program)
     ZeroMemory(&startinfo, sizeof(STARTUPINFO)); //initialize the memory and all the members
@@ -495,7 +495,7 @@ enum DirectoryDeletion
  
 ///code taken from Jay Kramer as a solution to a problem posted by Charles on stackoverflow, along with enum above
 ///http://stackoverflow.com/questions/1468774/why-am-i-having-problems-recursively-deleting-directories
-bool deleteDirectory(std::string& directoryname, int flags)
+bool ProjectManager::deleteDirectory(std::string& directoryname, int flags)
 {
 	if(directoryname.at(directoryname.size()-1) !=  '\\') directoryname += '\\';
 
@@ -529,7 +529,7 @@ bool deleteDirectory(std::string& directoryname, int flags)
 						}
 						else 
 						{
-							deleteDirectory(filelocation, DIRECTORY_AND_CONTENTS);
+							ProjectManager::deleteDirectory(filelocation, DIRECTORY_AND_CONTENTS);
 						}
 					}
 				} 
@@ -571,11 +571,11 @@ bool deleteDirectory(std::string& directoryname, int flags)
 }
 
 /// this function will create a new project at the specified location
-void createNewProject(string &projectFolder, string &templateLocation)
+void ProjectManager::createNewProject(string &projectFolder, string &templateLocation)
 {
 	//cp template
 	//unzip template
-	deleteDirectory(projectFolder, CONTENTS);
+	ProjectManager::deleteDirectory(projectFolder, CONTENTS);
 	unzipKIDE(templateLocation, projectFolder);
 	
 	string projectFile = projectFolder + "\\" + projectName + ".kproj";
@@ -588,7 +588,7 @@ void createNewProject(string &projectFolder, string &templateLocation)
 }
 
 /// this function saves a project to filepath from doc
-void saveProject(string &filepath)
+void ProjectManager::saveProject(string &filepath)
 {
 	//no save as for now...later maybe, needs to cp all external files
 	cout << "saving project file to: " << filepath << "\n";
@@ -598,16 +598,16 @@ void saveProject(string &filepath)
 	myfile.close();
 }
 
-void findTemplateCallback(vector<string> args)
+void ProjectManager::findTemplateCallback(vector<string> args)
 {
 	templateName = args[0];
 	cout << "template: " << templateName << "\n" << flush;
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
+	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
 }
 
-void findProjectCallback(vector<string> args)
+void ProjectManager::findProjectCallback(vector<string> args)
 {
 	projectDir = args[0];
 	unsigned found = projectDir.find_last_of("/\\");
