@@ -19,6 +19,8 @@ class Import
 		
 	private:
 		static int inline findAndReplace(string& source, const string& find, const string& replace);
+		static rapidxml::xml_document<> importdoc;
+		static vector<char> importstr;
 };
 
 

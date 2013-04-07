@@ -193,6 +193,7 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 		projman.push_back("C:\\aszgard5\\szg\\projects\\newproj");
 		ProjectManager::findProjectCallback(projman);
 	
+	
 	// Return true if everything is initialized correctly.
 	return true;
 }

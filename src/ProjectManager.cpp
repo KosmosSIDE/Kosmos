@@ -5,7 +5,52 @@ using namespace std;
 using namespace rapidxml;
 
 //removes beginning and end whitespace from a char*
-char *ProjectManager::trimwhitespace(char *str)
+char *ProjectManager::trimwhitespace(char *c)
+{
+	char *str = new char[strlen(c)];
+	strcpy(str, c);
+
+  char *end;
+
+  // Trim leading space
+  while(isspace(*str)) str++;
+
+  if(*str == 0)  // All spaces?
+    return str;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace(*end)) end--;
+
+  // Write new null terminator
+  *(end+1) = 0;
+
+  return str;
+}
+
+//removes end whitespace from a char*
+char *ProjectManager::trimtrailingwhitespace(char *c)
+{
+	char *str = new char[strlen(c)];
+	strcpy(str, c);
+
+  char *end;
+
+  if(*str == 0)  // All spaces?
+    return str;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace(*end)) end--;
+
+  // Write new null terminator
+  *(end+1) = 0;
+
+  return str;
+}
+
+//removes beginning and end whitespace from a char*
+char *ProjectManager::trimwhitespaceinplace(char *str)
 {
   char *end;
 
@@ -26,7 +71,7 @@ char *ProjectManager::trimwhitespace(char *str)
 }
 
 //removes end whitespace from a char*
-char *ProjectManager::trimtrailingwhitespace(char *str)
+char *ProjectManager::trimtrailingwhitespaceinplace(char *str)
 {
   char *end;
 
@@ -92,7 +137,9 @@ void ProjectManager::generateHeader(xml_node<> *node, ofstream &out)
 	{
 		if ((strcmp(node->first_node("type")->value(),"include") == 0) || (strcmp(node->first_node("type")->value(),"code") == 0))
 		{
-			out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
+			char* c = trimwhitespace(node->first_node("code")->value());
+			out << c << "\n" << flush;
+			delete [] c;
 		}
 		else if (strcmp(node->first_node("type")->value(),"classDefinition") == 0)
 		{
@@ -100,24 +147,36 @@ void ProjectManager::generateHeader(xml_node<> *node, ofstream &out)
 			xml_node<> *constructor = node->first_node("constructor");
 			xml_node<> *privatecode = node->first_node("private")->first_node();
 			
-			out << trimwhitespace(node->first_node("documentation")->value()) << "\n" << flush;
-			out << trimwhitespace(node->first_node("declaration")->value()) << "\n" << flush;
+			char *c = trimwhitespace(node->first_node("documentation")->value());
+			out << c << "\n" << flush;
+			delete [] c;
+			char *d = trimwhitespace(node->first_node("declaration")->value());
+			out << d << "\n" << flush;
+			delete [] d;
 			out << "{" << flush;
 			while (publiccode != 0)
 			{
-				out << trimtrailingwhitespace(publiccode->value()) << "\n" << flush;
+				char *e = trimtrailingwhitespace(publiccode->value());
+				out << e << "\n" << flush;
+				delete [] e;
 				publiccode = publiccode->next_sibling(); 
 			}
 			
 			//handle constructor
 			xml_node<> *codenode = constructor->first_node("functioncode")->first_node();
 			
-			out << trimwhitespace(constructor->first_node("documentation")->value()) << "\n" << flush;
-			out << trimwhitespace(constructor->first_node("declaration")->value()) << "\n" << flush;
+			char *f = trimwhitespace(constructor->first_node("documentation")->value());
+			out << f << "\n" << flush;
+			delete []f;
+			char *g = trimwhitespace(constructor->first_node("declaration")->value());
+			out << g << "\n" << flush;
+			delete []g;
 			out << "{" << flush;
 			while (codenode != 0)
 			{
-				out << trimtrailingwhitespace(codenode->value()) << "\n" << flush;
+				char *h = trimtrailingwhitespace(codenode->value());
+				out << h << "\n" << flush;
+				delete [] h;
 				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
 			}
 			out << "\n";
@@ -125,7 +184,9 @@ void ProjectManager::generateHeader(xml_node<> *node, ofstream &out)
 			
 			while (privatecode != 0)
 			{
-				out << trimtrailingwhitespace(privatecode->value()) << "\n" << flush;
+				char *j = trimtrailingwhitespace(privatecode->value());
+				out << j << "\n" << flush;
+				delete []j;
 				privatecode = privatecode->next_sibling(); 
 			}
 			out << "\n";
@@ -155,12 +216,18 @@ void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 			xml_node<> *codenode = node->first_node("functioncode")->first_node();
 			
 			//cout << node->first_node("code")->value() << "\n"; //TODO make sure you replace &projName; with the real projName, " and & already happen
-			out << trimwhitespace(node->first_node("documentation")->value()) << "\n" << flush;
-			out << trimwhitespace(node->first_node("declaration")->value()) << "\n" << flush;
+			char * c = trimwhitespace(node->first_node("documentation")->value());
+			out << c << "\n" << flush;
+			delete [] c;
+			char *b = trimwhitespace(node->first_node("declaration")->value());
+			out << b << "\n" << flush;
+			delete [] b;
 			out << "{" << flush;
 			while (codenode != 0)
 			{
-				out << trimtrailingwhitespace(codenode->value()) << "\n" << flush;
+				char *a = trimtrailingwhitespace(codenode->value());
+				out << a << "\n" << flush;
+				delete [] a;
 				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
 			}
 			out << "\n";
@@ -177,7 +244,9 @@ void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 			
 			while (codenode != 0)
 			{
-				out << trimtrailingwhitespace(codenode->value()) << "\n" << flush;
+				char *a = trimtrailingwhitespace(codenode->value());
+				out << a << "\n" << flush;
+				delete [] a;
 				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
 			}
 			
@@ -615,9 +684,16 @@ void ProjectManager::findProjectCallback(vector<string> args)
 	setProjectName(pname);
 	createNewProject(projectDir, templateName);
 	
-	/*vector<string> handy;
+	/*
+	vector<string> handy;
 	handy.push_back("right");
-	ExtendBlock::insertBlock(handy);*/
+	ExtendBlock::insertBlock(handy);
+	*/
+	
+	/*vector<string> importy;
+	importy.push_back("C:\\obj\\paperlantern.obj");
+	importy.push_back("C:\\obj\\");
+	Import::importCallback(importy);*/
 	
 	string projectFile = projectDir + "\\" + projectName + ".kproj";
 	saveProject(projectFile);
@@ -627,6 +703,16 @@ void ProjectManager::findProjectCallback(vector<string> args)
 	cout << "generate recur" << "\n" << flush;
 	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
 	cout << "finished generate recur" << "\n" << flush;
+	
+	/*
+	vector<string> importy;
+	importy.push_back("C:\\obj\\paperlantern.obj");
+	importy.push_back("C:\\obj\\");
+	Import::importCallback(importy);
+	*/
+	
+	//string projectFile = projectDir + "\\" + projectName + ".kproj";
+	//ProjectManager::saveProject(projectFile);
 }
 
 

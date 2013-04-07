@@ -29,6 +29,13 @@ class ProjectManager
 		static char *trimwhitespace(char *str);
 		//removes end whitespace from a char*
 		static char *trimtrailingwhitespace(char *str);//find a string in a string and replace with a string
+		
+		//////////////////////////////////// the inplace functions do not create a new string, they modify the current one
+		//removes beginning and end whitespace from a char*
+		static char *trimwhitespaceinplace(char *str);
+		//removes end whitespace from a char*
+		static char *trimtrailingwhitespaceinplace(char *str);//find a string in a string and replace with a string
+		
 		//remove a node (and all children) with atrribute name = attributeName
 		static void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue);
 		/// this function writes to a header file

@@ -9,6 +9,9 @@ Author: Aaron Hardin
 
 #include "Import.h"
 
+rapidxml::xml_document<> Import::importdoc;
+vector<char> Import::importstr;
+
 //find a string in a string and replace with a string
 int inline Import::findAndReplace(string& source, const string& find, const string& replace)
 {
@@ -103,20 +106,26 @@ Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
 	
 	std::string src2 = "<object><type>OBJ</type><name>"+filename.substr(0,filename.size()-4)+"</name><resourceName>"+filename+"</resourceName>"
 		"<x>0</x><y>4</y><z>-4</z><heading>0</heading><pitch>0</pitch><roll>0</roll></object>";
-	rapidxml::xml_document<> xmlseg;
-	std::vector<char> x(src2.begin(), src2.end());
-	x.push_back( 0 ); // make it zero-terminated as per RapidXml's docs
+	std::vector<char> data(src2.begin(), src2.end());
+	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	
+	importstr = data;
+	//rapidxml::xml_document<> xmlseg;
+	//std::vector<char> x(src2.begin(), src2.end());
+	 
 
-	xmlseg.parse<0>( &x[0] );
+	//xmlseg.parse<0>( &x[0] );
+	importdoc.parse<0>( &importstr[0] );
 
-	rapidxml::xml_node<>* a = xmlseg.first_node(); /* Node to append */
+	//rapidxml::xml_node<>* a = xmlseg.first_node(); /* Node to append */
+	rapidxml::xml_node<>* a = importdoc.first_node();
 
 	rapidxml::xml_node<> *node = codeTree.clone_node( a );
-//codeTree.first_node("project")->first_node("profile")->append_node( node ); /* Appending node a to the tree in src */
-	cout << "save proj" << "\n" << flush;
+codeTree.first_node("project")->first_node("profile")->append_node( node ); /* Appending node a to the tree in src */
+	/*cout << "save proj" << "\n" << flush;
 	string projectFile = projectDir + "\\" + projectName + ".kproj";
-//	ProjectManager::saveProject(projectFile);
-	cout << "finished save" << "\n" << flush;
+	ProjectManager::saveProject(projectFile);
+	cout << "finished save" << "\n" << flush;*/
 	// append to profile
 	/*
 		<object>
