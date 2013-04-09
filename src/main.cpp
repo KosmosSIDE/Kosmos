@@ -75,8 +75,10 @@ list<Object*> upSelectedObjects;
 list<Object*> rightSelectedObjects;
 list<Object*> downSelectedObjects;
 
-
-
+Object* _leftSelectedObject;
+Object* _rightSelectedObject;
+bool _rightMoving;
+bool _leftMovering;
 
 
 VirtualDirectory virtualdirectory;
@@ -129,6 +131,8 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	CallFunction cf;
 	cf.init();
 		
+	_rightMoving = false;
+	_leftMovering = false;
 	
 	// Register shared memory. Not needed for non-cluster-based systems.
 	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);
@@ -252,6 +256,13 @@ void preExchange(arMasterSlaveFramework& framework) {
 	
 	// Process user input.
 	
+	if( _leftMovering == true && leftHand.getButton(3) == 0)
+	{
+		_leftSelectedObject->snapMatrix();
+		cout << "snapping\n" << flush;
+		_leftMovering = false;
+		_leftSelectedObject = NULL;
+	}
 
 	//const unsigned int numButtons = framework.getNumberButtons();
 

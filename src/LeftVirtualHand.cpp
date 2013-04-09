@@ -87,8 +87,27 @@ void LeftVirtualHand::extend(arEffector& self, arInteractable* object, float max
 // Left hand effector's extend function for multiple objects.
 // Purpose:
 //		- Extends effector until it touches an object or reaches the maximum length.
-void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects, float maxLength) {
-
+void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects, float maxLength) 
+{
+	
+	list<arInteractable*> objectlist;
+	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
+	
+	if(_leftMovering == false && getButton(3) == 1 && ar_pollingInteraction(self, objectlist))
+	{
+		cout << "bump\n" << flush;
+		vector<arInteractable*>::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			if(ar_pollingInteraction(self, *i))
+			{
+				Object *oby = ((Object*)(*i));
+				_leftSelectedObject = oby;
+				_leftMovering = true;
+			}
+		}
+	}
+	
 	// Return if grabbing an object.
 	if(getGrabbedObject() != 0) return;
 
@@ -96,8 +115,6 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 	_currentLength = 0.0;
 	setTipOffset(arVector3(0, 0, -_currentLength));
 
-	list<arInteractable*> objectlist;
-	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
 	
 	// Check if the maximum length has been reached or an object has been touched.
 	while(_currentLength < maxLength && !ar_pollingInteraction(self, objectlist)) {

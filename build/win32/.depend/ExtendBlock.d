@@ -229,5 +229,5 @@ ExtendBlock.o: ../../src/ExtendBlock.cpp ../../src/ExtendBlock.h \
   ../../src/../lib/rapidxml/rapidxml_print.hpp \
   ../../src/../lib/rapidxml/rapidxml.hpp ../../src/ProjectManager.h \
   ../../src/selectedObjects.h ../../src/Object.h \
-  ../../src/VirtualDirectory.h ../../src/CallFunction.h \
-  ../../src/Import.h
+  C:/aszgard5/szg/src/math/arMath.h ../../src/VirtualDirectory.h \
+  ../../src/CallFunction.h ../../src/Import.h

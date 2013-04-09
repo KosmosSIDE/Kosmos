@@ -229,4 +229,5 @@ Import.o: ../../src/Import.cpp ../../src/Import.h ../../src/main.h \
   ../../src/../lib/rapidxml/rapidxml_print.hpp \
   ../../src/../lib/rapidxml/rapidxml.hpp ../../src/ProjectManager.h \
   ../../src/selectedObjects.h ../../src/Object.h \
-  ../../src/VirtualDirectory.h ../../src/CallFunction.h
+  C:/aszgard5/szg/src/math/arMath.h ../../src/VirtualDirectory.h \
+  ../../src/CallFunction.h

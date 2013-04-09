@@ -228,4 +228,5 @@ RightVirtualHand.o: ../../src/RightVirtualHand.cpp \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
   ../../src/../lib/rapidxml/rapidxml.hpp \
   ../../src/../lib/rapidxml/rapidxml_print.hpp \
-  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/Object.h
+  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/Object.h \
+  C:/aszgard5/szg/src/math/arMath.h

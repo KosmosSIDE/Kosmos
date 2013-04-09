@@ -77,6 +77,7 @@ void Import::importCallback(vector<string> args)
 	
 	findAndReplace(frompath, ".obj",".mtl");
 	findAndReplace(topath, ".obj",".mtl");
+	//TODO parse mtl look for and add jpg ppm
 	cout << "copying file from: " << frompath << " to: " << topath << "\n\n" << flush;
 	CopyFile(frompath.c_str(),topath.c_str(), true);
 	//add to xml

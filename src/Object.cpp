@@ -1,6 +1,32 @@
 #include "Object.h"
 
-
+void Object::snapMatrix()
+{ 
+	//_matrix = matrix;
+	int inchesToSnap = 6;
+	int degreesToSnap = 15;
+	_matrix[12] = ((int)round(_matrix[12]*12/inchesToSnap))*inchesToSnap/12;
+	_matrix[13] = ((int)round(_matrix[13]*12/inchesToSnap))*inchesToSnap/12;
+	_matrix[14] = ((int)round(_matrix[14]*12/inchesToSnap))*inchesToSnap/12;
+	arVector3 angles;
+	arEulerAngles* eulers = new arEulerAngles(AR_XYZ, angles);
+	//arMatrix4 ar_extractRotationMatrix(const arMatrix4&);
+	angles = eulers->extract(_matrix);
+	float y = 0;
+	float x = 0;//3.141592/2;
+	float z = 0;
+	//eulers->addAngles(x, y, z);
+	eulers->setAngles(x, y, z);
+	arMatrix4 rotation = eulers->toMatrix();
+	arMatrix4 translation = ar_extractTranslationMatrix(_matrix);
+	arMatrix4 scale = ar_extractScaleMatrix(_matrix);
+	_matrix = translation*scale*rotation; //tried: trs, rts, str      sort of worked: trs, str
+	//extract scale, translation
+	//eulers.toMatrix()
+	//multiply all three
+	
+	
+}
 
 // Interactable object's draw function.
 void Object::draw() 

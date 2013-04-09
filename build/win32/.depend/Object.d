@@ -227,4 +227,5 @@ Object.o: ../../src/Object.cpp ../../src/Object.h ../../src/main.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
   ../../src/../lib/rapidxml/rapidxml.hpp \
   ../../src/../lib/rapidxml/rapidxml_print.hpp \
-  ../../src/../lib/rapidxml/rapidxml.hpp
+  ../../src/../lib/rapidxml/rapidxml.hpp \
+  C:/aszgard5/szg/src/math/arMath.h

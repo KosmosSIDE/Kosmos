@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include "main.h"
+#include <arMath.h>
 
 // Object class
 // Purpose:
@@ -68,6 +69,7 @@ class Object:public arInteractableThing {
 		float getHeight() { return _height; }
 		float getWidth() { return _width; }
 		arOBJRenderer* getOBJ() { return &loadedOBJ; }
+		void snapMatrix();
 		
 	private:
 		
