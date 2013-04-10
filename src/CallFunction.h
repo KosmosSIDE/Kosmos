@@ -19,7 +19,6 @@ class CallFunction
 	public:
 		void add(const string& funName, void(*funPtr)(vector<string>) );
 		void call(const string& funName, vector<string> args);
-		void init();
 };
 
 #endif

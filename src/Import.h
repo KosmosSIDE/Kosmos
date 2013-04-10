@@ -14,7 +14,7 @@ class Import
 		
 		static void copyTo(const string &frompath, const string &topath); //used to copy file to proper folder in current project directory
 		static void import(const string &filename, const string &path); //used to import into our environment
-		static void import(const string &filename, int &x, int &y, int &z, int &h, int &p, int &r, int &scale, const string &path = ""); //used to import into our environment
+		static void import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path = ""); //used to import into our environment
 		static void importCallback(vector<string> args);
 		
 	private:

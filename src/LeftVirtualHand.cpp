@@ -89,13 +89,11 @@ void LeftVirtualHand::extend(arEffector& self, arInteractable* object, float max
 //		- Extends effector until it touches an object or reaches the maximum length.
 void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects, float maxLength) 
 {
-	
 	list<arInteractable*> objectlist;
 	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
 	
 	if(_leftMovering == false && getButton(3) == 1 && ar_pollingInteraction(self, objectlist))
 	{
-		cout << "bump\n" << flush;
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{

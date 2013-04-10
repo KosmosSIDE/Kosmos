@@ -129,8 +129,7 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 {
 
 	CallFunction cf;
-	cf.init();
-		
+	
 	_rightMoving = false;
 	_leftMovering = false;
 	
@@ -259,7 +258,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if( _leftMovering == true && leftHand.getButton(3) == 0)
 	{
 		_leftSelectedObject->snapMatrix();
-		cout << "snapping\n" << flush;
 		_leftMovering = false;
 		_leftSelectedObject = NULL;
 	}
@@ -272,18 +270,15 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if((!virtualdirectory.findingFile) && rightHand.getOnButton(4) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-		//Import::import("piano.obj");
 		virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
 	}
 	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-		//Import::import("piano.obj");
 		virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", "c:\\aszgard5\\szg\\projects\\Kosmos\\");
 	}
 	else if(virtualdirectory.findingFile)
 	{
-		// TODO make buttons do things
 		if (leftHand.getOnButton(9) || (leftHand.getButton(9) && (currentTime-dirButtonPress)>150))
 		{
 			virtualdirectory.upPressed();

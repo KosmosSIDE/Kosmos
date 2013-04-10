@@ -1,7 +1,6 @@
 /*
 Summary: this function is used to browse directories and implements a callback to handle the file result
-TODO: needs to be cleaned and documented
-		some functions need to be moved from main to help modularity
+TODO: some functions need to be moved from main to help modularity
 
 Author: Aaron Hardin
 
@@ -12,9 +11,11 @@ Author: Aaron Hardin
 #include <sys/stat.h>
 #include <sys/types.h>
 
+///starts the browsing, done asynchronously! uses callback class to do so
+///cb is the name of function, funPtr is the function, titley is a title to display (optional), 
+/// startDir is the directory to start in (optional)
 void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley, const string &startDir)
 {
-	cout << "startbrowse" << "\n" << flush;
 	currentIndex = 0;
 	currentDir.clear();
 	findingFile = true;
@@ -26,17 +27,14 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	if(startDir != "")
 	{
 		dirName = startDir;
-		string opendirectory = ""; //"c:\\aszgard5\\szg\\projects\\Kosmos\\"; //
-		//opendirectory = opendirectory+"projects\\";
-		cout << "startbrowse" << startDir.c_str() << "\n" << flush;
+		string opendirectory = "";
 		opendirectory += startDir.c_str();
-		openDir(opendirectory);//("c:\\aszgard5\\szg\\");
+		openDir(opendirectory);
 	}
 	else
 	{
 		openDir("c:\\");
 	}
-	
 	
 	if (titley != "")
 	{
@@ -46,59 +44,29 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	{
 		title = "";
 	}
-	
-	/*cout << "current directory" << flush;
-	vector<string>::iterator it;
-	for (it=currentDir.begin(); it!=currentDir.end(); ++it)
-		cout << ' ' << *it << '\n';
-	*/
 }
 
+///the up button has been pressed, move the selected index up one
 void VirtualDirectory::upPressed()
 {
 	currentIndex = (currentIndex-1+currentDir.size()) % currentDir.size();
 }
 
+///the down button has been pressed, move the selected index down one
 void VirtualDirectory::downPressed()
 {
 	currentIndex = (currentIndex+1) % currentDir.size();
 }
 
+///choose a file or directory, if a directory is chosen then move into it
 void VirtualDirectory::selectFile()
 {
-	//DIR *dir;
-	//struct dirent *ent;
 	string chosenFile = currentDir[currentIndex];
-	
-	/*printf("file is %s, %d\n",chosenFile.c_str(),currentIndex);
-	
-	if ((dir = opendir (dirName.c_str())) != NULL) 
-	{
-		
-		while ((ent = readdir (dir)) != NULL) 
-		{
-			if(ent->d_name == chosenFile)
-			{
-				printf("found the file\n");
-				closedir (dir);
-				break;
-			}
-		}
-		closedir (dir);
-	} 
-	else 
-	{
-		
-		perror ("");
-		//return EXIT_FAILURE;
-	}*/
-
-	//printf("found the file %s\n", ent->d_name);
 	
 	chosenFile = dirName + "\\" + chosenFile;
 	
 	struct stat st;
-	if(stat(chosenFile.c_str(), &st) == -1)//ent->d_name, &st) == -1)
+	if(stat(chosenFile.c_str(), &st) == -1)
 	{
 		perror("");
 	}
@@ -106,14 +74,14 @@ void VirtualDirectory::selectFile()
 	{
 		if(S_ISDIR(st.st_mode))
 		{
-			printf("\t DIRECTORY\n");
+			//printf("\t DIRECTORY\n");
 			dirName = chosenFile +"\\";
 			currentIndex = 0;
 			openDir(chosenFile);
 		}
 		else
 		{
-			printf("\t FILE\n");
+			//printf("\t FILE\n");
 			currentIndex = 0;
 			vector<string> filenamev;
 			filenamev.push_back(chosenFile);
@@ -125,6 +93,8 @@ void VirtualDirectory::selectFile()
 	}
 }
 
+///select a directory, if its a file choose it, if its a directory choose it
+/// really should be combined with selectFile in some way...oh well
 void VirtualDirectory::selectDirectory()
 {
 	string chosenFile = currentDir[currentIndex];
@@ -140,35 +110,31 @@ void VirtualDirectory::selectDirectory()
 	{
 		if(S_ISDIR(st.st_mode))
 		{
-			printf("\t DIRECTORY\n");
+			//printf("\t DIRECTORY\n");
 			currentIndex = 0;
 			vector<string> filenamev;
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
 			findingFile = false;
 			cf.call(callback,filenamev);
-			
 		}
 		else
 		{
-			printf("\t FILE\n");
+			//printf("\t FILE\n");
 			currentIndex = 0;
 			vector<string> filenamev;
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
 			findingFile = false;
 			cf.call(callback,filenamev);
-			
 		}
 	}
 }
 
-
+///opens the directory and adds the contents to currentDir
 void VirtualDirectory::openDir(string directory)
 {
-//cout << "opendir\n" << flush;
 	currentDir.clear();
-//cout << "cleared" << flush;
 	DIR *dir;
 	struct dirent *ent;
 	if ((dir = opendir (directory.c_str())) != NULL) 
@@ -176,14 +142,9 @@ void VirtualDirectory::openDir(string directory)
 		/* print all the files and directories within directory */
 		while ((ent = readdir (dir)) != NULL) 
 		{
-		//cout << "start add file" << flush;
-			//printf ("%s\n", ent->d_name);
 			currentDir.push_back(ent->d_name);
-			//cout << "end add file" << flush;
 		}
-		//cout << "closedir" << flush;
 		closedir (dir);
-		//cout << "endclosedir" << flush;
 	} 
 	else 
 	{
@@ -193,19 +154,15 @@ void VirtualDirectory::openDir(string directory)
 	}
 }
 
+///the draw function, draws what is in currentDir
 void VirtualDirectory::draw() const 
 {
 
 	// Always start with glPushMatrix to avoid matrix multiplications done here from
 	// affecting other portions of the scene.
 	glPushMatrix();
-		
-		//string files [] = currentDir.getFiles()
-		int upperbound = currentIndex+15;//std::min(currentIndex+15, (int)(currentDir.size()-currentIndex-1));
-		//int i = 0;
-		//cout << "starting vd.draw2\n" << flush;
+		int upperbound = currentIndex+15;
 		renderPrimitive(-2.5f, false);
-		//cout << "starting vd.draw3\n" << flush;
 		
 		int yshift = 0;
 		if (title != "")
@@ -231,57 +188,40 @@ void VirtualDirectory::draw() const
 				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, currentDir[i%(currentDir.size()+1)], false);
 			}
 		}
-		//cout << "end vd.draw3\n" << flush;
 	// Always finish with glPopMatrix to match glPushMatrix above.
 	glPopMatrix();
-	//cout << "end vd.draw2\n" << flush;
 }
 
+///draw text on the primitive (in front of)
 void VirtualDirectory::drawText(float distance, float ypos, string text, bool selected = false) const
 {
 	glPushMatrix();
 		glPushAttrib(GL_COLOR_BUFFER_BIT);
 		glColor3f(1, 1, 1);
 		glLoadIdentity(); // Load the Identity Matrix to reset our drawing locations  
-		  
 		glTranslatef(0.0f, 0.0, distance); // Push eveything 5 units back into the scene, otherwise we won't see the primitive  
-		
 		glScalef(0.001, 0.001, 0.001);
 		glTranslatef(0.0, ypos, 0.0);
-		//glRotatef(-20, 1.0, 0.0, 0.0);
-		
-
-//cout << "starting vd.draw4\n" << flush;
-
-			int lenghOfQuote = min((int)text.length(),300);
+			int lengthOfText = min((int)text.length(),300);
 			glPushMatrix();
-			//glTranslatef(-(lenghOfQuote*37), 0.0, 0.0);
 			glTranslatef(-770, 0.0, 0.0);
 			if(selected)
 			{
 				glPushAttrib(GL_COLOR_BUFFER_BIT);
 				glColor3f(1, 0, 0);
 			}
-			//cout << "starting vd.draw5\n" << flush;
-			if(lenghOfQuote < 300)
+			if(lengthOfText < 300)
 			{
-			for (int i = 0; i < lenghOfQuote; i++)
-			{
-			//cout << "starting vd.draw6   " << lenghOfQuote << flush;
-			//cout << "text:" << text[i] << "\n" << flush;
-				//glColor3f((UpwardsScrollVelocity/10)+300+(l*10),(UpwardsScrollVelocity/10)+300+(l*10),0.0);
-				glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
-			//	cout << "end vd.draw6\n" << flush;
-			}
+				for (int i = 0; i < lengthOfText; i++)
+				{
+					glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+				}
 			}
 			if(selected)
 			{
 				glPopAttrib();
 			}
-			//cout << "end vd.draw5\n" << flush;
 			glPopMatrix();
-			//cout << "end vd.draw4\n" << flush;
 		glPopAttrib();
-			
 	glPopMatrix();
 }

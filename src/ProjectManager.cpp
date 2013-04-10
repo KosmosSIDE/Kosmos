@@ -177,7 +177,7 @@ void ProjectManager::generateHeader(xml_node<> *node, ofstream &out)
 				char *h = trimtrailingwhitespace(codenode->value());
 				out << h << "\n" << flush;
 				delete [] h;
-				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
+				codenode = codenode->next_sibling();
 			}
 			out << "\n";
 			out << "}" << "\n\n" << flush;
@@ -215,7 +215,7 @@ void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 		{
 			xml_node<> *codenode = node->first_node("functioncode")->first_node();
 			
-			//cout << node->first_node("code")->value() << "\n"; //TODO make sure you replace &projName; with the real projName, " and & already happen
+			//TODO make sure you replace &projName; with the real projName, " and & already happen
 			char * c = trimwhitespace(node->first_node("documentation")->value());
 			out << c << "\n" << flush;
 			delete [] c;
@@ -228,18 +228,14 @@ void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 				char *a = trimtrailingwhitespace(codenode->value());
 				out << a << "\n" << flush;
 				delete [] a;
-				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
+				codenode = codenode->next_sibling();
 			}
 			out << "\n";
 			out << "}" << "\n\n" << flush;
-			//documentation
-			//declaration
-			//functioncode
-				//code*
 		}
 		else if ((strcmp(node->first_node("type")->value(),"include") == 0) || (strcmp(node->first_node("type")->value(),"code") == 0))
 		{
-			//cout << node->first_node("code")->value() << "\n"; //TODO make sure you replace &projName; with the real projName, " and & already happen
+			//TODO make sure you replace &projName; with the real projName, " and & already happen
 			xml_node<> *codenode = node->first_node("code");
 			
 			while (codenode != 0)
@@ -247,10 +243,8 @@ void ProjectManager::generateCode(xml_node<> *node, ofstream &out)
 				char *a = trimtrailingwhitespace(codenode->value());
 				out << a << "\n" << flush;
 				delete [] a;
-				codenode = codenode->next_sibling(); //TODO i really wanna trim the end whitespace here, see the trimwhitespace function and modify
+				codenode = codenode->next_sibling();
 			}
-			
-			//out << trimwhitespace(node->first_node("code")->value()) << "\n" << flush;
 		}
 		
 		node = node->next_sibling();
@@ -269,13 +263,10 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 		}
 		else if (strcmp(node->first_node("type")->value(),"plaintext") == 0)
 		{
-			//make new stream out to path+filename
-			//out << node value . replace (&quot; with ") . replace (&projName, projectName) etc.
 			string newpath = path+string("/")+string(node->first_node("name")->value());
 			ofstream myfile;
 			myfile.open(newpath.c_str());
 			string output = string(node->first_node("text")->value());
-			// TODO implement replace findAndReplace(output, "&projName;","kosmos");
 			ProjectManager::findAndReplace(output, "&projName;",projectName);
 			myfile << output;
 			myfile.close();
@@ -283,13 +274,10 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 		}
 		else if (strcmp(node->first_node("type")->value(),"makefile") == 0)
 		{
-			//make new stream out to path+filename
-			//out << node value . replace (&quot; with ") . replace (&projName, projectName) etc.
 			string newpath = path+string("/")+string(node->first_node("name")->value());
 			ofstream myfile;
 			myfile.open(newpath.c_str());
 			string output = string(node->first_node("text")->value());
-			// TODO implement replace findAndReplace(output, "&projName;","kosmos");
 			findAndReplace(output, "&projName;",projectName);
 			myfile << output;
 			myfile.close();
@@ -504,6 +492,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	{
 		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i]);
 	}
+	
 	filenamev.clear();
 	objx.clear();
 	objy.clear();
@@ -549,11 +538,10 @@ void ProjectManager::unzipKIDE(string &chosenFile, string &workingPath)
 	string process = "C:/aszgard5/szg/projects/Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
 	char* proc = strdup(process.c_str());
     CreateProcess(NULL, proc, NULL, NULL, false, 0, NULL, NULL, &startinfo, &procinfo); //this is the most important line in the program. it runs the program specified in the command-line argument (argv[1])
-	WaitForSingleObject( procinfo.hProcess, INFINITE );
+	WaitForSingleObject( procinfo.hProcess, INFINITE ); //wait until it's done
 	CloseHandle(procinfo.hProcess); //and, clean up after Windows because I don't need the process handles it gives me
     CloseHandle(procinfo.hThread);
 	free(proc);
-	cout << "finished 7zip process" << "\n" << flush;
 }
 enum DirectoryDeletion
  {

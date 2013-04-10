@@ -1,7 +1,6 @@
 /*
 Summary: this function is used to import files into the environment
 TODO: some functions may need to be moved from main to here for modularity
-		copyTo function needs to be implemented
 
 Author: Aaron Hardin
 
@@ -26,10 +25,11 @@ int inline Import::findAndReplace(string& source, const string& find, const stri
     return num;
 }
 
-
+///import obj from filename and given path...the filename is the full path but
+/// we need path for the mtl, i guess we could parse from filename but this is
+/// how i chose to do it
 void Import::import(const string &filename,const string &path = "data/obj")
 {
-	cout << "attempting to import..." << filename << " from: " << path << "\n" << flush;
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
@@ -40,23 +40,22 @@ void Import::import(const string &filename,const string &path = "data/obj")
 	}
 }
 
-void Import::import(const string &filename, int &x, int &y, int &z, int &h, int &p, int &r, int &scale, const string &path)
+///import with xyz position and hpr rotation and scale, see above import for more information
+void Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path)
 {
-	cout << "attempting to import..." << filename << " from: " << path << "\n" << flush;
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
 		Object* newObj = (path != "")?new Object(2,scale,scale,scale,filename,path):new Object(2,scale,scale,scale,filename);
-		cout << "created object..." << "\n" << flush;
 		newObj->normalize();
-		cout << "normalized object..." << "\n" << flush;
 		newObj->setMatrix(ar_translationMatrix(x, y, z)); // initial position
-		cout << "set object position..." << "\n" << flush;
-		//TODO hpr
+		newObj->setHPR(h,p,r);
+		
 		objects.push_back(newObj);
 	}
 }
 
+///callback for use via the callback class
 void Import::importCallback(vector<string> args)
 {
 	if(args.size() > 1)
@@ -72,13 +71,11 @@ void Import::importCallback(vector<string> args)
 	unsigned found = args[0].find_last_of("/\\");
 	string filename = args[0].substr(found+1);
 	string topath = projectDir + "\\data\\obj\\"+filename;
-	cout << "copying file from: " << frompath << " to: " << topath << "\n\n" << flush;
 	CopyFile(frompath.c_str(),topath.c_str(), true);
 	
 	findAndReplace(frompath, ".obj",".mtl");
 	findAndReplace(topath, ".obj",".mtl");
 	//TODO parse mtl look for and add jpg ppm
-	cout << "copying file from: " << frompath << " to: " << topath << "\n\n" << flush;
 	CopyFile(frompath.c_str(),topath.c_str(), true);
 	//add to xml
 	// append to data/obj

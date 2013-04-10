@@ -70,6 +70,7 @@ class Object:public arInteractableThing {
 		float getWidth() { return _width; }
 		arOBJRenderer* getOBJ() { return &loadedOBJ; }
 		void snapMatrix();
+		void setHPR(int h, int p, int r);
 		
 	private:
 		
