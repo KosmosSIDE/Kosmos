@@ -1,0 +1,30 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 10.04.2013 22:43:12
+
+mtllib MrWiiMapMinus.mtl
+
+#
+# object Plane002
+#
+
+v  -50.2244 2.0690 41.9922
+v  44.3655 2.0690 41.9922
+v  44.3655 2.0690 -38.8886
+v  -50.2244 2.0690 -38.8886
+# 4 vertices
+
+vn 0.0000 1.0000 -0.0000
+# 1 vertex normals
+
+vt 0.0000 0.0000 0.0000
+vt 1.0000 0.0000 0.0000
+vt 1.0000 1.0000 0.0000
+vt 0.0000 1.0000 0.0000
+# 4 texture coords
+
+g Plane002
+usemtl 17___Default
+s 1
+f 1/1/1 2/2/1 3/3/1 4/4/1 
+# 1 polygons
+
