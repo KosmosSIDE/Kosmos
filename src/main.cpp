@@ -31,6 +31,7 @@
 #include "Import.h"
 #include "VirtualDirectory.h"
 #include "ProjectManager.h"
+#include "TreeMenu.h"
 
 using namespace rapidxml;
 
@@ -132,6 +133,9 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	_rightMoving = false;
 	_leftMovering = false;
+	
+	TreeMenu daTree;
+	daTree.makeMenu();
 	
 	// Register shared memory. Not needed for non-cluster-based systems.
 	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);

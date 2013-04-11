@@ -7,7 +7,7 @@ using namespace rapidxml;
 //removes beginning and end whitespace from a char*
 char *ProjectManager::trimwhitespace(char *c)
 {
-	char *str = new char[strlen(c)];
+	char *str = new char[strlen(c)+1];
 	strcpy(str, c);
 
   char *end;
@@ -31,7 +31,7 @@ char *ProjectManager::trimwhitespace(char *c)
 //removes end whitespace from a char*
 char *ProjectManager::trimtrailingwhitespace(char *c)
 {
-	char *str = new char[strlen(c)];
+	char *str = new char[strlen(c)+1];
 	strcpy(str, c);
 
   char *end;

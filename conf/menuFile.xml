@@ -1,17 +1,17 @@
 <menus>
-  <menu level="0">
+	<menu level="0" hasChild="Y">
 		<options>
 			<option level="1" hasChild="Y">
 				<name>Create</name>
 				<attrList>
-					<attr></attr>
-					<attr></attr>
+					<attr>1</attr>
+					<attr>2</attr>
 				</attrList>
 				<options>
 					<option level="2" hasChild="Y">
 						<name>Object</name>
 						<attrList>
-							<attr></attr>
+							<attr>3</attr>
 						</attrList>
 						<options>
 							<option level="3" hasChild="N">
@@ -21,7 +21,13 @@
 									<attr>Texture</attr>
 								</attrList>
 							</option>
-						</options>	
+						</options>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Object1</name>
+						<attrList>
+							<attr>4</attr>
+						</attrList>
 					</option>
 				</options>
 			</option>

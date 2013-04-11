@@ -1,4 +1,8 @@
-main.o: ../../src/main.cpp C:/aszgard5/szg/src/language/arPrecompiled.h \
+TreeMenu.o: ../../src/TreeMenu.cpp ../../src/TreeMenu.h \
+  ../../src/../lib/rapidxml/rapidxml.hpp \
+  ../../src/../lib/rapidxml/rapidxml_print.hpp \
+  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/main.h \
+  C:/aszgard5/szg/src/language/arPrecompiled.h \
   C:/aszgard5/szg/src/framework/arMasterSlaveFramework.h \
   C:/aszgard5/szg/src/language/arDataServer.h \
   C:/aszgard5/szg/src/language/arDataPoint.h \
@@ -224,10 +228,6 @@ main.o: ../../src/main.cpp C:/aszgard5/szg/src/language/arPrecompiled.h \
   C:/aszgard5/szg/src/obj/arOBJSmoothingGroup.h \
   C:/aszgard5/szg/src/graphics/arRay.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
-  ../../src/main.h ../../src/../lib/rapidxml/rapidxml.hpp \
-  ../../src/../lib/rapidxml/rapidxml_print.hpp \
-  ../../src/../lib/rapidxml/rapidxml.hpp ../../src/Object.h \
-  C:/aszgard5/szg/src/math/arMath.h ../../src/LeftVirtualHand.h \
-  ../../src/selectedObjects.h ../../src/VirtualDirectory.h \
-  ../../src/CallFunction.h ../../src/RightVirtualHand.h \
-  ../../src/Import.h ../../src/ProjectManager.h ../../src/TreeMenu.h
+  ../../src/selectedObjects.h ../../src/Object.h \
+  C:/aszgard5/szg/src/math/arMath.h ../../src/VirtualDirectory.h \
+  ../../src/CallFunction.h ../../src/Import.h ../../src/ProjectManager.h
