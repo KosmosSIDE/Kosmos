@@ -224,10 +224,11 @@ main.o: ../../src/main.cpp C:/aszgard5/szg/src/language/arPrecompiled.h \
   C:/aszgard5/szg/src/obj/arOBJSmoothingGroup.h \
   C:/aszgard5/szg/src/graphics/arRay.h \
   C:/aszgard5/szg/src/graphics/arAxisAlignedBoundingBox.h \
-  ../../src/main.h ../../src/../lib/rapidxml/rapidxml.hpp \
+  ../../src/main.h ../../src/Constants.h ../../src/TreeMenu.h \
+  ../../src/../lib/rapidxml/rapidxml.hpp \
   ../../src/../lib/rapidxml/rapidxml_print.hpp \
   ../../src/../lib/rapidxml/rapidxml.hpp ../../src/Object.h \
   C:/aszgard5/szg/src/math/arMath.h ../../src/LeftVirtualHand.h \
   ../../src/selectedObjects.h ../../src/VirtualDirectory.h \
   ../../src/CallFunction.h ../../src/RightVirtualHand.h \
-  ../../src/Import.h ../../src/ProjectManager.h ../../src/TreeMenu.h
+  ../../src/Import.h ../../src/ProjectManager.h

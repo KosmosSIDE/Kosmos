@@ -23,7 +23,7 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	filename = "";
 	callback = cb;
 	cf.add(cb, funPtr);
-	dirName = "c:\\";
+	dirName = ROOTPATH;
 	if(startDir != "")
 	{
 		dirName = startDir;
@@ -33,7 +33,7 @@ void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>
 	}
 	else
 	{
-		openDir("c:\\");
+		openDir(ROOTPATH);
 	}
 	
 	if (titley != "")

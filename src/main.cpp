@@ -57,6 +57,7 @@ bool coneselection = false;
 //used to animate music note
 double currentTimeGlobal; //in millis
 arOBJRenderer musicNotey;
+arOBJRenderer mrTablet;
 
 int selectionMode = 0; //0 means null, 1 means just entered, 2 means in selection, 3 means just point and click
 
@@ -134,8 +135,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	_rightMoving = false;
 	_leftMovering = false;
 	
-	TreeMenu daTree;
-	daTree.makeMenu();
+	//TreeMenu daTree;
+	//daTree.makeMenu();
+	
+	//cout << "name:"<<rootNode<<"\n"<<flush;
 	
 	// Register shared memory. Not needed for non-cluster-based systems.
 	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);
@@ -189,15 +192,16 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	clickSound = dsLoop("click", "world", "click.mp3", 0, 1.0, arVector3(0, 0, 0));
 	
 	musicNotey.readOBJ("MusicNote.obj","data/obj");
+	mrTablet.readOBJ("MrTablet.obj","data/obj");
 	
 	ar_navRotate( arVector3(0,1,0), 135 );
 	ar_navTranslate( arVector3(0,0,6) );
 	
 	
 	
-		templateName = "C:\\aszgard5\\szg\\projects\\Kosmos\\templates\\template3.kide";
+		templateName = PATH+"Kosmos\\templates\\template3.kide";
 		vector<string> projman;
-		projman.push_back("C:\\aszgard5\\szg\\projects\\newproj");
+		projman.push_back(PATH+"newproj");
 		ProjectManager::findProjectCallback(projman);
 	
 	
@@ -279,7 +283,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-		virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", "c:\\aszgard5\\szg\\projects\\Kosmos\\");
+		virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
 	}
 	else if(virtualdirectory.findingFile)
 	{

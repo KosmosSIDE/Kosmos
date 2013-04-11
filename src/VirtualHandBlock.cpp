@@ -14,7 +14,8 @@ VirtualHandBlock::insertBlock(handy);
 */
 void VirtualHandBlock::insertBlock(vector<string> args)
 {
-	ifstream myfile("C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\virtualhandblock.xml");
+	string vhandfilepath = PATH+"Kosmos\\conf\\virtualhandblock.xml";
+	ifstream myfile(vhandfilepath.c_str());
 	vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
 	documenty.push_back('\0');
 	

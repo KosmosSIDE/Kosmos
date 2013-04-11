@@ -272,16 +272,36 @@ void LeftVirtualHand::drawTablet() const
 			GLfloat height = 0.5f;
 			GLfloat width = 1.f;
 			
-			glBegin(GL_QUADS); // Start drawing a quad primitive  
+			/////////////////new tablet
+			glRotatef(90, 0.0,0.0,1.0); //tablet rotation
+			glRotatef(90, 1.0,0.0,0.0); //tablet rotation
+			glRotatef(90, 0.0,1.0,0.0); //tablet rotation
+			glScalef(0.5, 0.5, 0.5);
+			glTranslatef(0.0, -3.0, 0.0);
+			mrTablet.draw();
+			glTranslatef(0.0, 3.0, 0.0);
+			glScalef(2, 2, 2);
+			glRotatef(-90, 0.0,1.0,0.0); //tablet rotation
+			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
+			glRotatef(-90, 0.0,0.0,1.0); //tablet rotation
+			
+			
+			/////////////////new tablet
+			
+			/*glBegin(GL_QUADS); // Start drawing a quad primitive  
 				glVertex3f(-width, -height, +0.0f); // The bottom left corner  
 				glVertex3f(-width,  height, +0.0f); // The top left corner  
 				glVertex3f( width,  height, +0.0f); // The top right corner  
 				glVertex3f( width, -height, +0.0f); // The bottom right corner  
-			glEnd();  
+			glEnd();  */
 			
 		glPopAttrib();
 		
 		//TODO, set text for tablet ie get from menu
+		//let index j be the selected item
+		//foreach menu item in menu
+		//draw text (i*200.0f, string(menuitem),(i==j?true:false))
+		
 		drawText(0.0f, string("settings"));
 		drawText(200.0f, string("import"));
 	glPopMatrix();

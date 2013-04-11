@@ -13,6 +13,9 @@
 #include "arNavigationUtilities.h"
 #include "arGlut.h"
 #include "arOBJ.h"
+#include "Constants.h"
+
+#include "TreeMenu.h"
 
 //rapid xml library
 #include "../lib/rapidxml/rapidxml.hpp"
@@ -23,6 +26,7 @@ using namespace rapidxml;
 extern double currentTimeGlobal;
 // music note to be used for animation
 extern arOBJRenderer musicNotey;
+extern arOBJRenderer mrTablet;
 extern bool coneselection;
 extern int selectionMode;
 extern vector<arInteractable*> objects;
@@ -31,6 +35,8 @@ extern xml_document<> codeTree;
 extern vector<char> document;
 extern string templateName;
 extern string projectDir;
+
+extern TreeMenu *rootNode;
 
 void renderPrimitive (float distance, bool separationLines);
 void setProjectName (string &pname);

@@ -14,7 +14,8 @@ ExtendBlock::insertBlock(handy);
 */
 void ExtendBlock::insertBlock(vector<string> args)
 {
-	ifstream myfile("C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\extendblock.xml");
+	string extendfilepath = PATH+"Kosmos\\conf\\extendblock.xml";
+	ifstream myfile(extendfilepath.c_str());
 	vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
 	documenty.push_back('\0');
 	

@@ -430,7 +430,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		
 		string filename = "MrBodyWithHands.obj";
 		filenamev.push_back(filename);
-		string pathy = "C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj";
+		string pathy = PATH+"Kosmos\\data\\obj";
 		pathv.push_back(pathy);
 		//Import::import("cello.obj", x, y, z, h, p, r, "C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj");
 	}
@@ -535,7 +535,7 @@ void ProjectManager::unzipKIDE(string &chosenFile, string &workingPath)
     ZeroMemory(&procinfo, sizeof(PROCESS_INFORMATION));
 	cout << "starting 7zip process" << "\n" << flush;
 	//TODO would like the path to be relative
-	string process = "C:/aszgard5/szg/projects/Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
+	string process = PATH+"Kosmos/lib/7zipCMD/7za.exe x -tzip \""+chosenFile+"\" -y -o\""+workingPath+"\" -mx=9";
 	char* proc = strdup(process.c_str());
     CreateProcess(NULL, proc, NULL, NULL, false, 0, NULL, NULL, &startinfo, &procinfo); //this is the most important line in the program. it runs the program specified in the command-line argument (argv[1])
 	WaitForSingleObject( procinfo.hProcess, INFINITE ); //wait until it's done
@@ -660,7 +660,7 @@ void ProjectManager::findTemplateCallback(vector<string> args)
 	templateName = args[0];
 	cout << "template: " << templateName << "\n" << flush;
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", "C:\\aszgard5\\szg\\projects\\");
+	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", PATH);
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
 }
 

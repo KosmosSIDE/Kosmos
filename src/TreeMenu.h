@@ -10,9 +10,13 @@
 #include "../lib/rapidxml/rapidxml.hpp"
 #include "../lib/rapidxml/rapidxml_print.hpp"
 #include <vector>
+#include "Constants.h"
 
 using namespace rapidxml;
 using namespace std;
+
+
+
 /* Class Attribute to hold the values of attributes
 ** Contains one string variable to hold the name of the attribute
 ** Contains one method setAttrName to set the attribute name */

@@ -332,7 +332,7 @@ public:
 		//Declaration for variables
 		ifstream myfile;
 		cout<<"inside makeMenu method of TreeMenu\n";
-		/*string fileName = "C:\\azgard5\\szg\\projects\\Kosmos\\conf\\menuFile.xml";
+		string fileName = PATH+"Kosmos\\conf\\menuFile.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
 
@@ -359,7 +359,7 @@ public:
 
 		//Print the values of the root node of TreeMenu
 		printValues(rootNode);
-		*/
+		
 		return;
 	}
 

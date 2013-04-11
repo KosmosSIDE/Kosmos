@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "CallFunction.h"
+#include "Constants.h"
 
 // VirtualDirectory class
 // Purpose:
@@ -33,7 +34,7 @@ class VirtualDirectory
 			foundFile = false;
 			filename = "";
 			currentIndex = 0;
-			dirName = "c:\\";
+			dirName = ROOTPATH;
 			title = "";
 		}
 		
