@@ -41,6 +41,18 @@ vector<char> document;
 string templateName = "";
 string projectDir = "";
 
+/*Changes by Harish Babu Arunachalam*/
+TreeMenu *nodeMenu = NULL;
+TreeMenu *parentMenu = NULL;
+TreeMenu *currentPtr = NULL;
+int curTreeLevel = 0;
+int treeIndex = 0;
+
+void goForward();
+void goBack();
+void goUp();
+void goDown();
+/*end of Changes by Harish Babu Arunachalam*/
 // Feet to local units conversion.
 // For example, if you use centimeters to create your models, then set this to 12*2.54 or 30.48 to
 // account for 12 inches per foot and 2.54 centimeters per inch.
@@ -135,11 +147,6 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	_rightMoving = false;
 	_leftMovering = false;
 	
-	//TreeMenu daTree;
-	//daTree.makeMenu();
-	
-	//cout << "name:"<<rootNode<<"\n"<<flush;
-	
 	// Register shared memory. Not needed for non-cluster-based systems.
 	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);
 	//list<arMatrix4*> objMatrices;
@@ -204,6 +211,20 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 		projman.push_back(PATH+"newproj");
 		ProjectManager::findProjectCallback(projman);
 	
+	/*Changes by Harish Babu Arunachalam*/
+	nodeMenu =  new TreeMenu();
+	currentPtr = new TreeMenu();
+	parentMenu = new TreeMenu();
+	nodeMenu = nodeMenu->makeMenu(nodeMenu);
+	nodeMenu->name = "menus";
+	nodeMenu->level = -1;
+//	cout<<" 219 nodeMenu name "<<nodeMenu->name<<endl<<flush;
+//	cout<<" 220 nodeMenu children "<<nodeMenu->noOf_FwdPtrs<<endl<<flush;
+	parentMenu = nodeMenu;
+	currentPtr = parentMenu;
+	curTreeLevel = currentPtr->level;
+	currentPtr = nodeMenu;//->makeMenu(nodeMenu);
+	/*End of changes by Harish Babu Arunachalam*/
 	
 	// Return true if everything is initialized correctly.
 	return true;
@@ -275,15 +296,40 @@ void preExchange(arMasterSlaveFramework& framework) {
 	// in milliseconds
 	double currentTime = framework.getTime();
 
-	if((!virtualdirectory.findingFile) && rightHand.getOnButton(4) && (currentTime-pressedImport)>1000)
+	if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-		virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
+	//	cout<<"\n before Go Back function call\n"<<flush;
+	//Harish Babu Arunachalam
+	//call back navigation function for TreeMenu
+		goBack();
+	//	virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
 	}
-	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
+	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(1) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-		virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
+	//Harish Babu Arunachalam
+	//call forward navigation function for TreeMenu
+		goForward();
+		//virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
+	}
+	else if( rightHand.getOnButton(2) && (currentTime-pressedImport)>1000)
+	{
+	//Harish Babu Arunachalam
+	//call upward navigation function for TreeMenu
+		pressedImport = currentTime;
+		cout<<"before go Up \n "<<endl<<flush;
+		//currentPtr->printValues(currentPtr);
+		goUp();
+				
+	}
+	else if(rightHand.getOnButton(3)&&(currentTime-pressedImport)>1000)
+	{
+	//Harish Babu Arunachalam
+	//call downward navigation function for TreeMenu
+		pressedImport = currentTime;
+		cout<<"\n\n Before go down\n"<<endl<<flush;
+		goDown();
 	}
 	else if(virtualdirectory.findingFile)
 	{
@@ -795,7 +841,66 @@ void draw(arMasterSlaveFramework& framework) {
 	leftHand.draw();
 }
 
-
+/*Changed by Harish Babu Arunachalam*/
+/*Method to navigate forward for TreeMenu*/
+void goForward()
+	{
+	cout<<"curTreeLevel "<<curTreeLevel<<endl<<flush;
+	
+	//currentPtr->printValues(currentPtr);
+		cout<<"currentPointer name is "<<currentPtr->name<<endl<<flush;
+		cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
+		if(currentPtr->noOf_FwdPtrs>0)
+			{
+				parentMenu = currentPtr;
+				currentPtr = currentPtr->forwardPtrs[treeIndex];
+				curTreeLevel = currentPtr->level;
+				cout<<"inside goForward() \n"<<flush;
+				treeIndex = 0;
+			}
+	return;
+	}
+/*Method to navigate backward for TreeMenu*/
+void goBack()
+{
+	//cout<<"backwardPointer name "<<currentPtr->backwardPtr->name<<endl<<flush;
+	//Check if the backward navigation has reached the root node - check for currentPtr level.
+	treeIndex=0;
+		if(currentPtr->level==-1)
+			return;
+		else
+		{
+			currentPtr = parentMenu;		//current pointer is the parent pointer
+			parentMenu = parentMenu->backwardPtr; // parent pointer is parent's backward pointer
+			curTreeLevel = currentPtr->level; //current tree level is one less
+			cout<<"inside goBack\n";
+		}
+	return;
+}
+/*method to navigate up for TreeMenu*/
+void goUp()
+{
+	//Check if treeIndex decrement will be negative
+		if(treeIndex-1>=0)
+		{
+			treeIndex--;
+		}
+		else
+		{
+			treeIndex=0;
+		}
+	return;
+}
+/*Method to navigate backwards*/
+void goDown()
+{
+	//Check if index increment will exceed the maximum forward pointers
+		if(treeIndex+1 > currentPtr->backwardPtr->noOf_FwdPtrs)
+			treeIndex = currentPtr->backwardPtr->noOf_FwdPtrs;
+		else
+			treeIndex++;
+	return;
+}
 // main entry to MasterSlave application
 int main(int argc, char** argv) {
 
