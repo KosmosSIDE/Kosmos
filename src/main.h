@@ -36,7 +36,13 @@ extern vector<char> document;
 extern string templateName;
 extern string projectDir;
 
-extern TreeMenu *rootNode;
+//Changes by Harish Babu Arunachalam
+extern TreeMenu *nodeMenu;
+extern TreeMenu *parentMenu;
+extern TreeMenu *currentPtr;
+extern int curTreeLevel;
+extern int treeIndex;
+//End of changes by Harish Babu Arunachalam
 
 void renderPrimitive (float distance, bool separationLines);
 void setProjectName (string &pname);
