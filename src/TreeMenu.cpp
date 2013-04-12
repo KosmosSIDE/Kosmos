@@ -25,18 +25,21 @@ TreeMenu *bkdPtr = new TreeMenu();
 ** Contains one string variable to hold the name of the attribute
 ** Contains one method setAttrName to set the attribute name */
 //Method to set the Attribute name
-void attribute::setAttrName(char attName[])
-{
-	strcpy(attributeName,attName);
-	return;
-}
+    void attribute::setAttrName(char attName[])
+	{
+		strcpy(attributeName,attName);
+		return;
+	}
+	//Method to get the Attribute name
+	char* attribute::getAttrName()
+	{
+		return attributeName;
+	}
 
-
-//Method to get the Attribute name
-char* attribute::getAttrName()
+/*Empty class that can serve as forward and backward pointer objects in TreeMenu class*/
+class pointerClass
 {
-	return attributeName;
-}
+};
 
 /*Constructor for attribute class*/
 attribute::attribute()
@@ -66,7 +69,6 @@ public:
 	TreeMenu *backwardPtr;
 	int noOfAttributes, noOf_FwdPtrs, level,backPtrIndex;
 */
-
 	/*Constructor method to initialize the values*/
 	TreeMenu::TreeMenu()
 	{
@@ -116,6 +118,19 @@ public:
 		}
 		return -1;
 	}
+/*
+int TreeMenu::findNode(char*)
+	{
+		for(int i=0;i<this->noOf_FwdPtrs;i++)
+		{
+			if(tempTree == this->forwardPtrs[i])
+			{
+				return i;
+			}
+		}
+		return -1;
+	}*/
+
 
 	/*method to construct the navigation menu node*/
 	TreeMenu* TreeMenu::createMenu(xml_node<> *xmlNode)
@@ -157,7 +172,7 @@ public:
 		{
 			node->name = "menu";
 		}
-
+		
 		//retrieve the level of the attribute
 		if(xmlNode->first_attribute("level")!= NULL)
 		{
@@ -285,7 +300,7 @@ public:
 		int noFwdPtr = printNode->noOf_FwdPtrs;
 		attribute attrib = attribute();
 
-		cout<<"\nMenu Name "<<printNode->name<<endl;
+		cout<<"\nMenu Name "<<printNode->name<<endl<<flush;
 		cout<<"   Attributes "<<endl;
 		//Iterate through the attributes
 		for(int i=0;i<noAttr;i++)
@@ -300,7 +315,7 @@ public:
 		return;
 
 	}
-/*
+
 	//Method for forwaed navigation
 	static void forwardNav(TreeMenu *node)
 	{
@@ -325,17 +340,15 @@ public:
 		
 		return;
 	}
-*/
 	//method to construct the menu
-	void TreeMenu::makeMenu()
+	 TreeMenu* TreeMenu::makeMenu(TreeMenu* rootNode)
 	{
 		//Declaration for variables
 		ifstream myfile;
-		cout<<"inside makeMenu method of TreeMenu\n";
-		string fileName = PATH+"Kosmos\\conf\\menuFile.xml";
+		string fileName = "C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\menuFile.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
-
+		cout<<"inside make menu \n\n"<<flush;
 		myfile.open (fileName.c_str(), ifstream::in);
 		
 		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
@@ -348,28 +361,30 @@ public:
 		//Get the node 'MENUS' from the XML file
 		tempNode = xml.first_node("menus");
 		bkdPtr = rootNode;
-
-		cout<<"name of the node is "<<tempNode->name()<<endl;
+		rootNode->backwardPtr = rootNode;
+		//Assign the forward pointer of root node to the sub nodes
+		rootNode->forwardPtrs[rootNode->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
+		
+		//cout<<"name of the node is "<<tempNode->name()<<endl;
 		//Assign the name of the root node of tree menu to name of the node
 		rootNode->name=tempNode->name();
 		cout<<" name of the root node is "<<rootNode->name<<endl;
-
-		//Assign the forward pointer of root node to the sub nodes
-		rootNode->forwardPtrs[rootNode->noOf_FwdPtrs++] = rootNode->createMenu(tempNode->first_node());
-
+		
 		//Print the values of the root node of TreeMenu
 		printValues(rootNode);
 		
-		return;
+		return rootNode;
 	}
-
+/*
 	//Main Function
-/*	int main()
+	int main()
 {
 	int value;
+
 	cout<<"enter the value\n";
 	cin>>value;
 
 	makeMenu();
 	return 1;
-}*/
+}
+*/
