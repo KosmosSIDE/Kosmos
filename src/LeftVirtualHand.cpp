@@ -301,9 +301,29 @@ void LeftVirtualHand::drawTablet() const
 		//let index j be the selected item
 		//foreach menu item in menu
 		//draw text (i*200.0f, string(menuitem),(i==j?true:false))
+		//Changes by Harish Babu Arunachalam
+		if(currentPtr->noOf_FwdPtrs>0)
+		{	
+		//cout<<"inside draw functuion of leftVirtualHand - pointer Name is "<<currentPtr->forwardPtrs[0]->name<<endl<<flush;
+		//cout<<"290 draw functuion of leftVirtualHand - no of attributes is "<<currentPtr->noOf_FwdPtrs<<endl<<flush;
+			for(int i=0;i<currentPtr->noOf_FwdPtrs;i++)
+			{
+				if(i==treeIndex)
+				{	
+					drawText(0.0f+i*(-200), currentPtr->forwardPtrs[i]->name,true);
+				}
+				else
+				{
+					drawText(0.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name);
+				}
+			}
 		
-		drawText(0.0f, string("settings"));
-		drawText(200.0f, string("import"));
+		}
+		//End of changes by Harish Babu Arunachalam
+		//drawText(200.0f, currentPtr->forwardPtrs[0]->name);
+		//drawText(400.0f, currentPtr->forwardPtrs[1]->name);
+		//drawText(-200.0f, currentPtr->forwardPtrs[1]->name);
+		//drawText(200.0f, string("import"));
 	glPopMatrix();
 
 }
