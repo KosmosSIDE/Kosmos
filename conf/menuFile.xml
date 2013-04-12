@@ -1,5 +1,5 @@
 <menus>
-	<menu level="0" hasChild="Y">
+  <menu level="0" hasChild="Y">
 		<options>
 			<option level="1" hasChild="Y">
 				<name>Create</name>
@@ -16,6 +16,13 @@
 						<options>
 							<option level="3" hasChild="N">
 								<name>Circle</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>Square</name>
 								<attrList>
 									<attr>Color</attr>
 									<attr>Texture</attr>
