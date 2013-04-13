@@ -42,7 +42,8 @@ public:
 	attribute *attPtr[100];
 	TreeMenu *forwardPtrs[100];
 	TreeMenu *backwardPtr;
-	char* name;
+	//char* name;
+	string name;
 	int noOfAttributes, noOf_FwdPtrs, level,backPtrIndex;	
 	
 	TreeMenu();

@@ -38,6 +38,75 @@
 					</option>
 				</options>
 			</option>
+			<option level="1" hasChild="Y">
+				<name>Import</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>obj</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Project</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>New project</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Load project</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Save project</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Settings</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>Snap</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Turkey</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Pop</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
 		</options>
 	</menu>
 </menus>

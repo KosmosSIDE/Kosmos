@@ -308,14 +308,15 @@ void LeftVirtualHand::drawTablet() const
 		//cout<<"290 draw functuion of leftVirtualHand - no of attributes is "<<currentPtr->noOf_FwdPtrs<<endl<<flush;
 			for(int i=0;i<currentPtr->noOf_FwdPtrs;i++)
 			{
-				if(i==treeIndex)
+				/*if(i==treeIndex)
 				{	
-					drawText(0.0f+i*(-200), currentPtr->forwardPtrs[i]->name,true);
+					drawText(0.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name,true);
 				}
 				else
 				{
 					drawText(0.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name);
-				}
+				}*/
+				drawText(400.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name,(i==treeIndex?true:false));
 			}
 		
 		}

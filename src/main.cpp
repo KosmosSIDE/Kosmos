@@ -80,6 +80,8 @@ static double pressed1 = 0.0;
 // how long do we need to hold it
 const double threshold = 1000.0;    // in millis
 static double pressedImport = 0.0;
+static double pressedMenu = 0.0;
+const double thresholdMenu = 0.0;//250.0;
 static double dirButtonPress = 0.0;
 static double handButtonPress = 0.0;
 
@@ -206,10 +208,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		templateName = PATH+"Kosmos\\templates\\template3.kide";
+		/*templateName = PATH+"Kosmos\\templates\\template3.kide";
 		vector<string> projman;
 		projman.push_back(PATH+"newproj");
-		ProjectManager::findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);*/
 	
 	/*Changes by Harish Babu Arunachalam*/
 	nodeMenu =  new TreeMenu();
@@ -296,7 +298,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	// in milliseconds
 	double currentTime = framework.getTime();
 
-	if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
+	/*if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
 	//	cout<<"\n before Go Back function call\n"<<flush;
@@ -329,6 +331,41 @@ void preExchange(arMasterSlaveFramework& framework) {
 	//call downward navigation function for TreeMenu
 		pressedImport = currentTime;
 		cout<<"\n\n Before go down\n"<<endl<<flush;
+		goDown();
+	}*/
+	if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedMenu)>thresholdMenu)
+	{
+		pressedMenu = currentTime;
+	//	cout<<"\n before Go Back function call\n"<<flush;
+	//Harish Babu Arunachalam
+	//call back navigation function for TreeMenu
+		goBack();
+	//	virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
+	}
+	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(1) && (currentTime-pressedMenu)>thresholdMenu)
+	{
+		pressedMenu = currentTime;
+	//Harish Babu Arunachalam
+	//call forward navigation function for TreeMenu
+		goForward();
+		//virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
+	}
+	else if( rightHand.getOnButton(2) && (currentTime-pressedMenu)>thresholdMenu)
+	{
+	//Harish Babu Arunachalam
+	//call upward navigation function for TreeMenu
+		pressedMenu = currentTime;
+		//cout<<"before go Up \n "<<endl<<flush;
+		//currentPtr->printValues(currentPtr);
+		goUp();
+				
+	}
+	else if(rightHand.getOnButton(3)&&(currentTime-pressedMenu)>thresholdMenu)
+	{
+	//Harish Babu Arunachalam
+	//call downward navigation function for TreeMenu
+		pressedMenu = currentTime;
+		//cout<<"\n\n Before go down\n"<<endl<<flush;
 		goDown();
 	}
 	else if(virtualdirectory.findingFile)
@@ -841,25 +878,40 @@ void draw(arMasterSlaveFramework& framework) {
 	leftHand.draw();
 }
 
+
+
 /*Changed by Harish Babu Arunachalam*/
 /*Method to navigate forward for TreeMenu*/
 void goForward()
-	{
+{
 	cout<<"curTreeLevel "<<curTreeLevel<<endl<<flush;
-	
+
 	//currentPtr->printValues(currentPtr);
-		cout<<"currentPointer name is "<<currentPtr->name<<endl<<flush;
-		cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
-		if(currentPtr->noOf_FwdPtrs>0)
-			{
-				parentMenu = currentPtr;
-				currentPtr = currentPtr->forwardPtrs[treeIndex];
-				curTreeLevel = currentPtr->level;
-				cout<<"inside goForward() \n"<<flush;
-				treeIndex = 0;
-			}
-	return;
+	cout<<"currentPointer name is "<<currentPtr->name<<endl<<flush;
+	cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
+	if(currentPtr->noOf_FwdPtrs>0)
+	{
+		parentMenu = currentPtr;
+		currentPtr = currentPtr->forwardPtrs[treeIndex];
+		curTreeLevel = currentPtr->level;
+		if (strcmp(currentPtr->name.c_str(),"New project")==0)
+		{
+			cout << "you selected New project pim\n" << flush;
+			templateName = PATH+"Kosmos\\templates\\template3.kide";
+			vector<string> projman;
+			projman.push_back(PATH+"newproj");
+			ProjectManager::findProjectCallback(projman);
+			currentPtr = nodeMenu;
+		}
+		else
+		{
+			cout << "you selected " << currentPtr->name << "\n" << flush;
+		}
+		cout<<"inside goForward() \n"<<flush;
+		treeIndex = 0;
 	}
+}
+
 /*Method to navigate backward for TreeMenu*/
 void goBack()
 {
@@ -877,30 +929,41 @@ void goBack()
 		}
 	return;
 }
+
 /*method to navigate up for TreeMenu*/
 void goUp()
 {
 	//Check if treeIndex decrement will be negative
-		if(treeIndex-1>=0)
+		/*if(treeIndex-1>=0)
 		{
 			treeIndex--;
 		}
 		else
 		{
 			treeIndex=0;
-		}
+		}		
 	return;
+	*/
+	//cout << "idk what im doing:"<<currentPtr->noOf_FwdPtrs<<"\n"<<flush;
+	treeIndex = (treeIndex-1+currentPtr->noOf_FwdPtrs)%currentPtr->noOf_FwdPtrs;
 }
+
 /*Method to navigate backwards*/
 void goDown()
 {
 	//Check if index increment will exceed the maximum forward pointers
-		if(treeIndex+1 > currentPtr->backwardPtr->noOf_FwdPtrs)
+		/*if(treeIndex+1 > currentPtr->backwardPtr->noOf_FwdPtrs)
 			treeIndex = currentPtr->backwardPtr->noOf_FwdPtrs;
 		else
 			treeIndex++;
-	return;
+	return;*/
+	//cout << "idk what im doing:"<<currentPtr->noOf_FwdPtrs<<"\n"<<flush;
+	treeIndex = (treeIndex+1)%currentPtr->noOf_FwdPtrs;
 }
+
+
+
+
 // main entry to MasterSlave application
 int main(int argc, char** argv) {
 
