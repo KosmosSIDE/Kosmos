@@ -1,5 +1,5 @@
-#ifndef EXTENDBLOCK_H
-#define EXTENDBLOCK_H
+#ifndef SQUADBLOCK_H
+#define SQUADBLOCK_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,15 +11,15 @@
 
 using namespace std;
 
-class ExtendBlock
+class SquadBlock
 {
 	public:
 		static void insertBlock(vector<string> args);
 		static void replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName);
 	
 	private:		
-		static rapidxml::xml_document<> extendblockdoc;
-		static vector<char> extendblockfile;
+		static rapidxml::xml_document<> squadblockdoc;
+		static vector<char> squadblockfile;
 };
 
 #endif

@@ -1,0 +1,422 @@
+							<code parent="rsquad" type="callPreexchangeMain">
+	// Detect right hand collisions.
+	rightHand.detectCollisions(rightHand, objects);
+							</code>
+					<codeblock parent="rsquad" type="preexchangeMain">
+						<name>detectCollisions</name>
+						<type>function</type>
+						<documentation>
+// Right hand effector&apos;s collision detection function for multiple objects.
+// Purpose:
+//		- Determine closest object (based on center) that effector is touching.
+// Notes:
+//		The list must be a list of Object instances, defined above.
+//		This function does not account for rotation of the object or the effector.
+						</documentation>
+						<declaration>
+void RightVirtualHand::detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects)
+						</declaration>
+						<functioncode>
+							<code>
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+	
+	// Set maximum distance for testing collision dection to 1000 ft.
+	float maxDistance = 1000.0;
+	
+	// Track closest object and its distance. No object is initially closest.
+	arInteractable* closestObject = 0;
+	float closestDistance = maxDistance;
+	
+	// Step through list of objects and test each one for collisions.
+	for(vector&lt;arInteractable*&gt;::iterator it=objects.begin(); it != objects.end(); ++it) {
+	
+		// Get information about object&apos;s position and dimensions.
+		const arMatrix4 objectMatrix = (*it)-&gt;getMatrix();
+		arMatrix4 objectTransMatrix = ar_extractTranslationMatrix(objectMatrix);
+		const float objectX = objectTransMatrix[12];
+		const float objectY = objectTransMatrix[13];
+		const float objectZ = objectTransMatrix[14];
+		const float objectLength = ((Object*)(*it))-&gt;getLength();
+		const float objectHeight = ((Object*)(*it))-&gt;getHeight();
+		const float objectWidth = ((Object*)(*it))-&gt;getWidth();
+		
+		// Get information about effector&apos;s position and dimensions. 
+		arMatrix4 effectorTransMatrix = ar_extractTranslationMatrix(getMatrix());
+		const float effectorX = effectorTransMatrix[12];
+		const float effectorY = effectorTransMatrix[13];
+		const float effectorZ = effectorTransMatrix[14];
+		const float effectorLength = _size;
+		const float effectorHeight = _size;
+		const float effectorWidth = _size;
+		
+		// Determine if effector is within object along X-axis.
+		if((objectX - objectLength/2.0) &lt;= (effectorX + effectorLength/2.0) &amp;&amp; (effectorX - effectorLength/2.0) &lt;= (objectX + objectLength/2.0)) {
+		// Determine if effector is within object along Y-axis.
+		if((objectY - objectHeight/2.0) &lt;= (effectorY + effectorHeight/2.0) &amp;&amp; (effectorY - effectorHeight/2.0) &lt;= (objectY + objectHeight/2.0)) {
+		// Determine if effector is within object along Z-axis.
+		if((objectZ - objectWidth/2.0) &lt;= (effectorZ + effectorWidth/2.0) &amp;&amp; (effectorZ - effectorWidth/2.0) &lt;= (objectZ + objectWidth/2.0)) {
+		
+			// Collision detected. Now use selector to determine distance to center of the object.
+			_selector.setMaxDistance(maxDistance);
+			float objectDistance = _selector.calcDistance(self, objectMatrix);
+			
+			// Determine if object is closest so far.
+			if(objectDistance &lt; closestDistance) {
+				// If so, remember object and distance to object.
+				closestObject = *it;
+				closestDistance = objectDistance;
+			}
+		}}}
+	}
+	
+	// Check if an object was touched.
+	if(closestObject != 0) {
+		// If so, set selector&apos;s distance to match object&apos;s distance.
+		_selector.setMaxDistance(closestDistance);
+		setInteractionSelector(_selector);
+		
+		//cout &lt;&lt; &quot;object was selected?&quot; &lt;&lt; &apos;\n&apos;;
+		
+		if(getOnButton(1) == 1)
+		{
+			//cout &lt;&lt; &quot;object was selected&quot; &lt;&lt; &apos;\n&apos;;
+			Object* oby = (Object*)closestObject;
+			oby-&gt;_selected = !oby-&gt;_selected;
+		}
+	}
+	else {
+		// If not, set selector&apos;s distance to size of effector.
+		_selector.setMaxDistance(_size);
+		setInteractionSelector(_selector);
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock parent="rsquad" type="drawMain">
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// Right hand effector&apos;s draw function.
+						</documentation>
+						<declaration>
+void RightVirtualHand::draw()
+						</declaration>
+						<functioncode>
+							<code>
+	// Always start with glPushMatrix to avoid matrix multiplications done here from
+	// affecting other portions of the scene.
+	glPushMatrix();
+							</code>
+							<code>
+		// Set to center of effector.
+		glMultMatrixf(getCenterMatrix().v);
+		// Scale to make 1 ft. cube into a 0.5 ft. cube to match interaction distance.
+	//	glScalef(0.5, 0.5, 0.5);
+		// Draw the right hand red.
+	//	glColor3f(1.0, 0.0, 0.0);
+		// Create the 1 ft. cube.
+	//	glutSolidCube(1.0);
+		// Superimpose slightly larger black wireframe cube to make it easier to see shape.
+	//	glColor3f(0.0, 0.0, 0.0);
+	//	glutWireCube(1.01);
+		glRotatef(180,0,1,0);
+		glRotatef(90,0,0,1);
+		glScalef(-1,1,1);
+		loadedOBJ.draw();
+	
+	// Always finish with glPopMatrix to match glPushMatrix above.
+	glPopMatrix();
+							</code>
+							<code>
+							</code>
+						</functioncode>
+					</codeblock>
+							<code parent="rsquad" type="preexchangeHeader">
+		// Resizes distance selector for basic collision detection.
+		void detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects);
+							</code>
+							<code parent="rsquad" type="drawHeader">
+		// Draw a representation for the right hand.
+		void draw() ;//const;
+							</code>
+					
+					<constructor parent="rsquad" type="constructor">
+							<name>rhandconstructor</name>
+							<type>function</type>
+							<documentation>
+		// Default constructor. 
+		// Parameters for arEffector are:
+		//		matrixIndex - index of matrix to use as position (1 is the right hand)
+		//		numButtons - number of buttons to use from device array (11 buttons for Wiimote)
+		//		loButton - index in device array of desired first button, (0 for right Wiimote)
+		//				   which gets mapped to virtual button index 0 by default 
+		//		buttonOffset - offset for mapping virtual buttons (0 for no offset)
+		//		numAxes - number of axes to use from device (2 axes for Wiimote)
+		//		loAxis - index in device array of desired first axis, (0 for right Wiimote)
+		//				 which gets mapped to virtual axis index 0 by default
+		//		axisOffset - offset for mapping virtual axes (0 for no offset)
+							</documentation>
+							<declaration>
+		RightVirtualHand(const string&amp; filename = &quot;&quot;):arEffector(1, 11, 0, 0, 2, 0, 0)
+							</declaration>
+							<functioncode>
+								<code>
+		if(filename != &quot;&quot;) {
+			if(!loadedOBJ.readOBJ(filename, &quot;data/obj&quot;)) { 
+				cout &lt;&lt; &quot;Cound not load OBJ file: &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+			}
+		}
+		
+		
+			// Set &quot;tip&quot; or point of interaction. This is primarily for rays.
+			setTipOffset(arVector3(0, 0, 0));
+			
+			// Set to interact with closest object within 0.5 ft. of tip using a distance selector.
+			// See szg/src/interaction/arInteractionSelector.h for alternative selectors.
+			_size = 0.5;
+			_selector.setMaxDistance(_size);
+			setInteractionSelector(_selector);
+			
+			// Create grab condition when &quot;A&quot; button is pressed more than 0.5 to 
+			// translate the selected object without rotating it.
+			// Wiimote index/button pairs:
+			//		0	&quot;2&quot;
+			//		1	&quot;1&quot;
+			//		2	&quot;B&quot;
+			//		3	&quot;A&quot;
+			//		4	&quot;-&quot;
+			//		5	&quot;+&quot;
+			//		6	&quot;L&quot;
+			//		7	&quot;D&quot;
+			//		8	&quot;R&quot;
+			//		9	&quot;U&quot;
+			//		10	&quot;H&quot; or Home
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandTranslationDrag());
+			
+			// Create grab condition when &quot;B&quot; button is pressed more than 0.5 to 
+			// rotate and translate the selected object.
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), arWandRelativeDrag());
+								</code>
+							</functioncode>
+						</constructor>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+							<code parent="lsquad" type="callPreexchangeMain">
+	// Detect left hand collisions.
+	leftHand.detectCollisions(leftHand, objects);
+							</code>
+					<codeblock parent="lsquad" type="preexchangeMain">
+						<name>detectCollisions</name>
+						<type>function</type>
+						<documentation>
+// Left hand effector&apos;s collision detection function for multiple objects.
+// Purpose:
+//		- Determine closest object (based on center) that effector is touching.
+// Notes:
+//		The list must be a list of Object instances, defined above.
+//		This function does not account for rotation of the object or the effector.
+						</documentation>
+						<declaration>
+void LeftVirtualHand::detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects)
+						</declaration>
+						<functioncode>
+							<code>
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+	
+	// Set maximum distance for testing collision dection to 1000 ft.
+	float maxDistance = 1000.0;
+	
+	// Track closest object and its distance. No object is initially closest.
+	arInteractable* closestObject = 0;
+	float closestDistance = maxDistance;
+	
+	// Step through list of objects and test each one for collisions.
+	for(vector&lt;arInteractable*&gt;::iterator it=objects.begin(); it != objects.end(); ++it) {
+	
+		// Get information about object&apos;s position and dimensions.
+		const arMatrix4 objectMatrix = (*it)-&gt;getMatrix();
+		arMatrix4 objectTransMatrix = ar_extractTranslationMatrix(objectMatrix);
+		const float objectX = objectTransMatrix[12];
+		const float objectY = objectTransMatrix[13];
+		const float objectZ = objectTransMatrix[14];
+		const float objectLength = ((Object*)(*it))-&gt;getLength();
+		const float objectHeight = ((Object*)(*it))-&gt;getHeight();
+		const float objectWidth = ((Object*)(*it))-&gt;getWidth();
+		
+		// Get information about effector&apos;s position and dimensions. 
+		arMatrix4 effectorTransMatrix = ar_extractTranslationMatrix(getMatrix());
+		const float effectorX = effectorTransMatrix[12];
+		const float effectorY = effectorTransMatrix[13];
+		const float effectorZ = effectorTransMatrix[14];
+		const float effectorLength = _size;
+		const float effectorHeight = _size;
+		const float effectorWidth = _size;
+		
+		// Determine if effector is within object along X-axis.
+		if((objectX - objectLength/2.0) &lt;= (effectorX + effectorLength/2.0) &amp;&amp; (effectorX - effectorLength/2.0) &lt;= (objectX + objectLength/2.0)) {
+		// Determine if effector is within object along Y-axis.
+		if((objectY - objectHeight/2.0) &lt;= (effectorY + effectorHeight/2.0) &amp;&amp; (effectorY - effectorHeight/2.0) &lt;= (objectY + objectHeight/2.0)) {
+		// Determine if effector is within object along Z-axis.
+		if((objectZ - objectWidth/2.0) &lt;= (effectorZ + effectorWidth/2.0) &amp;&amp; (effectorZ - effectorWidth/2.0) &lt;= (objectZ + objectWidth/2.0)) {
+		
+			// Collision detected. Now use selector to determine distance to center of the object.
+			_selector.setMaxDistance(maxDistance);
+			float objectDistance = _selector.calcDistance(self, objectMatrix);
+			
+			// Determine if object is closest so far.
+			if(objectDistance &lt; closestDistance) {
+				// If so, remember object and distance to object.
+				closestObject = *it;
+				closestDistance = objectDistance;
+			}
+		}}}
+	}
+	
+	// Check if an object was touched.
+	if(closestObject != 0) {
+		// If so, set selector&apos;s distance to match object&apos;s distance.
+		_selector.setMaxDistance(closestDistance);
+		setInteractionSelector(_selector);
+		
+		//cout &lt;&lt; &quot;object was selected?&quot; &lt;&lt; &apos;\n&apos;;
+		
+		if(getOnButton(1) == 1)
+		{
+			//cout &lt;&lt; &quot;object was selected&quot; &lt;&lt; &apos;\n&apos;;
+			Object* oby = (Object*)closestObject;
+			oby-&gt;_selected = !oby-&gt;_selected;
+		}
+	}
+	else {
+		// If not, set selector&apos;s distance to size of effector.
+		_selector.setMaxDistance(_size);
+		setInteractionSelector(_selector);
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock parent="lsquad" type="drawMain">
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// Left hand effector&apos;s draw function.
+						</documentation>
+						<declaration>
+void LeftVirtualHand::draw()
+						</declaration>
+						<functioncode>
+							<code>
+	// Always start with glPushMatrix to avoid matrix multiplications done here from
+	// affecting other portions of the scene.
+	glPushMatrix();
+							</code>
+							<code>
+		// Set to center of effector.
+		glMultMatrixf(getCenterMatrix().v);
+		// Scale to make 1 ft. cube into a 0.5 ft. cube to match interaction distance.
+	//	glScalef(0.5, 0.5, 0.5);
+		// Draw the right hand red.
+	//	glColor3f(1.0, 0.0, 0.0);
+		// Create the 1 ft. cube.
+	//	glutSolidCube(1.0);
+		// Superimpose slightly larger black wireframe cube to make it easier to see shape.
+	//	glColor3f(0.0, 0.0, 0.0);
+	//	glutWireCube(1.01);
+		glRotatef(180,0,1,0);
+		glRotatef(90,0,0,1);
+		glScalef(-1,1,1);
+		loadedOBJ.draw();
+	
+	// Always finish with glPopMatrix to match glPushMatrix above.
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+							<code parent="lsquad" type="preexchangeHeader">
+		// Resizes distance selector for basic collision detection.
+		void detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects);
+							</code>
+							<code parent="lsquad" type="drawHeader">
+		// Draw a representation for the left hand.
+		void draw() ;//const;
+							</code>
+					
+					<constructor parent="lsquad" type="constructor">
+							<name>lhandconstructor</name>
+							<type>function</type>
+							<documentation>
+		// Default constructor. 
+		// Parameters for arEffector are:
+		//		matrixIndex - index of matrix to use as position (2 is the left hand)
+		//		numButtons - number of buttons to use from device array (11 buttons for Wiimote)
+		//		loButton - index in device array of desired first button, (11 for left Wiimote)
+		//				   which gets mapped to virtual button index 0 by default 
+		//		buttonOffset - offset for mapping virtual buttons (0 for no offset)
+		//		numAxes - number of axes to use from device (2 axes for left Wiimote)
+		//		loAxis - index in device array of desired first axis, (2 for left Wiimote)
+		//				 which gets mapped to virtual axis index 0 by default
+		//		axisOffset - offset for mapping virtual axes (0 for no offset)
+							</documentation>
+							<declaration>
+		LeftVirtualHand(const string&amp; filename = &quot;&quot;):arEffector(2, 11, 11, 0, 2, 2, 0)
+							</declaration>
+							<functioncode>
+								<code>
+		if(filename != &quot;&quot;) {
+			if(!loadedOBJ.readOBJ(filename, &quot;data/obj&quot;)) { 
+				cout &lt;&lt; &quot;Cound not load OBJ file: &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+			}
+		}
+		
+		
+			// Set &quot;tip&quot; or point of interaction. This is primarily for rays.
+			setTipOffset(arVector3(0, 0, 0));
+			
+			// Set to interact with closest object within 0.5 ft. of tip using a distance selector.
+			// See szg/src/interaction/arInteractionSelector.h for alternative selectors.
+			_size = 0.5;
+			_selector.setMaxDistance(_size);
+			setInteractionSelector(_selector);
+			
+			// Create grab condition when &quot;A&quot; button is pressed more than 0.5 to 
+			// translate the selected object without rotating it.
+			// Wiimote index/button pairs:
+			//		0	&quot;2&quot;
+			//		1	&quot;1&quot;
+			//		2	&quot;B&quot;
+			//		3	&quot;A&quot;
+			//		4	&quot;-&quot;
+			//		5	&quot;+&quot;
+			//		6	&quot;L&quot;
+			//		7	&quot;D&quot;
+			//		8	&quot;R&quot;
+			//		9	&quot;U&quot;
+			//		10	&quot;H&quot; or Home
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandTranslationDrag());
+			
+			// Create grab condition when &quot;B&quot; button is pressed more than 0.5 to 
+			// rotate and translate the selected object.
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), arWandRelativeDrag());
+								</code>
+							</functioncode>
+						</constructor>
