@@ -333,7 +333,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		cout<<"\n\n Before go down\n"<<endl<<flush;
 		goDown();
 	}*/
-	if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedMenu)>thresholdMenu)
+	if((!virtualdirectory.findingFile) && leftHand.getOnButton(6) && (currentTime-pressedMenu)>thresholdMenu)
 	{
 		pressedMenu = currentTime;
 	//	cout<<"\n before Go Back function call\n"<<flush;
@@ -342,7 +342,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		goBack();
 	//	virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
 	}
-	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(1) && (currentTime-pressedMenu)>thresholdMenu)
+	else if((!virtualdirectory.findingFile) && leftHand.getOnButton(7) && (currentTime-pressedMenu)>thresholdMenu)
 	{
 		pressedMenu = currentTime;
 	//Harish Babu Arunachalam
@@ -350,7 +350,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		goForward();
 		//virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
 	}
-	else if( rightHand.getOnButton(2) && (currentTime-pressedMenu)>thresholdMenu)
+	else if( leftHand.getOnButton(9) && (currentTime-pressedMenu)>thresholdMenu)
 	{
 	//Harish Babu Arunachalam
 	//call upward navigation function for TreeMenu
@@ -360,7 +360,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		goUp();
 				
 	}
-	else if(rightHand.getOnButton(3)&&(currentTime-pressedMenu)>thresholdMenu)
+	else if(leftHand.getOnButton(8)&&(currentTime-pressedMenu)>thresholdMenu)
 	{
 	//Harish Babu Arunachalam
 	//call downward navigation function for TreeMenu

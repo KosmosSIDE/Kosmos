@@ -10,6 +10,7 @@
 #include "../lib/rapidxml/rapidxml.hpp"
 #include "../lib/rapidxml/rapidxml_print.hpp"
 #include <vector>
+#include "Constants.h"
 
 using namespace rapidxml;
 using namespace std;

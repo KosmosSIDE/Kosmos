@@ -345,7 +345,7 @@ int TreeMenu::findNode(char*)
 	{
 		//Declaration for variables
 		ifstream myfile;
-		string fileName = "C:\\aszgard5\\szg\\projects\\Kosmos\\conf\\menuFile.xml";
+		string fileName = PATH+"Kosmos\\conf\\menuFile.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
 		cout<<"inside make menu \n\n"<<flush;
