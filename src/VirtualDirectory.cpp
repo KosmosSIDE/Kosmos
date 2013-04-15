@@ -55,7 +55,13 @@ void VirtualDirectory::upPressed()
 ///the down button has been pressed, move the selected index down one
 void VirtualDirectory::downPressed()
 {
+	printf("in down\n");
+	cout.flush();
+	printf("down pressed, currentIndex=%d, currentDir.size=%d\n",currentIndex,currentDir.size());
+	cout.flush();
 	currentIndex = (currentIndex+1) % currentDir.size();
+	printf("end down\n");
+	cout.flush();
 }
 
 ///choose a file or directory, if a directory is chosen then move into it
@@ -76,6 +82,8 @@ void VirtualDirectory::selectFile()
 		{
 			//printf("\t DIRECTORY\n");
 			dirName = chosenFile +"\\";
+			printf("%s\n%s\n",chosenFile.c_str(),dirName.c_str());
+			cout.flush();
 			currentIndex = 0;
 			openDir(chosenFile);
 		}
@@ -86,6 +94,8 @@ void VirtualDirectory::selectFile()
 			vector<string> filenamev;
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
+			printf("%s\n%s\n",chosenFile.c_str(),dirName.c_str());
+			cout.flush();
 			findingFile = false;
 			cf.call(callback,filenamev);
 			

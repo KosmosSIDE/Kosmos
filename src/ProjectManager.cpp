@@ -703,6 +703,34 @@ void ProjectManager::findProjectCallback(vector<string> args)
 	//ProjectManager::saveProject(projectFile);
 }
 
+void ProjectManager::loadProjectCallback(vector<string> args)
+{
+	printf("attempting to load project...i hope\n");
+	cout.flush();
+	projectDir = args[0];
+	printf("projectDir=%s\n",projectDir.c_str());
+	cout.flush();
+	unsigned found = projectDir.find_last_of("/\\");
+	string filename = projectDir.substr(found+1);
+	findAndReplace(projectDir, "\\\\"+filename, "");
+	printf("projectDir=%s\n",projectDir.c_str());
+	cout.flush();
+	found = projectDir.find_last_of("/\\");
+	string pname = projectDir.substr(found+1);
+	//remove .kproj
+	
+	//findAndReplace(pname, ".kproj", "");
+	printf("pname=%s\n",pname.c_str());
+	cout.flush();
+	setProjectName(pname);
+	
+	string projectFile = projectDir + "\\" + projectName + ".kproj";
+	printf("loading %s\n",projectFile.c_str());
+	cout.flush();
+	loadProject(projectFile);
+	printf("loaded %s\n",projectFile.c_str());
+	cout.flush();
+}
 
 
 /*

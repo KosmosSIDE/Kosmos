@@ -60,6 +60,7 @@ class ProjectManager
 		
 		static void findTemplateCallback(vector<string> args);
 		static void findProjectCallback(vector<string> args);
+		static void loadProjectCallback(vector<string> args);
 
 		static void loadEnvironment(xml_document<> &doc);
 		

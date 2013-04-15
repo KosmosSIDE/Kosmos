@@ -385,7 +385,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 			pressedImport = currentTime;
 			virtualdirectory.selectFile();
 			dirButtonPress = currentTime;
-			//cout << "wth" << flush;
+			cout << "wth\n" << flush;
 		}
 		else if (rightHand.getOnButton(4))// && (currentTime-dirButtonPress)>200)
 		{
@@ -896,12 +896,22 @@ void goForward()
 		curTreeLevel = currentPtr->level;
 		if (strcmp(currentPtr->name.c_str(),"New project")==0)
 		{
-			cout << "you selected New project pim\n" << flush;
+			/*cout << "you selected New project pim\n" << flush;
 			templateName = PATH+"Kosmos\\templates\\template3.kide";
 			vector<string> projman;
 			projman.push_back(PATH+"newproj");
 			ProjectManager::findProjectCallback(projman);
-			currentPtr = nodeMenu;
+			currentPtr = nodeMenu;*/
+			virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
+		}
+		else if (strcmp(currentPtr->name.c_str(),"obj")==0)
+		{
+			virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Load project")==0)
+		{
+			virtualdirectory.startBrowse("loadProjectCallback", &ProjectManager::loadProjectCallback,"Select kproj file to load: ", PATH);
+			cout << "loading project from path " << PATH << "\n" << flush;
 		}
 		else
 		{

@@ -50,7 +50,7 @@ class Object:public arInteractableThing {
 				}
 				else
 				{
-					cout << "loaded " << filename << '\n';
+					cout << "loaded " << filename << '\n' << flush;
 				}
 			}
 			// invalid type and file combination
