@@ -35,6 +35,7 @@ extern xml_document<> codeTree;
 extern vector<char> document;
 extern string templateName;
 extern string projectDir;
+extern bool tabletOn;
 
 //Changes by Harish Babu Arunachalam
 extern TreeMenu *nodeMenu;

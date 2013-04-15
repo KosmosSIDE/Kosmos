@@ -253,7 +253,10 @@ void LeftVirtualHand::draw() //const
 	// Always finish with glPopMatrix to match glPushMatrix above.
 	glPopMatrix();
 	
-	drawTablet();
+	if(tabletOn)
+	{
+		drawTablet();
+	}
 }
 
 void LeftVirtualHand::drawTablet() const
@@ -272,6 +275,11 @@ void LeftVirtualHand::drawTablet() const
 			GLfloat height = 0.5f;
 			GLfloat width = 1.f;
 			
+			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
+			
+			glTranslatef(1.0,1.0,-3);
+			
+			glPushMatrix();
 			/////////////////new tablet
 			glRotatef(90, 0.0,0.0,1.0); //tablet rotation
 			glRotatef(90, 1.0,0.0,0.0); //tablet rotation
@@ -279,11 +287,7 @@ void LeftVirtualHand::drawTablet() const
 			glScalef(0.5, 0.5, 0.5);
 			glTranslatef(0.0, -3.0, 0.0);
 			mrTablet.draw();
-			glTranslatef(0.0, 3.0, 0.0);
-			glScalef(2, 2, 2);
-			glRotatef(-90, 0.0,1.0,0.0); //tablet rotation
-			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
-			glRotatef(-90, 0.0,0.0,1.0); //tablet rotation
+			glPopMatrix();
 			
 			
 			/////////////////new tablet
@@ -333,12 +337,12 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 {
 	glPushMatrix();
 		glScalef(0.001, 0.001, 0.001);
-		glTranslatef(0.0, ypos, 1.5);
+		glTranslatef(0.0, ypos, 0.0);//1.5);
 		//glPushAttrib(GL_COLOR_BUFFER_BIT);
-		glColor3f(1, 1, 1);			
+		glColor3f(0, 0, 0);			
 			int lenghOfQuote = min((int)text.length(),300);
 			glPushMatrix();			
-				glTranslatef(-770, 0.0, 0.0);
+				glTranslatef(-470, 160.0, -40.0);
 				if(selected)
 				{
 					//glPushAttrib(GL_COLOR_BUFFER_BIT);
@@ -346,6 +350,7 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 				}
 				if(lenghOfQuote < 300)
 				{
+					glScalef(1.3, 1.3, 1.3);
 					for (int i = 0; i < lenghOfQuote; i++)
 					{
 						glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
