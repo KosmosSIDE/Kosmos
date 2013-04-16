@@ -36,7 +36,10 @@ extern vector<char> document;
 extern string templateName;
 extern string projectDir;
 extern bool tabletOn;
+extern bool sandboxed;
+extern bool rightSelected;
 
+extern TreeMenu *wiiNodeMenu;
 //Changes by Harish Babu Arunachalam
 extern TreeMenu *nodeMenu;
 extern TreeMenu *parentMenu;

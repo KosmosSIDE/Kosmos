@@ -53,6 +53,7 @@ class ProjectManager
 		static void unzipKIDE(string &chosenFile, string &workingPath);
 		/// this function will create a new project at the specified location
 		static void createNewProject(string &projectFolder, string &templateLocation);
+		static void save();
 		/// this function saves a project to filepath from doc
 		static void saveProject(string &filepath);
 

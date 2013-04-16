@@ -13,6 +13,8 @@ extern Object* _rightSelectedObject;
 extern Object* _leftSelectedObject;
 extern bool _rightMoving;
 extern bool _leftMovering;
+extern Object* rightWiimote;
+extern Object* leftWiimote;
 
 extern VirtualDirectory virtualdirectory;
 

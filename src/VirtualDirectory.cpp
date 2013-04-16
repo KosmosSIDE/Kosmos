@@ -14,8 +14,9 @@ Author: Aaron Hardin
 ///starts the browsing, done asynchronously! uses callback class to do so
 ///cb is the name of function, funPtr is the function, titley is a title to display (optional), 
 /// startDir is the directory to start in (optional)
-void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley, const string &startDir)
+void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley, const string &startDir, bool sandy)
 {
+	sandboxed = sandy;
 	currentIndex = 0;
 	currentDir.clear();
 	findingFile = true;
@@ -67,6 +68,11 @@ void VirtualDirectory::downPressed()
 ///choose a file or directory, if a directory is chosen then move into it
 void VirtualDirectory::selectFile()
 {
+	if (sandboxed && (currentIndex == 0 || currentIndex == 1))
+	{
+		return;
+	}
+	
 	string chosenFile = currentDir[currentIndex];
 	
 	chosenFile = dirName + "\\" + chosenFile;
@@ -97,6 +103,7 @@ void VirtualDirectory::selectFile()
 			printf("%s\n%s\n",chosenFile.c_str(),dirName.c_str());
 			cout.flush();
 			findingFile = false;
+			sandboxed = false;
 			cf.call(callback,filenamev);
 			
 		}
@@ -107,6 +114,11 @@ void VirtualDirectory::selectFile()
 /// really should be combined with selectFile in some way...oh well
 void VirtualDirectory::selectDirectory()
 {
+	if (sandboxed && (currentIndex == 0 || currentIndex == 1))
+	{
+		return;
+	}
+	
 	string chosenFile = currentDir[currentIndex];
 	
 	chosenFile = dirName + "\\" + chosenFile;
@@ -126,6 +138,7 @@ void VirtualDirectory::selectDirectory()
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
 			findingFile = false;
+			sandboxed = false;
 			cf.call(callback,filenamev);
 		}
 		else
@@ -136,6 +149,7 @@ void VirtualDirectory::selectDirectory()
 			filenamev.push_back(chosenFile);
 			filenamev.push_back(dirName);
 			findingFile = false;
+			sandboxed = false;
 			cf.call(callback,filenamev);
 		}
 	}
@@ -184,8 +198,17 @@ void VirtualDirectory::draw() const
 		
 		for (int i=currentIndex;i<upperbound;++i)
 		{
+			if(i > (int)currentDir.size())
+			{
+				break;
+			}
+		
 			//display filename
-			if(i==currentIndex)
+			if (sandboxed && (i == 0 || i == 1))
+			{
+				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, "------------------------------", false);
+			}
+			else if(i==currentIndex)
 			{
 				drawText(-2.4f, 800-(i-currentIndex)*120+yshift, currentDir[i%(currentDir.size()+1)],true);
 			}

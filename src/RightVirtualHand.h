@@ -3,6 +3,7 @@
 
 #include "main.h"	
 #include "Object.h"
+#include "selectedObjects.h"
 
 // RightVirtualHand class
 // Purpose:

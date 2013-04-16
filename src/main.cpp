@@ -32,6 +32,7 @@
 #include "VirtualDirectory.h"
 #include "ProjectManager.h"
 #include "TreeMenu.h"
+#include "ExtendBlock.h"
 
 using namespace rapidxml;
 
@@ -41,8 +42,12 @@ vector<char> document;
 string templateName = "";
 string projectDir = "";
 
+bool sandboxed = false;
+bool rightSelected = false;
+
 bool tabletOn = true;
 
+TreeMenu *wiiNodeMenu = NULL;
 /*Changes by Harish Babu Arunachalam*/
 TreeMenu *nodeMenu = NULL;
 TreeMenu *parentMenu = NULL;
@@ -95,6 +100,8 @@ list<Object*> downSelectedObjects;
 
 Object* _leftSelectedObject;
 Object* _rightSelectedObject;
+Object* rightWiimote;
+Object* leftWiimote;
 bool _rightMoving;
 bool _leftMovering;
 
@@ -210,11 +217,13 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		/*templateName = PATH+"Kosmos\\templates\\template3.kide";
+		templateName = PATH+"Kosmos\\templates\\template3.kide";
 		vector<string> projman;
-		projman.push_back(PATH+"newproj");
-		ProjectManager::findProjectCallback(projman);*/
+		projman.push_back(SANDBOXPATH+"newproj");
+		ProjectManager::findProjectCallback(projman);
 	
+	wiiNodeMenu = new TreeMenu();
+	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
 	/*Changes by Harish Babu Arunachalam*/
 	nodeMenu =  new TreeMenu();
 	currentPtr = new TreeMenu();
@@ -390,17 +399,19 @@ void preExchange(arMasterSlaveFramework& framework) {
 			virtualdirectory.downPressed();
 			dirButtonPress = currentTime;
 		}
-		else if (leftHand.getOnButton(9))// && (currentTime-dirButtonPress)>200)
+		else if (leftHand.getOnButton(9) || leftHand.getOnButton(3))// && (currentTime-dirButtonPress)>200)
 		{
 			pressedImport = currentTime;
-			virtualdirectory.selectFile();
-			dirButtonPress = currentTime;
-			cout << "wth\n" << flush;
-		}
-		else if (leftHand.getOnButton(3))// && (currentTime-dirButtonPress)>200)
-		{
-			pressedImport = currentTime;
-			virtualdirectory.selectDirectory();
+			
+			if (sandboxed)
+			{
+				virtualdirectory.selectDirectory();
+			}
+			else
+			{
+				virtualdirectory.selectFile();
+			}
+			
 			dirButtonPress = currentTime;
 			//cout << "wth" << flush;
 		}
@@ -441,6 +452,10 @@ void preExchange(arMasterSlaveFramework& framework) {
 			{
 				Object* oby = leftSelectedObjects.front();
 				oby->_selected = !oby->_selected;
+				if(oby->_selected && oby == rightWiimote)
+				{
+					cout << "hi :3\n" << flush;
+				}
 				selectionMode = 0;
 			}
 			else
@@ -483,6 +498,10 @@ void preExchange(arMasterSlaveFramework& framework) {
 			{
 				Object* oby = upSelectedObjects.front();
 				oby->_selected = !oby->_selected;
+				if(oby->_selected && oby == rightWiimote)
+				{
+					cout << "hi :3\n" << flush;
+				}
 				selectionMode = 0;
 			}
 			else
@@ -525,6 +544,10 @@ void preExchange(arMasterSlaveFramework& framework) {
 			{
 				Object* oby = rightSelectedObjects.front();
 				oby->_selected = !oby->_selected;
+				if(oby->_selected && oby == rightWiimote)
+				{
+					cout << "hi :3\n" << flush;
+				}
 				selectionMode = 0;
 			}
 			else
@@ -567,6 +590,10 @@ void preExchange(arMasterSlaveFramework& framework) {
 			{
 				Object* oby = downSelectedObjects.front();
 				oby->_selected = !oby->_selected;
+				if(oby->_selected && oby == rightWiimote)
+				{
+					cout << "hi :3\n" << flush;
+				}
 				selectionMode = 0;
 			}
 			else
@@ -922,6 +949,16 @@ void goForward()
 		{
 			virtualdirectory.startBrowse("loadProjectCallback", &ProjectManager::loadProjectCallback,"Select kproj file to load: ", PATH);
 			cout << "loading project from path " << PATH << "\n" << flush;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Extend")==0)
+		{
+			if(rightSelected)
+			{
+				vector<string> handy;
+				handy.push_back("right");
+				ExtendBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
 		}
 		else
 		{

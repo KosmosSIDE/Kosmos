@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "selectedObjects.h"
 
 void Object::setHPR(int h, int p, int r)
 {
@@ -69,6 +70,42 @@ void Object::draw()
 		else if(_type == 2) { 
 			// Draw loaded OBJ file.
 			loadedOBJ.draw();			
+		}
+		else if(_type == 4) //wiimote
+		{
+		}
+		else if(_type == 5) //person
+		{
+			loadedOBJ.draw();
+			//rightWiimote->loadedOBJ.normalizeModelSize();
+			glPushMatrix();
+				glScalef(1/_length, 1/_height, 1/_width);
+				glTranslatef(3, 2, -1.6);
+				glRotatef(180, 0.0,1.0,0.0); //pitch
+				glRotatef(180, 0.0,0.0,1.0); //yaw/heading
+				glRotatef(-45, 1.0,0.0,0.0); //roll
+				//glScalef(0.5, 0.5, 0.5);
+				//glTranslatef(3, 2, -1.6);
+				rightWiimote->loadedOBJ.draw();
+				if (rightWiimote->_selected) //rightWiimote->getHighlight()
+				{
+					glutWireCube(1.01);
+				}
+			glPopMatrix();
+			glPushMatrix();
+				glScalef(1/_length, 1/_height, 1/_width);
+				glTranslatef(-3, 2, -1.6);
+				glRotatef(180, 0.0,1.0,0.0); //pitch
+				glRotatef(180, 0.0,0.0,1.0); //yaw/heading
+				glRotatef(-45, 1.0,0.0,0.0); //roll
+				//glScalef(0.5, 0.5, 0.5);
+				//glTranslatef(3, 2, -1.6);
+				leftWiimote->loadedOBJ.draw();
+				if (leftWiimote->_selected)
+				{
+					glutWireCube(1.01);
+				}
+			glPopMatrix();
 		}
 		else if(_type > 2) { 
 			// Draw loaded OBJ file.

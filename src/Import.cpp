@@ -41,12 +41,12 @@ void Import::import(const string &filename,const string &path = "data/obj")
 }
 
 ///import with xyz position and hpr rotation and scale, see above import for more information
-void Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path)
+void Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path, int type)
 {
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
-		Object* newObj = (path != "")?new Object(2,scale,scale,scale,filename,path):new Object(2,scale,scale,scale,filename);
+		Object* newObj = (path != "")?new Object(type,scale,scale,scale,filename,path):new Object(2,scale,scale,scale,filename);
 		newObj->normalize();
 		newObj->setMatrix(ar_translationMatrix(x, y, z)); // initial position
 		newObj->setHPR(h,p,r);

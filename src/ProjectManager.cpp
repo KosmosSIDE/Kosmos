@@ -490,7 +490,14 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	
 	for( int i=0; i<filenamev.size(); ++i)
 	{
-		Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i]);
+		if (i==0)
+		{
+			Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],5);
+		}
+		else
+		{
+			Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i]);
+		}
 	}
 	
 	filenamev.clear();
@@ -502,6 +509,24 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	objr.clear();
 	objscale.clear();
 	pathv.clear();
+	
+	
+	rightWiimote = new Object(4, 0.5, 0.5, 0.5, "MrWiimote.obj");
+	rightWiimote->normalize();
+	rightWiimote->setMatrix(ar_translationMatrix(3, 2, -1.6)); // initial position
+	rightWiimote->setHPR(135,0,0);
+	rightWiimote->disable();
+	//rightWiimote->_selected = true;
+	//rightWiimote->setHighlight(true);
+	objects.push_back(rightWiimote);
+	
+	leftWiimote = new Object(4, 0.5, 0.5, 0.5, "MrWiimote.obj");
+	leftWiimote->normalize();
+	leftWiimote->setMatrix(ar_translationMatrix(-3, 2, -1.6)); // initial position
+	leftWiimote->setHPR(135,0,0);
+	leftWiimote->disable();
+	leftWiimote->_selected = false;
+	objects.push_back(leftWiimote);
 }
 
 // load a previously created file for editing
@@ -644,6 +669,12 @@ void ProjectManager::createNewProject(string &projectFolder, string &templateLoc
 	//load into environment
 }
 
+void ProjectManager::save()
+{
+	string projectFile = projectDir + "\\" + projectName + ".kproj";
+	saveProject(projectFile);
+}
+
 /// this function saves a project to filepath from doc
 void ProjectManager::saveProject(string &filepath)
 {
@@ -660,7 +691,7 @@ void ProjectManager::findTemplateCallback(vector<string> args)
 	templateName = args[0];
 	cout << "template: " << templateName << "\n" << flush;
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", PATH);
+	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", SANDBOXPATH, true);
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
 }
 
