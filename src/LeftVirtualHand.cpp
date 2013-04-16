@@ -92,7 +92,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 	list<arInteractable*> objectlist;
 	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
 	
-	if(_leftMovering == false && getButton(3) == 1 && ar_pollingInteraction(self, objectlist))
+	if(_leftMovering == false && getButton(2) == 1 && ar_pollingInteraction(self, objectlist))
 	{
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
@@ -353,7 +353,7 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 					glScalef(1.3, 1.3, 1.3);
 					for (int i = 0; i < lenghOfQuote; i++)
 					{
-						glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+						glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, text[i]);
 					}
 				}
 				if(selected)

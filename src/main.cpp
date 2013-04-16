@@ -205,8 +205,8 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	musicNotey.readOBJ("MusicNote.obj","data/obj");
 	mrTablet.readOBJ("MrTablet.obj","data/obj");
 	
-	ar_navRotate( arVector3(0,1,0), 135 );
-	ar_navTranslate( arVector3(0,0,6) );
+	ar_navRotate( arVector3(0,1,0), 180 );
+	ar_navTranslate( arVector3(0,0,10) );
 	
 	
 	
@@ -290,7 +290,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	
 	// Process user input.
 	
-	if( _leftMovering == true && leftHand.getButton(3) == 0)
+	if( _leftMovering == true && leftHand.getButton(2) == 0)
 	{
 		_leftSelectedObject->snapMatrix();
 		_leftMovering = false;
@@ -337,7 +337,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		cout<<"\n\n Before go down\n"<<endl<<flush;
 		goDown();
 	}*/
-	if(leftHand.getOnButton(3))
+	if(leftHand.getOnButton(5))
 	{
 		tabletOn = !tabletOn;
 	}
@@ -380,24 +380,24 @@ void preExchange(arMasterSlaveFramework& framework) {
 	}
 	else if(virtualdirectory.findingFile)
 	{
-		if (leftHand.getOnButton(9) || (leftHand.getButton(9) && (currentTime-dirButtonPress)>150))
+		if (leftHand.getOnButton(6) || (leftHand.getButton(6) && (currentTime-dirButtonPress)>150))
 		{
 			virtualdirectory.upPressed();
 			dirButtonPress = currentTime;
 		}
-		else if (leftHand.getOnButton(8) || (leftHand.getButton(8) && (currentTime-dirButtonPress)>150))
+		else if (leftHand.getOnButton(7) || (leftHand.getButton(7) && (currentTime-dirButtonPress)>150))
 		{
 			virtualdirectory.downPressed();
 			dirButtonPress = currentTime;
 		}
-		else if (leftHand.getOnButton(7))// && (currentTime-dirButtonPress)>200)
+		else if (leftHand.getOnButton(9))// && (currentTime-dirButtonPress)>200)
 		{
 			pressedImport = currentTime;
 			virtualdirectory.selectFile();
 			dirButtonPress = currentTime;
 			cout << "wth\n" << flush;
 		}
-		else if (leftHand.getOnButton(10))// && (currentTime-dirButtonPress)>200)
+		else if (leftHand.getOnButton(3))// && (currentTime-dirButtonPress)>200)
 		{
 			pressedImport = currentTime;
 			virtualdirectory.selectDirectory();
