@@ -24,23 +24,28 @@ void VirtualHandBlock::insertBlock(vector<string> args)
 
 	if (strcmp(args[0].c_str(),"right") == 0)
 	{
+		cout << "operating...replacing right hand with vhand\n" << flush;
 		//get the name of the current one
 		string currName = codeTree.first_node()->first_node("profile")->first_node()->first_node("rightHand")->first_node("block")->first_node("name")->value();
 		//replace all nodes where attr parent = current name
 		vector<char> writable(currName.size() + 1);
 		copy(currName.begin(), currName.end(), writable.begin());
 		
-		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]));
+		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]),true);
 	}
 	else if (strcmp(args[0].c_str(),"left") == 0)
 	{
+		cout << "operating...replacing left hand with vhand\n" << flush;
 		//get the name of the current one
 		string currName = codeTree.first_node()->first_node("profile")->first_node()->first_node("leftHand")->first_node("block")->first_node("name")->value();
+		cout << "currname\n" << flush;
+		cout << currName << flush;
+		cout << "\n" << flush;
 		//replace all nodes where attr parent = current name
 		vector<char> writable(currName.size() + 1);
 		copy(currName.begin(), currName.end(), writable.begin());
 		
-		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]));
+		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]),false);
 	}
 	else
 	{
@@ -49,21 +54,29 @@ void VirtualHandBlock::insertBlock(vector<string> args)
 }
 
 
-void VirtualHandBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName)
+void VirtualHandBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, bool isRightHand)
 {
 	if (node->first_attribute() != 0)
 	{
 		rapidxml::xml_attribute<> *attr = node->first_attribute("parent");
 		if (strcmp(blockName, attr->value()) == 0)
 		{
+			cout << "looking for parent\n" << flush;
+			cout << blockName << " \n\n" << flush;
 			rapidxml::xml_attribute<> *type = node->first_attribute("type");
 			if (type != 0)
 			{			
+				string parentToLookFor = (isRightHand?"rvhand":"lvhand");
 				rapidxml::xml_node<>* a = vhandblockdoc.first_node();
-				while ((strcmp(a->first_attribute("type")->value(), type->value()) != 0) && (strcmp(blockName, a->first_attribute("parent")->value()) != 0))
+				while ((strcmp(a->first_attribute("type")->value(), type->value()) != 0) || (strcmp(parentToLookFor.c_str(), a->first_attribute("parent")->value()) != 0))
 				{
 					a = a->next_sibling();
 				}
+				cout << "replacing parent type\n" << flush;
+				cout << attr->value() << " " << type->value() << flush;
+				cout << "\nwith\n" << flush;
+				cout << a->first_attribute("parent")->value() << " " << a->first_attribute("type")->value() << flush;
+				cout << "\n\n" << flush;
 				rapidxml::xml_node<> *child = codeTree.clone_node( a, node );
 			}
 		}
@@ -71,11 +84,11 @@ void VirtualHandBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char*
 	
 	if (node->first_node() != 0)
 	{
-		replaceNodesByAttribute(node->first_node(), blockName);
+		replaceNodesByAttribute(node->first_node(), blockName, isRightHand);
 	}
 	if (node->next_sibling() != 0)
 	{
-		replaceNodesByAttribute(node->next_sibling(), blockName);
+		replaceNodesByAttribute(node->next_sibling(), blockName, isRightHand);
 	}
 }
 

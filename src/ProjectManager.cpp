@@ -515,7 +515,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	rightWiimote->normalize();
 	rightWiimote->setMatrix(ar_translationMatrix(3, 2, -1.6)); // initial position
 	rightWiimote->setHPR(135,0,0);
-	rightWiimote->disable();
+	//rightWiimote->disable();
 	//rightWiimote->_selected = true;
 	//rightWiimote->setHighlight(true);
 	objects.push_back(rightWiimote);
@@ -524,8 +524,8 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	leftWiimote->normalize();
 	leftWiimote->setMatrix(ar_translationMatrix(-3, 2, -1.6)); // initial position
 	leftWiimote->setHPR(135,0,0);
-	leftWiimote->disable();
-	leftWiimote->_selected = false;
+	//leftWiimote->disable();
+	//leftWiimote->_selected = false;
 	objects.push_back(leftWiimote);
 }
 
@@ -667,6 +667,11 @@ void ProjectManager::createNewProject(string &projectFolder, string &templateLoc
 	loadProject(projectFile);
 	//initialize
 	//load into environment
+}
+
+void ProjectManager::generate()
+{
+	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir);
 }
 
 void ProjectManager::save()

@@ -187,7 +187,12 @@ void RightVirtualHand::draw()
 						
 						
 						
-						
+						<code parent="rextend" type="declaration">
+RightVirtualHand rightHand(&quot;staff.obj&quot;);
+						</code>
+						<code parent="lextend" type="declaration">
+LeftVirtualHand leftHand(&quot;staff.obj&quot;);
+						</code>
 						
 						
 						

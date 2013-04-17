@@ -83,6 +83,41 @@ void LeftVirtualHand::extend(arEffector& self, arInteractable* object, float max
 	}
 }
 
+bool LeftVirtualHand::requestGrab( arInteractable* grabee ) 
+{
+	if (grabee == rightWiimote || grabee == leftWiimote)
+	{
+		//cout << "handy\n" << flush;
+		if (_grabbedObject == grabee) 
+		{
+			return true;
+		}
+		if (_grabbedObject) 
+		{
+			return false;
+		}
+		if (_touchedObject != grabee) 
+		{
+			if (_touchedObject) 
+			{
+				_touchedObject->untouch( *this );
+			}
+			if (grabee) 
+			{
+				grabee->touch( *this );
+			}
+		}
+		_grabbedObject = grabee; // ASSIGNMENT
+		//((Object*)grabee)->_selected = !((Object*)grabee)->_selected;
+		//return false;
+		return true;
+	}
+	else
+	{
+		return arEffector::requestGrab( grabee );
+	}
+	return false;
+}
 
 // Left hand effector's extend function for multiple objects.
 // Purpose:
@@ -131,9 +166,27 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			{
 				Object *oby = ((Object*)(*i));
 				oby->_selected = !oby->_selected;
-				if(oby->_selected && oby == rightWiimote)
+				if(oby->_selected)
 				{
-					cout << "hi :3\n" << flush;
+					if(oby == rightWiimote)
+					{
+						rightSelected = true;
+						leftWiimote->_selected=false;
+						currentPtr = wiiNodeMenu->forwardPtrs[0];
+						cout << "hi :3 changing menu?\n" << flush;
+					}
+					else if(oby == leftWiimote)
+					{
+						rightWiimote->_selected=false;
+						rightSelected = false;
+						currentPtr = wiiNodeMenu->forwardPtrs[0];
+					}
+					else
+					{
+						currentPtr = nodeMenu;
+						leftWiimote->_selected=false;
+						rightWiimote->_selected=false;
+					}
 				}
 				selectionMode = 0;
 			}
@@ -200,9 +253,27 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			Object* oby = leftSelectedObjects.front();
 			//set the one object to selected
 			oby->_selected = !oby->_selected;
-			if(oby->_selected && oby == rightWiimote)
+			if(oby->_selected)
 			{
-				cout << "hi :3\n" << flush;
+				if(oby == rightWiimote)
+				{
+					rightSelected = true;
+					leftWiimote->_selected=false;
+					currentPtr = wiiNodeMenu->forwardPtrs[0];
+					cout << "hi :3 changing menu?\n" << flush;
+				}
+				else if(oby == leftWiimote)
+				{
+					rightWiimote->_selected=false;
+					rightSelected = false;
+					currentPtr = wiiNodeMenu->forwardPtrs[0];
+				}
+				else
+				{
+					currentPtr = nodeMenu;
+					leftWiimote->_selected=false;
+					rightWiimote->_selected=false;
+				}
 			}
 		}
 		else

@@ -33,6 +33,7 @@
 #include "ProjectManager.h"
 #include "TreeMenu.h"
 #include "ExtendBlock.h"
+#include "VirtualHandBlock.h"
 
 using namespace rapidxml;
 
@@ -217,10 +218,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		templateName = PATH+"Kosmos\\templates\\template3.kide";
+		/*templateName = PATH+"Kosmos\\templates\\template3.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);*/
 	
 	wiiNodeMenu = new TreeMenu();
 	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
@@ -301,7 +302,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	
 	if( _leftMovering == true && leftHand.getButton(2) == 0)
 	{
-		_leftSelectedObject->snapMatrix();
+		//_leftSelectedObject->snapMatrix();
 		_leftMovering = false;
 		_leftSelectedObject = NULL;
 	}
@@ -349,6 +350,13 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if(leftHand.getOnButton(5))
 	{
 		tabletOn = !tabletOn;
+	}
+	
+	if(leftHand.getOnButton(10))
+	{
+		currentPtr = nodeMenu;
+		leftWiimote->_selected = false;
+		rightWiimote->_selected = false;
 	}
 	
 	
@@ -928,6 +936,7 @@ void goForward()
 	cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
 	if(currentPtr->noOf_FwdPtrs>0)
 	{
+		bool leaf = true;
 		parentMenu = currentPtr;
 		currentPtr = currentPtr->forwardPtrs[treeIndex];
 		curTreeLevel = currentPtr->level;
@@ -940,29 +949,73 @@ void goForward()
 			ProjectManager::findProjectCallback(projman);
 			currentPtr = nodeMenu;*/
 			virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
+			tabletOn = false;
 		}
-		else if (strcmp(currentPtr->name.c_str(),"obj")==0)
+		else if (strcmp(currentPtr->name.c_str(),"Object")==0)
 		{
-			virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
+			virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ", OBJECTPATH);
+			tabletOn = false;
 		}
 		else if (strcmp(currentPtr->name.c_str(),"Load project")==0)
 		{
-			virtualdirectory.startBrowse("loadProjectCallback", &ProjectManager::loadProjectCallback,"Select kproj file to load: ", PATH);
-			cout << "loading project from path " << PATH << "\n" << flush;
+			virtualdirectory.startBrowse("loadProjectCallback", &ProjectManager::loadProjectCallback,"Select kproj file to load: ", SANDBOXPATH);
+			cout << "loading project from path " << SANDBOXPATH << "\n" << flush;
+			tabletOn = false;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Save project")==0)
+		{
+			ProjectManager::save();
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Generate code")==0)
+		{
+			ProjectManager::generate();
 		}
 		else if (strcmp(currentPtr->name.c_str(),"Extend")==0)
 		{
 			if(rightSelected)
 			{
+				cout << "replacing right hand with extend\n" << flush;
 				vector<string> handy;
 				handy.push_back("right");
 				ExtendBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
+			else
+			{
+				cout << "replacing left hand with extend\n" << flush;
+				vector<string> handy;
+				handy.push_back("left");
+				ExtendBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Virtual Hand")==0)
+		{
+			if(rightSelected)
+			{
+				cout << "replacing right hand with vhand\n" << flush;
+				vector<string> handy;
+				handy.push_back("right");
+				VirtualHandBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
+			else
+			{
+				cout << "replacing left hand with vhand\n" << flush;
+				vector<string> handy;
+				handy.push_back("left");
+				VirtualHandBlock::insertBlock(handy);
 				ProjectManager::save();
 			}
 		}
 		else
 		{
 			cout << "you selected " << currentPtr->name << "\n" << flush;
+			leaf = false;
+		}
+		if(leaf)
+		{
+			currentPtr = nodeMenu;
 		}
 		cout<<"inside goForward() \n"<<flush;
 		treeIndex = 0;
@@ -1021,7 +1074,6 @@ void goDown()
 
 
 
-// main entry to MasterSlave application
 int main(int argc, char** argv) {
 
 	// Declare a MasterSlave framework.

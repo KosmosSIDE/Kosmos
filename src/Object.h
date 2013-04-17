@@ -52,6 +52,11 @@ class Object:public arInteractableThing {
 				{
 					cout << "loaded " << filename << '\n' << flush;
 				}
+				
+				if(_type == 5)
+				{
+					arInteractableThing::disable();
+				}
 			}
 			// invalid type and file combination
 			else if(_type >= 2) { _type = -1; }
@@ -71,6 +76,9 @@ class Object:public arInteractableThing {
 		arOBJRenderer* getOBJ() { return &loadedOBJ; }
 		void snapMatrix();
 		void setHPR(int h, int p, int r);
+		void setMatrix(const arMatrix4& matrix);
+		bool touch( arEffector& effector );
+		bool _touch( arEffector& /*effector*/ );
 		
 	private:
 		
@@ -80,6 +88,7 @@ class Object:public arInteractableThing {
 		float _length;
 		float _height;
 		float _width;
+		bool processInteraction( arEffector& effector );
 		
 		
 		//bool _selected;

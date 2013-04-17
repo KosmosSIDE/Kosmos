@@ -74,16 +74,34 @@ void RightVirtualHand::detectCollisions(arEffector& self, vector<arInteractable*
 			//cout << "object was selected" << '\n';
 			Object* oby = (Object*)closestObject;
 			oby->_selected = !oby->_selected;
-			if(oby->_selected && oby == rightWiimote)
+			/*if(oby->_selected)
 			{
-				rightSelected = true;
-				currentPtr = wiiNodeMenu->forwardPtrs[0];
-				cout << "hi :3 changing menu?\n" << flush;
+				if(oby == rightWiimote)
+				{
+					rightSelected = true;
+					leftWiimote->_selected=false;
+					currentPtr = wiiNodeMenu->forwardPtrs[0];
+					cout << "hi :3 changing menu?\n" << flush;
+				}
+				else if(oby == leftWiimote)
+				{
+					rightWiimote->_selected=false;
+					rightSelected = false;
+					currentPtr = wiiNodeMenu->forwardPtrs[0];
+				}
+				else
+				{
+					currentPtr = nodeMenu;
+					leftWiimote->_selected=false;
+					rightWiimote->_selected=false;
+				}
 			}
-			else if(oby->_selected && oby == leftWiimote)
+			else if((oby == rightWiimote) || (oby == leftWiimote))
 			{
-				rightSelected = false;
-			}
+				currentPtr = nodeMenu;
+				leftWiimote->_selected=false;
+				rightWiimote->_selected=false;
+			}*/
 		}
 	}
 	else {

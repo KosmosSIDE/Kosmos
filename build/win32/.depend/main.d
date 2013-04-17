@@ -231,4 +231,5 @@ main.o: ../../src/main.cpp C:/aszgard5/szg/src/language/arPrecompiled.h \
   C:/aszgard5/szg/src/math/arMath.h ../../src/LeftVirtualHand.h \
   ../../src/selectedObjects.h ../../src/VirtualDirectory.h \
   ../../src/CallFunction.h ../../src/RightVirtualHand.h \
-  ../../src/Import.h ../../src/ProjectManager.h ../../src/ExtendBlock.h
+  ../../src/Import.h ../../src/ProjectManager.h ../../src/ExtendBlock.h \
+  ../../src/VirtualHandBlock.h

@@ -54,6 +54,7 @@ class ProjectManager
 		/// this function will create a new project at the specified location
 		static void createNewProject(string &projectFolder, string &templateLocation);
 		static void save();
+		static void generate();
 		/// this function saves a project to filepath from doc
 		static void saveProject(string &filepath);
 

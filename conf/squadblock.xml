@@ -209,7 +209,12 @@ void RightVirtualHand::draw()
 						
 						
 						
-						
+						<code parent="rsquad" type="declaration">
+RightVirtualHand rightHand();
+						</code>
+						<code parent="lsquad" type="declaration">
+LeftVirtualHand leftHand();
+						</code>
 						
 						
 						

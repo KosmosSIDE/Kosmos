@@ -77,6 +77,7 @@ class LeftVirtualHand:public arEffector {
 		void drawTablet() const;
 		
 		float getLength();
+		bool requestGrab( arInteractable* grabee );
 	
 	private:
 		float _currentLength;

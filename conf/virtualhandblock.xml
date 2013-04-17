@@ -212,7 +212,12 @@ void RightVirtualHand::draw()
 						
 						
 						
-						
+						<code parent="rvhand" type="declaration">
+RightVirtualHand rightHand(&quot;handy.obj&quot;); // loads obj for hand
+						</code>
+						<code parent="lvhand" type="declaration">
+LeftVirtualHand leftHand(&quot;handy.obj&quot;); // loads obj for hand
+						</code>
 						
 						
 						
