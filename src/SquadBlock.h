@@ -15,7 +15,7 @@ class SquadBlock
 {
 	public:
 		static void insertBlock(vector<string> args);
-		static void replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName);
+		static void replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, bool isRightHand);
 	
 	private:		
 		static rapidxml::xml_document<> squadblockdoc;

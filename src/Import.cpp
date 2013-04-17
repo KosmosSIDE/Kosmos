@@ -78,6 +78,15 @@ void Import::importCallback(vector<string> args)
 	//TODO parse mtl look for and add jpg ppm
 	CopyFile(frompath.c_str(),topath.c_str(), true);
 	//add to xml
+	/*std::string srcdataobj = "<file><name>"+filename+"</name><type>external</type><locationType>filesystem</locationType></file><file><name>"+filename.substr(0,filename.size()-4)+".mtl</name><type>external</type><locationType>filesystem</locationType></file>";
+	std::vector<char> dataobj(srcdataobj.begin(), srcdataobj.end());
+	dataobj.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> newimportdoc;
+	newimportdoc.parse<0>( &dataobj[0] );
+	rapidxml::xml_node<>* dataobjnode = importdoc.first_node();
+	rapidxml::xml_node<> *appendnode = codeTree.clone_node( dataobjnode );
+	codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->first_node("directory")->append_node( appendnode ); Appending node a to the tree in src
+	*/
 	// append to data/obj
 	/*
 				<file>
@@ -106,24 +115,11 @@ Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
 		"<x>0</x><y>4</y><z>-4</z><heading>0</heading><pitch>0</pitch><roll>0</roll></object>";
 	std::vector<char> data(src2.begin(), src2.end());
 	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
-	
 	importstr = data;
-	//rapidxml::xml_document<> xmlseg;
-	//std::vector<char> x(src2.begin(), src2.end());
-	 
-
-	//xmlseg.parse<0>( &x[0] );
 	importdoc.parse<0>( &importstr[0] );
-
-	//rapidxml::xml_node<>* a = xmlseg.first_node(); /* Node to append */
 	rapidxml::xml_node<>* a = importdoc.first_node();
-
 	rapidxml::xml_node<> *node = codeTree.clone_node( a );
-codeTree.first_node("project")->first_node("profile")->append_node( node ); /* Appending node a to the tree in src */
-	/*cout << "save proj" << "\n" << flush;
-	string projectFile = projectDir + "\\" + projectName + ".kproj";
-	ProjectManager::saveProject(projectFile);
-	cout << "finished save" << "\n" << flush;*/
+	codeTree.first_node("project")->first_node("profile")->append_node( node ); /* Appending node a to the tree in src */
 	// append to profile
 	/*
 		<object>

@@ -30,7 +30,7 @@ void SquadBlock::insertBlock(vector<string> args)
 		vector<char> writable(currName.size() + 1);
 		copy(currName.begin(), currName.end(), writable.begin());
 		
-		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]));
+		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]), true);
 	}
 	else if (strcmp(args[0].c_str(),"left") == 0)
 	{
@@ -40,7 +40,7 @@ void SquadBlock::insertBlock(vector<string> args)
 		vector<char> writable(currName.size() + 1);
 		copy(currName.begin(), currName.end(), writable.begin());
 		
-		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]));
+		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]), false);
 	}
 	else
 	{
@@ -49,7 +49,7 @@ void SquadBlock::insertBlock(vector<string> args)
 }
 
 
-void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName)
+void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, , bool isRightHand)
 {
 	if (node->first_attribute() != 0)
 	{
@@ -59,8 +59,9 @@ void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* block
 			rapidxml::xml_attribute<> *type = node->first_attribute("type");
 			if (type != 0)
 			{			
+				string parentToLookFor = (isRightHand?"rsquad":"lsquad");
 				rapidxml::xml_node<>* a = squadblockdoc.first_node();
-				while ((strcmp(a->first_attribute("type")->value(), type->value()) != 0) && (strcmp(blockName, a->first_attribute("parent")->value()) != 0))
+				while ((strcmp(a->first_attribute("type")->value(), type->value()) != 0) && (strcmp(parentToLookFor.c_str(), a->first_attribute("parent")->value()) != 0))
 				{
 					a = a->next_sibling();
 				}
@@ -71,11 +72,11 @@ void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* block
 	
 	if (node->first_node() != 0)
 	{
-		replaceNodesByAttribute(node->first_node(), blockName);
+		replaceNodesByAttribute(node->first_node(), blockName, isRightHand);
 	}
 	if (node->next_sibling() != 0)
 	{
-		replaceNodesByAttribute(node->next_sibling(), blockName);
+		replaceNodesByAttribute(node->next_sibling(), blockName, , isRightHand);
 	}
 }
 
