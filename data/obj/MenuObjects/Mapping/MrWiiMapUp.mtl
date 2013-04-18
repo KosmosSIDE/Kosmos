@@ -12,5 +12,5 @@ newmtl 18___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\Users\David\Desktop\Objects For VR\Mapping\MotesUp.jpg
-	map_Kd C:\Users\David\Desktop\Objects For VR\Mapping\MotesUp.jpg
+	map_Ka MotesUp.jpg
+	map_Kd MotesUp.jpg

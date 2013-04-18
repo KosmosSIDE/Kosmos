@@ -12,5 +12,5 @@ newmtl 09___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\Users\David\Desktop\Objects For VR\Mapping\MotesB.jpg
-	map_Kd C:\Users\David\Desktop\Objects For VR\Mapping\MotesB.jpg
+	map_Ka MotesB.jpg
+	map_Kd MotesB.jpg
