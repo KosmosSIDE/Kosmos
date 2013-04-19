@@ -49,6 +49,7 @@ bool rightSelected = false;
 bool tabletOn = true;
 
 TreeMenu *wiiNodeMenu = NULL;
+TreeMenu *userMenu = NULL;
 /*Changes by Harish Babu Arunachalam*/
 TreeMenu *nodeMenu = NULL;
 TreeMenu *parentMenu = NULL;
@@ -103,6 +104,7 @@ Object* _leftSelectedObject;
 Object* _rightSelectedObject;
 Object* rightWiimote;
 Object* leftWiimote;
+Object* userObject;
 bool _rightMoving;
 bool _leftMovering;
 
@@ -218,13 +220,16 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		/*templateName = PATH+"Kosmos\\templates\\template3.kide";
+		/*templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
 		ProjectManager::findProjectCallback(projman);*/
 	
 	wiiNodeMenu = new TreeMenu();
 	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
+	
+	userMenu = new TreeMenu();
+	userMenu = userMenu->makeUserMenu(userMenu);
 	/*Changes by Harish Babu Arunachalam*/
 	nodeMenu =  new TreeMenu();
 	currentPtr = new TreeMenu();

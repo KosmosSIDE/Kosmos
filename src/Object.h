@@ -55,7 +55,7 @@ class Object:public arInteractableThing {
 				
 				if(_type == 5)
 				{
-					arInteractableThing::disable();
+					//arInteractableThing::disable();
 				}
 			}
 			// invalid type and file combination

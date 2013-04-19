@@ -166,7 +166,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			{
 				Object *oby = ((Object*)(*i));
 				oby->_selected = !oby->_selected;
-				if(oby->_selected)
+				/*if(oby->_selected)
 				{
 					if(oby == rightWiimote)
 					{
@@ -187,7 +187,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 						leftWiimote->_selected=false;
 						rightWiimote->_selected=false;
 					}
-				}
+				}*/
 				selectionMode = 0;
 			}
 		}
@@ -253,7 +253,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			Object* oby = leftSelectedObjects.front();
 			//set the one object to selected
 			oby->_selected = !oby->_selected;
-			if(oby->_selected)
+			/*if(oby->_selected)
 			{
 				if(oby == rightWiimote)
 				{
@@ -274,7 +274,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 					leftWiimote->_selected=false;
 					rightWiimote->_selected=false;
 				}
-			}
+			}*/
 		}
 		else
 		{

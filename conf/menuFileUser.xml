@@ -1,0 +1,101 @@
+<menus>
+  <menu level="0" hasChild="Y">
+		<options>
+			<option level="1" hasChild="Y">
+				<name>Movement</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="Y">
+						<name>LeftRight</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>Strafing</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>Rotate</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
+					</option>
+					<option level="2" hasChild="Y">
+						<name>UpDown</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>Forward and back</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>Up and down</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Import</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>Object</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Settings</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>Snap</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Turkey</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Pop</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+		</options>
+	</menu>
+</menus>

@@ -373,7 +373,7 @@ void ProjectManager::initialize(string &filename)
 		std::copy(istream_iterator(myfile), istream_iterator(),
 				  std::back_inserter(document));*/
 	
-	codeTree.parse<0>(&document[0]);
+	codeTree.parse<rapidxml::parse_no_data_nodes>(&document[0]);
 	//codeTree.parse<parse_full>(&document[0]);
 	
 	myfile.close();
@@ -492,7 +492,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	{
 		if (i==0)
 		{
-			Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],5);
+			userObject = Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],5);
 		}
 		else
 		{

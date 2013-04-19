@@ -55,6 +55,7 @@ public:
 	int getIntValue(char*);
 	TreeMenu* populateAttr(TreeMenu* , xml_node<>*);
 	TreeMenu* makeMenu(TreeMenu*);
+	TreeMenu* makeUserMenu(TreeMenu*);
 	TreeMenu* makeWiiMenu(TreeMenu*);
 	void printValues(TreeMenu*);
 	//static int main();

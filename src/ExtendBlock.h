@@ -20,6 +20,7 @@ class ExtendBlock
 	private:		
 		static rapidxml::xml_document<> extendblockdoc;
 		static vector<char> extendblockfile;
+		static void addExtendToProfile(bool isRightHand);
 };
 
 #endif

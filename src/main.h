@@ -40,6 +40,8 @@ extern bool sandboxed;
 extern bool rightSelected;
 
 extern TreeMenu *wiiNodeMenu;
+extern TreeMenu *userMenu;
+
 //Changes by Harish Babu Arunachalam
 extern TreeMenu *nodeMenu;
 extern TreeMenu *parentMenu;

@@ -20,6 +20,7 @@ class SquadBlock
 	private:		
 		static rapidxml::xml_document<> squadblockdoc;
 		static vector<char> squadblockfile;
+		static void addSquadToProfile(bool isRightHand);
 };
 
 #endif

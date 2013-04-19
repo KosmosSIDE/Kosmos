@@ -10,6 +10,8 @@ Author: Aaron Hardin
 
 rapidxml::xml_document<> Import::importdoc;
 vector<char> Import::importstr;
+rapidxml::xml_document<> Import::profileimportdoc;
+vector<char> Import::profileimportstr;
 
 //find a string in a string and replace with a string
 int inline Import::findAndReplace(string& source, const string& find, const string& replace)
@@ -28,7 +30,7 @@ int inline Import::findAndReplace(string& source, const string& find, const stri
 ///import obj from filename and given path...the filename is the full path but
 /// we need path for the mtl, i guess we could parse from filename but this is
 /// how i chose to do it
-void Import::import(const string &filename,const string &path = "data/obj")
+Object* Import::import(const string &filename,const string &path = "data/obj")
 {
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
@@ -37,11 +39,14 @@ void Import::import(const string &filename,const string &path = "data/obj")
 		newObj->normalize();
 		newObj->setMatrix(ar_translationMatrix(0, 4, -8)); // initial position
 		objects.push_back(newObj);
+		
+		return newObj;
 	}
+	return NULL;
 }
 
 ///import with xyz position and hpr rotation and scale, see above import for more information
-void Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path, int type)
+Object* Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path, int type)
 {
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
@@ -52,7 +57,10 @@ void Import::import(const string &filename, int x, int y, int z, int h, int p, i
 		newObj->setHPR(h,p,r);
 		
 		objects.push_back(newObj);
+		
+		return newObj;
 	}
+	return NULL;
 }
 
 ///callback for use via the callback class
@@ -77,16 +85,22 @@ void Import::importCallback(vector<string> args)
 	findAndReplace(topath, ".obj",".mtl");
 	//TODO parse mtl look for and add jpg ppm
 	CopyFile(frompath.c_str(),topath.c_str(), true);
+	
+	cout << "adding obj to xml file...\n" << flush;
 	//add to xml
-	/*std::string srcdataobj = "<file><name>"+filename+"</name><type>external</type><locationType>filesystem</locationType></file><file><name>"+filename.substr(0,filename.size()-4)+".mtl</name><type>external</type><locationType>filesystem</locationType></file>";
+	std::string srcdataobj = "<file><name>"+filename+"</name><type>external</type><locationType>filesystem</locationType></file><file><name>"+filename.substr(0,filename.size()-4)+".mtl</name><type>external</type><locationType>filesystem</locationType></file>";
 	std::vector<char> dataobj(srcdataobj.begin(), srcdataobj.end());
 	dataobj.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
-	rapidxml::xml_document<> newimportdoc;
-	newimportdoc.parse<0>( &dataobj[0] );
-	rapidxml::xml_node<>* dataobjnode = importdoc.first_node();
-	rapidxml::xml_node<> *appendnode = codeTree.clone_node( dataobjnode );
-	codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->first_node("directory")->append_node( appendnode ); Appending node a to the tree in src
-	*/
+	profileimportstr = dataobj;
+	profileimportdoc.parse<0>( &profileimportstr[0] );
+	rapidxml::xml_node<>* dataobjnode = profileimportdoc.first_node();
+	while (dataobjnode != 0)
+	{
+		rapidxml::xml_node<> *appendnode = codeTree.clone_node( dataobjnode );
+		codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->first_node("directory")->append_node( appendnode ); //Appending node a to the tree in src
+		dataobjnode = dataobjnode->next_sibling();
+	}
+	cout << "added obj to profile...\n" << flush;
 	// append to data/obj
 	/*
 				<file>
@@ -95,8 +109,24 @@ void Import::importCallback(vector<string> args)
 					<locationType>filesystem</locationType>
 				</file>
 	*/
+	ostringstream lines;
+
+	lines << "<code parent=\"" << filename.substr(0,filename.size()-4) << "\">" << endl;
+	lines << "the" << filename.substr(0,filename.size()-4) << ".setMatrix(ar_translationMatrix(0, 4, -8));" << endl;
+	lines << "objects.push_back(&amp;the" << filename.substr(0,filename.size()-4) << ");" << endl;
+	lines << "</code>" << endl;
+	std::string mainStartObjectStr = lines.str();
+	std::vector<char> mainStartObjectVec(mainStartObjectStr.begin(), mainStartObjectStr.end());
+	mainStartObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainStartObjectDoc;
+	mainStartObjectDoc.parse<0>( &mainStartObjectVec[0] );
+	rapidxml::xml_node<>* mainStartObjectNode = mainStartObjectDoc.first_node();
+	rapidxml::xml_node<> *mainStartObjectAppendNode = codeTree.clone_node( mainStartObjectNode );
+	rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+	firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->prepend_node( mainStartObjectAppendNode );
 	
-	// append to main.start callback
+	cout << "added obj to main.start...\n" << flush;
+	// prepend to main.start callback
 	/*
 							<code parent="cello">
 	theCello.setMatrix(ar_translationMatrix(0, 4, -8));
@@ -104,6 +134,16 @@ void Import::importCallback(vector<string> args)
 							</code>
 	*/
 	
+	std::string mainGlobalObjectStr = "<code parent=\""+filename.substr(0,filename.size()-4)+"\">Object the"+filename.substr(0,filename.size()-4)+"(2, 0.5, 0.5, 0.5, &quot;"+filename+"&quot;);</code>";
+	std::vector<char> mainGlobalObjectVec(mainGlobalObjectStr.begin(), mainGlobalObjectStr.end());
+	mainGlobalObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainGlobalObjectDoc;
+	mainGlobalObjectDoc.parse<0>( &mainGlobalObjectVec[0] );
+	rapidxml::xml_node<>* mainGlobalObjectNode = mainGlobalObjectDoc.first_node();
+	rapidxml::xml_node<> *mainGlobalObjectAppendNode = codeTree.clone_node( mainGlobalObjectNode );
+	firstCodeBlock->next_sibling()->append_node( mainGlobalObjectAppendNode );
+	
+	cout << "added obj to main.global vars...\n" << flush;
 	// append to main.global vars
 	/*
 						<code parent="cello">

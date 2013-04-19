@@ -18,6 +18,7 @@ class VirtualHandBlock
 	private:		
 		static rapidxml::xml_document<> vhandblockdoc;
 		static std::vector<char> vhandblockfile;
+		static void addVhandToProfile(bool isRightHand);
 };
 
 #endif

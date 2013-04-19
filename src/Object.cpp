@@ -91,17 +91,25 @@ void Object::draw()
 		{
 			//glutWireCube(0.8);
 			loadedOBJ.draw();
-			if (this == rightWiimote && rightWiimote->_selected) //rightWiimote->getHighlight()
+			/*if (this == rightWiimote && rightWiimote->_selected) //rightWiimote->getHighlight()
 			{
 				glutWireCube(1.01);
 			}
 			if (this == leftWiimote && leftWiimote->_selected) //rightWiimote->getHighlight()
 			{
 				glutWireCube(1.01);
+			}*/
+			if (this->_selected)
+			{
+				glutWireCube(1.01);
 			}
 		}
 		else if(_type == 5) //person
 		{
+			if (this->_selected)
+			{
+				glutWireCube(1.01);
+			}
 			loadedOBJ.draw();
 			//rightWiimote->loadedOBJ.normalizeModelSize();
 			glPushMatrix();
@@ -179,7 +187,7 @@ void Object::draw()
 // callback).
 bool Object::processInteraction( arEffector& effector )
 {
-	if(this == leftWiimote || this == rightWiimote)
+	if(this == leftWiimote || this == rightWiimote || this == userObject)
 	{
 		// The interactable cannot be manipulated if it hasn't been enabled.
 		if (!_enabled)
@@ -237,20 +245,29 @@ bool Object::processInteraction( arEffector& effector )
 						{
 							rightSelected = true;
 							leftWiimote->_selected=false;
+							userObject->_selected = false;
 							currentPtr = wiiNodeMenu->forwardPtrs[0];
 							cout << "hi :3 changing menu?\n" << flush;
 						}
 						else if(this == leftWiimote)
 						{
 							rightWiimote->_selected=false;
+							userObject->_selected = false;
 							rightSelected = false;
 							currentPtr = wiiNodeMenu->forwardPtrs[0];
+						}
+						else if(this == userObject)
+						{
+							leftWiimote->_selected=false;
+							rightWiimote->_selected=false;
+							currentPtr = userMenu->forwardPtrs[0];
 						}
 						else
 						{
 							currentPtr = nodeMenu;
 							leftWiimote->_selected=false;
 							rightWiimote->_selected=false;
+							userObject->_selected = false;
 						}
 					}
 					else

@@ -31,6 +31,7 @@ void ExtendBlock::insertBlock(vector<string> args)
 		copy(currName.begin(), currName.end(), writable.begin());
 		
 		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]), true);
+		addExtendToProfile(true);
 	}
 	else if (strcmp(args[0].c_str(),"left") == 0)
 	{
@@ -41,6 +42,7 @@ void ExtendBlock::insertBlock(vector<string> args)
 		copy(currName.begin(), currName.end(), writable.begin());
 		
 		replaceNodesByAttribute(codeTree.first_node(), (char *)(&writable[0]), false);
+		addExtendToProfile(false);
 	}
 	else
 	{
@@ -48,6 +50,16 @@ void ExtendBlock::insertBlock(vector<string> args)
 	}
 }
 
+void ExtendBlock::addExtendToProfile(bool isRightHand)
+{
+	cout << "adding extend to profile\n" << flush;
+	
+	rapidxml::xml_node<>* handNode = (isRightHand?codeTree.first_node()->first_node("profile")->first_node()->first_node("rightHand"):codeTree.first_node()->first_node("profile")->first_node()->first_node("leftHand"));
+	cout << "value:"<<handNode->first_node("block")->first_node("name")->value()<<"\n"<<flush;
+	handNode->first_node("block")->first_node("name")->value(codeTree.allocate_string(isRightHand?"rextend\0":"lextend\0"));
+	handNode->first_node("block")->first_node("type")->value(codeTree.allocate_string("extend"));
+	cout << "value:"<<handNode->first_node("block")->first_node("name")->value()<<"\n"<<flush;
+}
 
 void ExtendBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, bool isRightHand)
 {
@@ -65,7 +77,8 @@ void ExtendBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* bloc
 				{
 					a = a->next_sibling();
 				}
-				rapidxml::xml_node<> *child = codeTree.clone_node( a, node );
+				//rapidxml::xml_node<> *child = codeTree.clone_node( a, node );
+				codeTree.clone_node( a, node );
 			}
 		}
 	}

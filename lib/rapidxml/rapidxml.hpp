@@ -507,14 +507,27 @@ namespace rapidxml
                 result = allocate_node(source->type());
 
             // Clone name and value
-            result->name(source->name(), source->name_size());
-            result->value(source->value(), source->value_size());
-
+			/*std::string* str = new std::string();
+			memcpy(str, source->name(), sizeof(source->name_size())+1);
+            result->name(str->c_str(), source->name_size());
+			std::string* val = new std::string();
+			memcpy(val, source->value(), sizeof(source->value_size())+1);
+            result->value(val->c_str(), source->value_size());*/
+			char *nami = new char[source->name_size()+1];
+			memcpy(nami, source->name(), source->name_size()+1);
+			char *vali = new char[source->value_size()+1];
+			memcpy(vali, source->value(), source->value_size()+1);
+			result->name(nami, source->name_size());
+			result->value(vali, source->value_size());
+			
+			
+			
+			
             // Clone child nodes and attributes
             for (xml_node<Ch> *child = source->first_node(); child; child = child->next_sibling())
                 result->append_node(clone_node(child));
             for (xml_attribute<Ch> *attr = source->first_attribute(); attr; attr = attr->next_attribute())
-                result->append_attribute(allocate_attribute(attr->name(), attr->value(), attr->name_size(), attr->value_size()));
+                result->append_attribute(allocate_attribute(allocate_string(attr->name()), allocate_string(attr->value()), attr->name_size(), attr->value_size()));
 
             return result;
         }
