@@ -429,6 +429,51 @@ int TreeMenu::findNode(char*)
 		printValues(wiiNodeMenu);
 		return wiiNodeMenu;
 	}
+	
+
+
+/*Method to get dependency of files*/
+	vector<string> TreeMenu::getDependency(string file)
+	{
+		//read the file
+		ifstream fin;
+		string str = "";
+		vector<string> dependFile;
+		//fin.open("C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj\\cello.mtl");
+		fin.open(file);
+		while(!(fin.eof()))
+		{
+			fin>>str;
+			if(str.find("map_")!=string::npos)
+			{
+				fin>>str;
+				if(!findDuplicate(str,dependFile))
+				{
+					dependFile.push_back(str);
+					cout<<"  "<<dependFile[0]<<endl;
+				}
+				//cout<<"string found -- "<<str;
+			}
+			//cout<<str<<" -- ";
+		}
+		return dependFile;
+	}
+
+	/*method to find the duplicate file in the vector*/
+	bool TreeMenu::findDuplicate(string file,vector<string> tempDepend)
+	{
+		//bool result = false;
+		for(int i=0;i<tempDepend.size();i++)
+		{
+			if(tempDepend[0].find(file)!=string::npos)
+			{
+				cout<<"duplicate found "<<endl;
+				return true;
+			}
+		}
+		return false;
+	}
+	
 /*
 	//Main Function
 	int main()
