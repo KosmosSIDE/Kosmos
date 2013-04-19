@@ -58,6 +58,8 @@ public:
 	TreeMenu* makeUserMenu(TreeMenu*);
 	TreeMenu* makeWiiMenu(TreeMenu*);
 	void printValues(TreeMenu*);
+	vector<string> getDependency(string);
+	bool findDuplicate(string,vector<string>);
 	//static int main();
 };
 #endif // !TREE_MENU
