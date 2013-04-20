@@ -38,6 +38,7 @@ extern string projectDir;
 extern bool tabletOn;
 extern bool sandboxed;
 extern bool rightSelected;
+extern bool showFloor;
 
 extern TreeMenu *wiiNodeMenu;
 extern TreeMenu *userMenu;

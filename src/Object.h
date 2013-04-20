@@ -75,7 +75,7 @@ class Object:public arInteractableThing {
 		float getWidth() { return _width; }
 		arOBJRenderer* getOBJ() { return &loadedOBJ; }
 		void snapMatrix();
-		void setHPR(int h, int p, int r);
+		void setHPR(float h, float p, float r);
 		void setMatrix(const arMatrix4& matrix);
 		bool touch( arEffector& effector );
 		bool _touch( arEffector& /*effector*/ );

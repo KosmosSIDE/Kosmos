@@ -58,8 +58,8 @@ public:
 	TreeMenu* makeUserMenu(TreeMenu*);
 	TreeMenu* makeWiiMenu(TreeMenu*);
 	void printValues(TreeMenu*);
-	vector<string> getDependency(string);
-	bool findDuplicate(string,vector<string>);
+	static vector<string> getDependency(string); //Aaron: changed to static...these don't belong here, makes no sense...oh well
+	static bool findDuplicate(string,vector<string>);
 	//static int main();
 };
 #endif // !TREE_MENU

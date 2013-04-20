@@ -9,13 +9,13 @@
 				</attrList>
 				<options>
 					<option level="2" hasChild="Y">
-						<name>LeftRight</name>
+						<name>DpadLeftRight</name>
 						<attrList>
 							<attr>3</attr>
 						</attrList>
 						<options>
 							<option level="3" hasChild="N">
-								<name>Strafing</name>
+								<name>Strafe</name>
 								<attrList>
 									<attr>Color</attr>
 									<attr>Texture</attr>
@@ -31,20 +31,20 @@
 						</options>
 					</option>
 					<option level="2" hasChild="Y">
-						<name>UpDown</name>
+						<name>DpadUpDown</name>
 						<attrList>
 							<attr>3</attr>
 						</attrList>
 						<options>
 							<option level="3" hasChild="N">
-								<name>Forward and back</name>
+								<name>Horizontal</name>
 								<attrList>
 									<attr>Color</attr>
 									<attr>Texture</attr>
 								</attrList>
 							</option>
 							<option level="3" hasChild="N">
-								<name>Up and down</name>
+								<name>Vertical</name>
 								<attrList>
 									<attr>Color</attr>
 									<attr>Texture</attr>

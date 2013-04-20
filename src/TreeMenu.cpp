@@ -440,7 +440,7 @@ int TreeMenu::findNode(char*)
 		string str = "";
 		vector<string> dependFile;
 		//fin.open("C:\\aszgard5\\szg\\projects\\Kosmos\\data\\obj\\cello.mtl");
-		fin.open(file);
+		fin.open(file.c_str());
 		while(!(fin.eof()))
 		{
 			fin>>str;

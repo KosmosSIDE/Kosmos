@@ -46,7 +46,7 @@ Object* Import::import(const string &filename,const string &path = "data/obj")
 }
 
 ///import with xyz position and hpr rotation and scale, see above import for more information
-Object* Import::import(const string &filename, int x, int y, int z, int h, int p, int r, int scale, const string &path, int type)
+Object* Import::import(const string &filename, float x, float y, float z, float h, float p, float r, float scale, const string &path, int type)
 {
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
@@ -86,9 +86,31 @@ void Import::importCallback(vector<string> args)
 	//TODO parse mtl look for and add jpg ppm
 	CopyFile(frompath.c_str(),topath.c_str(), true);
 	
+	std::string srcdataobj = "<file><name>"+filename+"</name><type>external</type><locationType>filesystem</locationType></file><file><name>"+filename.substr(0,filename.size()-4)+".mtl</name><type>external</type><locationType>filesystem</locationType></file>";
+	
+	cout << "fetching dependencies\n" << flush;
+	vector<string> dependencies = TreeMenu::getDependency(topath);
+	
+	cout << "replacing filenames\n" << flush;
+	findAndReplace(frompath, filename.substr(0,filename.size()-4)+".mtl", "");
+	findAndReplace(topath, filename.substr(0,filename.size()-4)+".mtl", "");
+	cout << "iterating through\n" << flush;
+	vector<string>::iterator i;
+	for(i=dependencies.begin(); i != dependencies.end(); ++i) 
+	{
+		string str = *i;
+		cout << "dependecy: " << str << "\n" << flush;
+		
+		string fromy = frompath+str;
+		string tooy = topath+str;
+		CopyFile(fromy.c_str(),tooy.c_str(), true);
+		
+		srcdataobj += "<file><name>"+str+"</name><type>external</type><locationType>filesystem</locationType></file>";
+	}
+	
 	cout << "adding obj to xml file...\n" << flush;
 	//add to xml
-	std::string srcdataobj = "<file><name>"+filename+"</name><type>external</type><locationType>filesystem</locationType></file><file><name>"+filename.substr(0,filename.size()-4)+".mtl</name><type>external</type><locationType>filesystem</locationType></file>";
+	
 	std::vector<char> dataobj(srcdataobj.begin(), srcdataobj.end());
 	dataobj.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
 	profileimportstr = dataobj;

@@ -45,6 +45,7 @@ string projectDir = "";
 
 bool sandboxed = false;
 bool rightSelected = false;
+bool showFloor = true;
 
 bool tabletOn = true;
 
@@ -79,6 +80,7 @@ bool coneselection = false;
 double currentTimeGlobal; //in millis
 arOBJRenderer musicNotey;
 arOBJRenderer mrTablet;
+arOBJRenderer mrFloor;
 
 int selectionMode = 0; //0 means null, 1 means just entered, 2 means in selection, 3 means just point and click
 
@@ -214,16 +216,17 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	musicNotey.readOBJ("MusicNote.obj","data/obj");
 	mrTablet.readOBJ("MrTablet.obj","data/obj");
+	mrFloor.readOBJ("MrHDeckFloor.obj","data/obj");
 	
 	ar_navRotate( arVector3(0,1,0), 180 );
 	ar_navTranslate( arVector3(0,0,10) );
 	
 	
 	
-		/*templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
+		templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);*/
+		ProjectManager::findProjectCallback(projman);
 	
 	wiiNodeMenu = new TreeMenu();
 	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
@@ -922,6 +925,13 @@ void draw(arMasterSlaveFramework& framework) {
 		oby->draw();
 	}
 
+	if (showFloor)
+	{
+		glPushMatrix();
+		glScalef(0.05f,0.05f,0.05f);
+		mrFloor.draw();
+		glPopMatrix();
+	}
 	
 	// Draw the effectors.
 	rightHand.draw();
@@ -1012,6 +1022,122 @@ void goForward()
 				VirtualHandBlock::insertBlock(handy);
 				ProjectManager::save();
 			}
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Show Floor")==0)
+		{
+			showFloor = !showFloor;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Horizontal")==0)
+		{
+			ostringstream lines;
+
+			lines << "							<code parent=\"dpadUD\">" << endl;
+			lines << "	// Translate along Z-axis (forwards/backwards) if joystick is pressed more than 20% along axis 1." << endl;
+			lines << "	framework.setNavTransCondition(&apos;z&apos;, AR_EVENT_AXIS, 1, 0.2);" << endl;
+			lines << "							</code>" << endl;
+			std::string horizontalMovementStr = lines.str();
+			std::vector<char> horizontalMovementVec(horizontalMovementStr.begin(), horizontalMovementStr.end());
+			horizontalMovementVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+			rapidxml::xml_document<> horizontalMovementDoc;
+			horizontalMovementDoc.parse<0>( &horizontalMovementVec[0] );
+			rapidxml::xml_node<>* horizontalMovementNode = horizontalMovementDoc.first_node();
+			rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+			rapidxml::xml_node<> *codenode = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node("code");//prepend_node( horizontalMovementAppendNode);
+			while((codenode->first_attribute("parent") == 0) || (strcmp(codenode->first_attribute("parent")->value(),"dpadUD")!=0))
+			{
+				codenode = codenode->next_sibling();
+			}
+			rapidxml::xml_node<> *horizontalMovementAppendNode = codeTree.clone_node( horizontalMovementNode, codenode );
+			
+			char* val = codeTree.allocate_string("Horizontal");
+			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadUD")->value(val);
+			
+			cout << "set horizontal movement...\n" << flush;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Vertical")==0)
+		{
+			ostringstream lines;
+
+			lines << "							<code parent=\"dpadUD\">" << endl;
+			lines << "	// Translate along Y-axis (up/down) if joystick is pressed more than 20% along axis 1." << endl;
+			lines << "	framework.setNavTransCondition(&apos;y&apos;, AR_EVENT_AXIS, 1, 0.2);" << endl;
+			lines << "							</code>" << endl;
+			std::string verticalMovementStr = lines.str();
+			std::vector<char> verticalMovementVec(verticalMovementStr.begin(), verticalMovementStr.end());
+			verticalMovementVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+			rapidxml::xml_document<> verticalMovementDoc;
+			verticalMovementDoc.parse<0>( &verticalMovementVec[0] );
+			rapidxml::xml_node<>* verticalMovementNode = verticalMovementDoc.first_node();
+			rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+			rapidxml::xml_node<> *codenode = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node("code");//prepend_node( verticalMovementAppendNode);
+			while((codenode->first_attribute("parent") == 0) || (strcmp(codenode->first_attribute("parent")->value(),"dpadUD")!=0))
+			{
+				codenode = codenode->next_sibling();
+			}
+			rapidxml::xml_node<> *verticalMovementAppendNode = codeTree.clone_node( verticalMovementNode, codenode );
+			
+			char* val = codeTree.allocate_string("Vertical");
+			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadUD")->value(val);
+			
+			cout << "set vertical movement...\n" << flush;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Strafe")==0)
+		{
+			ostringstream lines;
+
+			lines << "							<code parent=\"dpadLR\">" << endl;
+			lines << "	// Rotate around Y-axis (vertical) if joystick is pressed more than 20% along axis 0." << endl;
+			lines << "	//framework.setNavRotCondition(&apos;y&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR ROTATE" << endl;
+			lines << "	framework.setNavTransCondition(&apos;x&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR STRAFING" << endl;
+			lines << "							</code>" << endl;
+
+			std::string strafeMovementStr = lines.str();
+			std::vector<char> strafeMovementVec(strafeMovementStr.begin(), strafeMovementStr.end());
+			strafeMovementVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+			rapidxml::xml_document<> strafeMovementDoc;
+			strafeMovementDoc.parse<0>( &strafeMovementVec[0] );
+			rapidxml::xml_node<>* strafeMovementNode = strafeMovementDoc.first_node();
+			rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+			rapidxml::xml_node<> *codenode = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node("code");//prepend_node( strafeMovementAppendNode);
+			while((codenode->first_attribute("parent") == 0) || (strcmp(codenode->first_attribute("parent")->value(),"dpadLR")!=0))
+			{
+				codenode = codenode->next_sibling();
+			}
+			rapidxml::xml_node<> *strafeMovementAppendNode = codeTree.clone_node( strafeMovementNode, codenode );
+			
+			char* val = codeTree.allocate_string("Strafe");
+			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadLR")->value(val);
+			
+			cout << "set strafe movement...\n" << flush;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Rotate")==0)
+		{
+			ostringstream lines;
+
+			lines << "							<code parent=\"dpadLR\">" << endl;
+			lines << "	// Rotate around Y-axis (vertical) if joystick is pressed more than 20% along axis 0." << endl;
+			lines << "	framework.setNavRotCondition(&apos;y&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR ROTATE" << endl;
+			lines << "	//framework.setNavTransCondition(&apos;x&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR STRAFING" << endl;
+			lines << "							</code>" << endl;
+
+			std::string rotateMovementStr = lines.str();
+			std::vector<char> rotateMovementVec(rotateMovementStr.begin(), rotateMovementStr.end());
+			rotateMovementVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+			rapidxml::xml_document<> rotateMovementDoc;
+			rotateMovementDoc.parse<0>( &rotateMovementVec[0] );
+			rapidxml::xml_node<>* rotateMovementNode = rotateMovementDoc.first_node();
+			rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+			rapidxml::xml_node<> *codenode = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node("code");//prepend_node( rotateMovementAppendNode);
+			while((codenode->first_attribute("parent") == 0) || (strcmp(codenode->first_attribute("parent")->value(),"dpadLR")!=0))
+			{
+				codenode = codenode->next_sibling();
+			}
+			rapidxml::xml_node<> *rotateMovementAppendNode = codeTree.clone_node( rotateMovementNode, codenode );
+			
+			char* val = codeTree.allocate_string("Rotate");
+			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadLR")->value(val);
+			
+			cout << "set rotate movement...\n" << flush;
 		}
 		else
 		{

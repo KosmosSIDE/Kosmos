@@ -1,7 +1,7 @@
 #include "Object.h"
 #include "selectedObjects.h"
 
-void Object::setHPR(int h, int p, int r)
+void Object::setHPR(float h, float p, float r)
 {
 	arVector3 angles;
 	arEulerAngles* eulers = new arEulerAngles(AR_XYZ, angles);

@@ -381,6 +381,8 @@ void ProjectManager::initialize(string &filename)
 
 void ProjectManager::loadEnvironment(xml_document<> &doc)
 {
+	objects.clear();
+
 	cout << "loading environment..." << "\n" << flush;
 	xml_node<> *profile = doc.first_node()->first_node("profile");
 	xml_node<> *user = profile->first_node("user");
@@ -395,24 +397,24 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	cout << "projdir: " << projectDir << "\n" << flush;
 	vector<string> pathv;
 	vector<string> filenamev;
-	vector<int> objx;
-	vector<int> objy;
-	vector<int> objz;
-	vector<int> objh;
-	vector<int> objp;
-	vector<int> objr;
-	vector<int> objscale;
+	vector<float> objx;
+	vector<float> objy;
+	vector<float> objz;
+	vector<float> objh;
+	vector<float> objp;
+	vector<float> objr;
+	vector<float> objscale;
 	//filenamev.push_back(filename);
 	
 	xml_node<> *userlocation = user->first_node("startingLocation");
 	if (userlocation != 0)
 	{
-		int x = atoi(userlocation->first_node("x")->value());
-		int y = atoi(userlocation->first_node("y")->value());
-		int z = atoi(userlocation->first_node("z")->value());
-		int h = atoi(userlocation->first_node("heading")->value());
-		int p = atoi(userlocation->first_node("pitch")->value());
-		int r = atoi(userlocation->first_node("roll")->value());
+		float x = atof(userlocation->first_node("x")->value());
+		float y = atof(userlocation->first_node("y")->value());
+		float z = atof(userlocation->first_node("z")->value());
+		float h = atof(userlocation->first_node("heading")->value());
+		float p = atof(userlocation->first_node("pitch")->value());
+		float r = atof(userlocation->first_node("roll")->value());
 		
 		cout << "user set x..." << x << "\n" << flush;
 		cout << "user set y..." << y << "\n" << flush;
@@ -421,12 +423,12 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		cout << "user set p..." << p << "\n" << flush;
 		
 		objx.push_back(x);
-		objy.push_back(y);
+		objy.push_back(y+3);
 		objz.push_back(z);
 		objh.push_back(h);
-		objp.push_back(p);
+		objp.push_back(p-12);
 		objr.push_back(r);
-		objscale.push_back(7);
+		objscale.push_back(4);
 		
 		string filename = "MrBodyWithHands.obj";
 		filenamev.push_back(filename);
@@ -457,12 +459,13 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		{
 			cout << "wth file is obj " << "\n" << flush;
 		}*/
-		int x = atoi(objecties->first_node("x")->value());
-		int y = atoi(objecties->first_node("y")->value());
-		int z = atoi(objecties->first_node("z")->value());
-		int h = atoi(objecties->first_node("heading")->value());
-		int p = atoi(objecties->first_node("pitch")->value());
-		int r = atoi(objecties->first_node("roll")->value());
+		float x = atof(objecties->first_node("x")->value());
+		float y = atof(objecties->first_node("y")->value());
+		float z = atof(objecties->first_node("z")->value());
+		float h = atof(objecties->first_node("heading")->value());
+		float p = atof(objecties->first_node("pitch")->value());
+		float r = atof(objecties->first_node("roll")->value());
+		float s = atof(objecties->first_node("scale")->value());
 		
 		objx.push_back(x);
 		objy.push_back(y);
@@ -470,7 +473,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		objh.push_back(h);
 		objp.push_back(p);
 		objr.push_back(r);
-		objscale.push_back(1);
+		objscale.push_back(s);
 		
 		/*
 			<resourceName>cello.obj</resourceName>
@@ -510,10 +513,12 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	objscale.clear();
 	pathv.clear();
 	
-	
+	float wiimoteX = 2.0;
+	float wiimoteY = 4;
+	float wiimoteZ = -0.7;
 	rightWiimote = new Object(4, 0.5, 0.5, 0.5, "MrWiimote.obj");
 	rightWiimote->normalize();
-	rightWiimote->setMatrix(ar_translationMatrix(3, 2, -1.6)); // initial position
+	rightWiimote->setMatrix(ar_translationMatrix(wiimoteX, wiimoteY, wiimoteZ)); // initial position
 	rightWiimote->setHPR(135,0,0);
 	//rightWiimote->disable();
 	//rightWiimote->_selected = true;
@@ -522,7 +527,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	
 	leftWiimote = new Object(4, 0.5, 0.5, 0.5, "MrWiimote.obj");
 	leftWiimote->normalize();
-	leftWiimote->setMatrix(ar_translationMatrix(-3, 2, -1.6)); // initial position
+	leftWiimote->setMatrix(ar_translationMatrix(-wiimoteX, wiimoteY, wiimoteZ)); // initial position
 	leftWiimote->setHPR(135,0,0);
 	//leftWiimote->disable();
 	//leftWiimote->_selected = false;
