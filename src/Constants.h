@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#define LABSETUP 1
+#define LABSETUP 1
 #ifdef LABSETUP
 const std::string PATH = "E:/Shared/labsvn/aszgard/szg/vrclass/";
 const std::string TEMPLATEPATH = "E:/Shared/labsvn/aszgard/szg/vrclass/Kosmos/";

@@ -226,10 +226,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
+		/*templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);*/
 	
 	wiiNodeMenu = new TreeMenu();
 	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
@@ -412,6 +412,16 @@ void preExchange(arMasterSlaveFramework& framework) {
 		rightWiimote->_selected = false;
 	}
 	
+	if(rightHand.getOnButton(2))
+	{
+		vector<arInteractable*>::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			Object* oby = ((Object*)(*i));
+			oby->_selected = false;
+		}
+	}
+	
 	
 	if((!virtualdirectory.findingFile) && tabletOn && leftHand.getOnButton(8) && (currentTime-pressedMenu)>thresholdMenu)
 	{
@@ -422,7 +432,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		goBack();
 	//	virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
 	}
-	else if((!virtualdirectory.findingFile) && tabletOn && leftHand.getOnButton(9) && (currentTime-pressedMenu)>thresholdMenu)
+	else if((!virtualdirectory.findingFile) && tabletOn && (leftHand.getOnButton(9) || leftHand.getOnButton(3)) && (currentTime-pressedMenu)>thresholdMenu)
 	{
 		pressedMenu = currentTime;
 	//Harish Babu Arunachalam

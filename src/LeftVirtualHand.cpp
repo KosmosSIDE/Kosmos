@@ -360,7 +360,7 @@ void LeftVirtualHand::drawTablet() const
 			
 			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
 			
-			glTranslatef(1.0,1.0,-3);
+			glTranslatef(1.0,1.0,-4); // last one is dist from you
 			
 			glPushMatrix();
 			/////////////////new tablet
@@ -425,11 +425,12 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 		glColor3f(0, 0, 0);			
 			int lenghOfQuote = min((int)text.length(),300);
 			glPushMatrix();			
-				glTranslatef(-470, 160.0, -40.0);
+				//first one is left right text move (-) left (+) right, third number is the text moving closer to the screen as it gets lower
+				glTranslatef(-1070, 160.0, -1000.0); 
 				if(selected)
 				{
 					//glPushAttrib(GL_COLOR_BUFFER_BIT);
-					glColor3f(1, 0, 0);
+					glColor3f(0.9, 0, 0.0);
 				}
 				if(lenghOfQuote < 300)
 				{

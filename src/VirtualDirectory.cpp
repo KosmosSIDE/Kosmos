@@ -16,6 +16,7 @@ Author: Aaron Hardin
 /// startDir is the directory to start in (optional)
 void VirtualDirectory::startBrowse(const string& cb,void(*funPtr)(vector<string>), const string &titley, const string &startDir, bool sandy)
 {
+tabletOn = false;
 	sandboxed = sandy;
 	currentIndex = 0;
 	currentDir.clear();
@@ -104,8 +105,8 @@ void VirtualDirectory::selectFile()
 			cout.flush();
 			findingFile = false;
 			sandboxed = false;
+			tabletOn = true;
 			cf.call(callback,filenamev);
-			
 		}
 	}
 }
@@ -139,6 +140,7 @@ void VirtualDirectory::selectDirectory()
 			filenamev.push_back(dirName);
 			findingFile = false;
 			sandboxed = false;
+			tabletOn = true;
 			cf.call(callback,filenamev);
 		}
 		else
@@ -150,6 +152,7 @@ void VirtualDirectory::selectDirectory()
 			filenamev.push_back(dirName);
 			findingFile = false;
 			sandboxed = false;
+			tabletOn = true;
 			cf.call(callback,filenamev);
 		}
 	}
@@ -241,7 +244,7 @@ void VirtualDirectory::drawText(float distance, float ypos, string text, bool se
 			if(selected)
 			{
 				glPushAttrib(GL_COLOR_BUFFER_BIT);
-				glColor3f(1, 0, 0);
+				glColor3f(0.9, 0, 0.0);
 			}
 			if(lengthOfText < 300)
 			{
