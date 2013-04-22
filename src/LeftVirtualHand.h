@@ -78,6 +78,10 @@ class LeftVirtualHand:public arEffector {
 		
 		float getLength();
 		bool requestGrab( arInteractable* grabee );
+		
+		float getX() { return _matrix[12]; }
+		float getY() { return _matrix[13]; }
+		float getZ() { return _matrix[14]; }
 	
 	private:
 		float _currentLength;

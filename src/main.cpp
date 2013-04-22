@@ -46,11 +46,14 @@ string projectDir = "";
 bool sandboxed = false;
 bool rightSelected = false;
 bool showFloor = true;
+bool scalingActive = false;
+float distBetweenHands = 0.0;
 
 bool tabletOn = true;
 
 TreeMenu *wiiNodeMenu = NULL;
 TreeMenu *userMenu = NULL;
+TreeMenu *objectMenu = NULL;
 /*Changes by Harish Babu Arunachalam*/
 TreeMenu *nodeMenu = NULL;
 TreeMenu *parentMenu = NULL;
@@ -233,6 +236,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	userMenu = new TreeMenu();
 	userMenu = userMenu->makeUserMenu(userMenu);
+	
+	objectMenu = new TreeMenu();
+	TreeMenu::makeMenu(objectMenu, PATH+"Kosmos\\conf\\menuFileObject.xml");
+	
 	/*Changes by Harish Babu Arunachalam*/
 	nodeMenu =  new TreeMenu();
 	currentPtr = new TreeMenu();
@@ -307,6 +314,44 @@ void preExchange(arMasterSlaveFramework& framework) {
 	currentTimeGlobal = framework.getTime();
 	
 	// Process user input.
+	bool anyButton = false;
+	for (int i=0;i<=10;++i)
+	{
+		if(leftHand.getOnButton(i) || rightHand.getOnButton(i))
+		{
+			anyButton = true;
+			break;
+		}
+	}
+	
+	if( scalingActive && anyButton)
+	{
+		scalingActive = false;
+	}
+	else if(scalingActive)
+	{
+		//cout << "left hand xyz "<<leftHand.getX()<<" "<<leftHand.getY()<<" "<<leftHand.getZ()<<"\n"<<flush;
+		//cout << "right hand xyz "<<rightHand.getX()<<" "<<rightHand.getY()<<" "<<rightHand.getZ()<<"\n"<<flush;
+		float xdist = rightHand.getX() - leftHand.getX();
+		float ydist = rightHand.getY() - leftHand.getY();
+		float zdist = rightHand.getZ() - leftHand.getZ();
+		float currentDist = sqrt(xdist*xdist+ydist*ydist+zdist*zdist);
+		float scaleBy = currentDist / distBetweenHands;
+		//cout << "scaling by "<<scaleBy<<"\n"<<flush;
+		distBetweenHands = currentDist;
+		//foreach object != wiimote && != user
+		vector<arInteractable*>::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			Object* obPointer = ((Object*)(*i));
+			if(obPointer->_selected && (obPointer != rightWiimote && obPointer != leftWiimote && obPointer != userObject))
+			{
+				obPointer->setScale(scaleBy);
+			}
+		}
+		//	if _selected then scale by scaleBy
+	}
+	
 	
 	if( _leftMovering == true && leftHand.getButton(2) == 0)
 	{
@@ -939,6 +984,29 @@ void draw(arMasterSlaveFramework& framework) {
 }
 
 
+void playSound(vector<string> args)
+{
+	// Parameters are:
+	//		name - string name for sound
+	//		transformName - string name for dsTransform
+	//		loopType - 1 for continuous, -1 for one-time, 0 to stop
+	//		loudness - float from 0.0 (quiet) to 1.0 (max)
+	//		positionVector - vector position of sound origin
+	// Create loop for click sound.
+	int eeksound = dsLoop("click", "world", args[0], 0, 1.0, arVector3(0, 0, 0));
+	
+	// Play click sound if right hand has grabbed an object.
+//	if(rightHand.getGrabbedObject() != 0) 
+//	{
+		dsLoop(eeksound, args[0], -1, 1.0, arVector3(0, 0, 0));
+//	}
+	// Or reset the trigger
+//	else 
+//	{
+//		dsLoop(clickSound, "click.mp3", 0, 1.0, arVector3(0, 0, 0));
+//	}
+}
+
 
 /*Changed by Harish Babu Arunachalam*/
 /*Method to navigate forward for TreeMenu*/
@@ -1026,6 +1094,20 @@ void goForward()
 		else if (strcmp(currentPtr->name.c_str(),"Show Floor")==0)
 		{
 			showFloor = !showFloor;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Scale")==0)
+		{
+			cout << "scale active\n"<<flush;
+			float xdist = rightHand.getX() - leftHand.getX();
+			float ydist = rightHand.getY() - leftHand.getY();
+			float zdist = rightHand.getZ() - leftHand.getZ();
+			distBetweenHands = sqrt(xdist*xdist+ydist*ydist+zdist*zdist);
+			scalingActive = true;
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Session")==0)
+		{
+			virtualdirectory.startBrowse("playSound", &playSound,"Select sound file to play: ", PATH);
+			tabletOn = false;
 		}
 		else if (strcmp(currentPtr->name.c_str(),"Horizontal")==0)
 		{

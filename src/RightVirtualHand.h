@@ -85,6 +85,10 @@ class RightVirtualHand:public arEffector {
 		
 		// Draw a representation for the right hand.
 		void draw() ;//const;
+		
+		float getX() { return _matrix[12]; }
+		float getY() { return _matrix[13]; }
+		float getZ() { return _matrix[14]; }
 	
 	private:
 		float _currentLength;

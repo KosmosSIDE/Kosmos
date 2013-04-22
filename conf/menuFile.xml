@@ -98,11 +98,27 @@
 							<attr>3</attr>
 						</attrList>
 					</option>
-					<option level="2" hasChild="N">
-						<name>Pop</name>
+					<option level="2" hasChild="Y">
+						<name>Sound</name>
 						<attrList>
 							<attr>3</attr>
 						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>Session</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>GeneratedProject</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
 					</option>
 				</options>
 			</option>

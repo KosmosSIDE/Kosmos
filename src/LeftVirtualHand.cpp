@@ -166,6 +166,10 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			{
 				Object *oby = ((Object*)(*i));
 				oby->_selected = !oby->_selected;
+				if(oby->_selected)
+				{
+					currentPtr = objectMenu->forwardPtrs[0];
+				}
 				/*if(oby->_selected)
 				{
 					if(oby == rightWiimote)

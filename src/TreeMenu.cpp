@@ -430,6 +430,37 @@ int TreeMenu::findNode(char*)
 		return wiiNodeMenu;
 	}
 	
+	void TreeMenu::makeMenu(TreeMenu *toSet, string fileName)
+	{
+		//Declaration for variables
+		ifstream myfile;
+		xml_document <> xml;
+		xml_node <> *tempNode;
+		cout<<"inside make menu \n\n"<<flush;
+		myfile.open (fileName.c_str(), ifstream::in);
+		
+		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
+		documenty.push_back('\0');
+		
+		//Populate the vector with the contents of XML file
+		xml.parse<0>(&documenty[0]);
+		toSet->backwardPtr = NULL;
+
+		//Get the node 'MENUS' from the XML file
+		tempNode = xml.first_node("menus");
+		bkdPtr = toSet;
+		toSet->backwardPtr = toSet;
+		//Assign the forward pointer of root node to the sub nodes
+		toSet->forwardPtrs[toSet->noOf_FwdPtrs++] = toSet->createMenu(tempNode->first_node());
+		
+		//cout<<"name of the node is "<<tempNode->name()<<endl;
+		//Assign the name of the root node of tree menu to name of the node
+		toSet->name=tempNode->name();
+		
+		//Print the values of the root node of TreeMenu
+		toSet->printValues(toSet);
+		
+	}
 
 
 /*Method to get dependency of files*/

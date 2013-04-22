@@ -79,6 +79,7 @@ class Object:public arInteractableThing {
 		void setMatrix(const arMatrix4& matrix);
 		bool touch( arEffector& effector );
 		bool _touch( arEffector& /*effector*/ );
+		void setScale(float scaleBy) {_length = _length*scaleBy; _height = _height*scaleBy; _width = _width*scaleBy;}
 		
 	private:
 		

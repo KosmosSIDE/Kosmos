@@ -54,6 +54,7 @@ public:
 	TreeMenu* createMenu(xml_node<> *);
 	int getIntValue(char*);
 	TreeMenu* populateAttr(TreeMenu* , xml_node<>*);
+	static void makeMenu(TreeMenu *toSet, string fileName);
 	TreeMenu* makeMenu(TreeMenu*);
 	TreeMenu* makeUserMenu(TreeMenu*);
 	TreeMenu* makeWiiMenu(TreeMenu*);

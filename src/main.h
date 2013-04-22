@@ -42,6 +42,7 @@ extern bool showFloor;
 
 extern TreeMenu *wiiNodeMenu;
 extern TreeMenu *userMenu;
+extern TreeMenu *objectMenu;
 
 //Changes by Harish Babu Arunachalam
 extern TreeMenu *nodeMenu;

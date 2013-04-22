@@ -85,6 +85,10 @@ void Object::draw()
 		}
 		else if(_type == 2) { 
 			// Draw loaded OBJ file.
+			if (this->_selected)
+			{
+				glutWireCube(1.01);
+			}
 			loadedOBJ.draw();			
 		}
 		else if(_type == 4) //wiimote
@@ -143,6 +147,10 @@ void Object::draw()
 		}
 		else if(_type > 2) { 
 			// Draw loaded OBJ file.
+			if (this->_selected)
+			{
+				glutWireCube(1.01);
+			}
 			loadedOBJ.draw();
 			if (_selected)
 			{
