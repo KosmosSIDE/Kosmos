@@ -18,6 +18,7 @@ class Object:public arInteractableThing {
 		// Object's loaded OBJ file
 		arOBJRenderer loadedOBJ;
 		arMatrix4 matrix;
+		string name;
 	
 		// Default constructor. 
 		// Parameters are:
@@ -47,14 +48,23 @@ class Object:public arInteractableThing {
 				{
 					// Set type to loaded file
 					_type = 2;
+					unsigned found = filename.find_last_of("/\\");
+					string namy = filename.substr(found+1);
+					name = namy.substr(0,namy.size()-4);
 				}
 				else
 				{
 					cout << "loaded " << filename << '\n' << flush;
+					unsigned found = filename.find_last_of("/\\");
+					string namy = filename.substr(found+1);
+					name = namy.substr(0,namy.size()-4);
 				}
 				
 				if(_type == 5)
 				{
+					unsigned found = filename.find_last_of("/\\");
+					string namy = filename.substr(found+1);
+					name = namy.substr(0,namy.size()-4);
 					//arInteractableThing::disable();
 				}
 			}

@@ -1,0 +1,38 @@
+newmtl BatmanArmoured:BatmanEye_Mat
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd BatmanEye_D.jpg
+bump BatmanEye_N_2.tga -bm 0
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 10.00
+newmtl BatmanArmoured:Batman_Armoured_Body_Mat
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd BatmanArmoured_Body_D.jpg
+bump BatmanArmoured_Body_N.tga -bm 0
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 10.00
+newmtl BatmanArmoured:Batman_Armoured_Head_Mat
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd BatmanArmoured_Head_D.jpg
+bump BatmanArmoured_Head_N.tga -bm 0
+Ni 1.00
+Ks 1.00 1.00 1.00
+Ns 10.00
+newmtl BatmanArmoured:wire_174186203
+illum 4
+Kd 0.68 0.73 0.80
+Ka 0.68 0.73 0.80
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.35 0.35 0.35
+Ns 32.00

@@ -174,7 +174,7 @@ Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
 	*/
 	
 	std::string src2 = "<object><type>OBJ</type><name>"+filename.substr(0,filename.size()-4)+"</name><resourceName>"+filename+"</resourceName>"
-		"<x>0</x><y>4</y><z>-4</z><heading>0</heading><pitch>0</pitch><roll>0</roll></object>";
+		"<x>0</x><y>4</y><z>-4</z><heading>0</heading><pitch>0</pitch><roll>0</roll><scale>1</scale></object>";
 	std::vector<char> data(src2.begin(), src2.end());
 	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
 	importstr = data;

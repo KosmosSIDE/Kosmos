@@ -52,7 +52,97 @@ void Object::snapMatrix()
 	arMatrix4 scale = ar_extractScaleMatrix(_matrix);
 	_matrix = translation*scale*rotation;
 	
+	float scaly = _length;
+	
 	//TODO: update the xml
+cout << "obj has moved update xml...\n" << flush;
+	
+	ostringstream lines;
+
+
+	lines << "<code parent=\"" << name << "\">" << endl;
+	lines << "	the" << name << ".setMatrix(ar_translationMatrix("<<_matrix[12]<<","<<_matrix[13]<<","<<_matrix[14]<<"));" << endl;
+	lines << "	objects.push_back(&amp;the" << name << ");" << endl;
+	lines << "							</code>" << endl;
+	std::string mainStartObjectStr = lines.str();
+	std::vector<char> mainStartObjectVec(mainStartObjectStr.begin(), mainStartObjectStr.end());
+	mainStartObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainStartObjectDoc;
+	mainStartObjectDoc.parse<0>( &mainStartObjectVec[0] );
+	rapidxml::xml_node<>* mainStartObjectNode = mainStartObjectDoc.first_node();
+	//rapidxml::xml_node<> *mainStartObjectAppendNode = codeTree.clone_node( mainStartObjectNode );
+	rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+cout << "find code block..."<<name<<"\n" << flush;
+	rapidxml::xml_node<> *cloney = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node();
+	while(cloney->first_attribute("parent") == 0 || strcmp(cloney->first_attribute("parent")->value(),name.c_str()) != 0)
+	{
+		cloney = cloney->next_sibling(); 
+	}
+	codeTree.clone_node( mainStartObjectNode, cloney );
+	
+	cout << "added obj to main.start...\n" << flush;
+	// prepend to main.start callback
+	/*
+							<code parent="cello">
+	theCello.setMatrix(ar_translationMatrix(0, 4, -8));
+	objects.push_back(&amp;theCello);
+							</code>
+	*/
+	ostringstream stringify;
+	
+	stringify << "<code parent=\""<<name<<"\">Object the"<<name<<"(2,"<<scaly<<","<< scaly<<","<< scaly<<", &quot;"<<name<<".obj&quot;);</code>";
+	std::string mainGlobalObjectStr = stringify.str();
+	std::vector<char> mainGlobalObjectVec(mainGlobalObjectStr.begin(), mainGlobalObjectStr.end());
+	mainGlobalObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainGlobalObjectDoc;
+	mainGlobalObjectDoc.parse<0>( &mainGlobalObjectVec[0] );
+	rapidxml::xml_node<>* mainGlobalObjectNode = mainGlobalObjectDoc.first_node();
+	cloney = firstCodeBlock->next_sibling()->first_node("code");
+	while(cloney->first_attribute("parent") == 0 || strcmp(cloney->first_attribute("parent")->value(),name.c_str()) != 0)
+	{
+		cloney = cloney->next_sibling(); 
+	}
+	codeTree.clone_node( mainGlobalObjectNode, cloney );
+	cout << "added obj to main.global vars...\n" << flush;
+	// append to main.global vars
+	/*
+						<code parent="cello">
+Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
+						</code>
+	*/
+	
+	ostringstream linies;
+
+
+	linies << "<object><type>OBJ</type><name>"<<name<<"</name><resourceName>"<<name<<".obj</resourceName>";
+	linies << "<x>"<<_matrix[12]<<"</x><y>"<<_matrix[13]<<"</y><z>"<<_matrix[14]<<"</z><heading>"<<x<<"</heading><pitch>"<<y<<"</pitch><roll>"<<z<<"</roll><scale>"<<scaly<<"</scale></object>" << endl;
+	std::string src2 = linies.str();
+	std::vector<char> data(src2.begin(), src2.end());
+	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> newdoc;
+	newdoc.parse<0>( &data[0] );
+	rapidxml::xml_node<>* a = newdoc.first_node();
+	rapidxml::xml_node<>* cloneInto = codeTree.first_node("project")->first_node("profile")->first_node("object");
+	while(cloneInto->first_node("name") == 0 || strcmp(cloneInto->first_node("name")->value(),name.c_str()) != 0)
+	{
+		cloneInto = cloneInto->next_sibling();
+	}
+	codeTree.clone_node( a, cloneInto );
+	
+	// append to profile
+	/*
+		<object>
+			<type>OBJ</type>
+			<name>cello</name>
+			<resourceName>cello.obj</resourceName>
+			<x>0</x>
+			<y>4</y>
+			<z>-4</z>
+			<heading>0</heading>
+			<pitch>0</pitch>
+			<roll>0</roll>
+		</object>
+	*/
 	
 }
 
