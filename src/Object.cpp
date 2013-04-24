@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "selectedObjects.h"
+#include "ProjectManager.h"
 
 void Object::setHPR(float h, float p, float r)
 {
@@ -52,7 +53,130 @@ void Object::snapMatrix()
 	arMatrix4 scale = ar_extractScaleMatrix(_matrix);
 	_matrix = translation*scale*rotation;
 	
+	updateProjectFile();
+}
+
+void Object::deleteObject()
+{
+
+cout<<"delete...remove main.start\n"<<flush;
+	rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+	rapidxml::xml_node<> *cloney = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node();
+	while(cloney->first_attribute("parent") == 0 || strcmp(cloney->first_attribute("parent")->value(),name.c_str()) != 0)
+	{
+		cloney = cloney->next_sibling(); 
+	}
+	rapidxml::xml_node<> *parent = cloney->parent();
+	parent->remove_node(cloney);
+	
+cout<<"delete...remove main.globalvars\n"<<flush;
+	
+	cloney = firstCodeBlock->next_sibling()->first_node("code");
+	while(cloney->first_attribute("parent") == 0 || strcmp(cloney->first_attribute("parent")->value(),name.c_str()) != 0)
+	{
+		cloney = cloney->next_sibling(); 
+	}
+	parent = cloney->parent();
+	parent->remove_node(cloney);
+	
+cout<<"delete...remove profile\n"<<flush;
+	
+	cloney = codeTree.first_node("project")->first_node("profile")->first_node("object");
+	while(cloney->first_node("name") == 0 || strcmp(cloney->first_node("name")->value(),name.c_str()) != 0)
+	{
+		cloney = cloney->next_sibling();
+	}
+	parent = cloney->parent();
+	parent->remove_node(cloney);
+	
+	
+	ProjectManager::removeNodesWithAttribute(codeTree.first_node(), "parent", name.c_str());
+cout<<"delete...done\n"<<flush;
+	
+}
+
+void Object::insertObject()
+{
+
+	unsigned found = filenm.find_last_of("/\\");
+	string filename = filenm.substr(found+1);
+	
+	ostringstream lines;
+
+	lines << "<code parent=\"" << name << "\">" << endl;
+	lines << "the" << name << ".setMatrix(ar_translationMatrix(0, 4, -8));" << endl;
+	lines << "objects.push_back(&amp;the" << name << ");" << endl;
+	lines << "</code>" << endl;
+	std::string mainStartObjectStr = lines.str();
+	std::vector<char> mainStartObjectVec(mainStartObjectStr.begin(), mainStartObjectStr.end());
+	mainStartObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainStartObjectDoc;
+	mainStartObjectDoc.parse<0>( &mainStartObjectVec[0] );
+	rapidxml::xml_node<>* mainStartObjectNode = mainStartObjectDoc.first_node();
+	rapidxml::xml_node<> *mainStartObjectAppendNode = codeTree.clone_node( mainStartObjectNode );
+	rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
+	firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->prepend_node( mainStartObjectAppendNode );
+	
+	cout << "added obj to main.start...\n" << flush;
+	// prepend to main.start callback
+	/*
+							<code parent="cello">
+	theCello.setMatrix(ar_translationMatrix(0, 4, -8));
+	objects.push_back(&amp;theCello);
+							</code>
+	*/
+	
+	std::string mainGlobalObjectStr = "<code parent=\""+name+"\">Object the"+name+"(2, 1, 1, 1, &quot;"+filename+"&quot;);</code>";
+	std::vector<char> mainGlobalObjectVec(mainGlobalObjectStr.begin(), mainGlobalObjectStr.end());
+	mainGlobalObjectVec.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> mainGlobalObjectDoc;
+	mainGlobalObjectDoc.parse<0>( &mainGlobalObjectVec[0] );
+	rapidxml::xml_node<>* mainGlobalObjectNode = mainGlobalObjectDoc.first_node();
+	rapidxml::xml_node<> *mainGlobalObjectAppendNode = codeTree.clone_node( mainGlobalObjectNode );
+	firstCodeBlock->next_sibling()->append_node( mainGlobalObjectAppendNode );
+	
+	cout << "added obj to main.global vars...\n" << flush;
+	// append to main.global vars
+	/*
+						<code parent="cello">
+Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
+						</code>
+	*/
+	
+	std::string src2 = "<object><type>OBJ</type><name>"+name+"</name><resourceName>"+filename+"</resourceName>"
+		"<x>0</x><y>4</y><z>-8</z><heading>0</heading><pitch>0</pitch><roll>0</roll><scale>1</scale></object>";
+	std::vector<char> data(src2.begin(), src2.end());
+	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
+	rapidxml::xml_document<> profiledoc;
+	profiledoc.parse<0>( &data[0] );
+	rapidxml::xml_node<>* a = profiledoc.first_node();
+	rapidxml::xml_node<> *node = codeTree.clone_node( a );
+	codeTree.first_node("project")->first_node("profile")->append_node( node ); /* Appending node a to the tree in src */
+	// append to profile
+	/*
+		<object>
+			<type>OBJ</type>
+			<name>cello</name>
+			<resourceName>cello.obj</resourceName>
+			<x>0</x>
+			<y>4</y>
+			<z>-4</z>
+			<heading>0</heading>
+			<pitch>0</pitch>
+			<roll>0</roll>
+		</object>
+	*/
+}
+
+void Object::updateProjectFile()
+{
 	float scaly = _length;
+	arVector3 angles;
+	arEulerAngles* eulers = new arEulerAngles(AR_XYZ, angles);
+	angles = eulers->extract(_matrix);
+	float x = angles[0];
+	float y = angles[1];
+	float z = angles[2];
 	
 	//TODO: update the xml
 cout << "obj has moved update xml...\n" << flush;

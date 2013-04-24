@@ -12,13 +12,14 @@ class Object:public arInteractableThing {
 	//extern double currentTimeGlobal;
 	
 	public:
-	
+		
 		bool _selected;
 		
 		// Object's loaded OBJ file
 		arOBJRenderer loadedOBJ;
 		arMatrix4 matrix;
 		string name;
+		string filenm;
 	
 		// Default constructor. 
 		// Parameters are:
@@ -26,13 +27,15 @@ class Object:public arInteractableThing {
 		//		length - length (X-axis) of object
 		//		height - height (Y-axis) of object
 		//		width - width (Z-axis) of object
-		Object(int type = 0, float length = 1.0, float height = 1.0, float width = 1.0, const string& filename = "", const string& path ="data/obj"):arInteractableThing() 
+		Object(int type = 0, float length = 1.0, float height = 1.0, float width = 1.0, const string& filename = "", const string& path ="data/obj", const char* namey = ""):arInteractableThing() 
 		{
+			++numObjects;
 			// Track values.
 			_type = type;
 			_length = length;
 			_height = height;
 			_width = width;
+			filenm = filename;
 			_selected = false;
 			// Read OBJ file if provided.
 			if(filename != "") 
@@ -48,24 +51,38 @@ class Object:public arInteractableThing {
 				{
 					// Set type to loaded file
 					_type = 2;
-					unsigned found = filename.find_last_of("/\\");
-					string namy = filename.substr(found+1);
-					name = namy.substr(0,namy.size()-4);
 				}
 				else
 				{
 					cout << "loaded " << filename << '\n' << flush;
-					unsigned found = filename.find_last_of("/\\");
-					string namy = filename.substr(found+1);
-					name = namy.substr(0,namy.size()-4);
 				}
 				
 				if(_type == 5)
 				{
+					//arInteractableThing::disable();
+				}
+				if(strcmp(namey,"") == 0 )
+				{
+					//make sure it doesn't exist, we may have something from previous obj
+					ostringstream eek;
 					unsigned found = filename.find_last_of("/\\");
 					string namy = filename.substr(found+1);
-					name = namy.substr(0,namy.size()-4);
-					//arInteractableThing::disable();
+					eek << namy.substr(0,namy.size()-4);
+					eek << numObjects;
+					vector<arInteractable*>::iterator i;
+					for(i=objects.begin(); i != objects.end(); ++i) 
+					{
+						Object* obj = ((Object*)(*i));
+						if(strcmp(eek.str().c_str(), obj->name.c_str())==0)
+						{
+							eek << "new";
+						}
+					}
+					name = eek.str();
+				}
+				else //you passed a name
+				{
+					name = namey;
 				}
 			}
 			// invalid type and file combination
@@ -89,7 +106,12 @@ class Object:public arInteractableThing {
 		void setMatrix(const arMatrix4& matrix);
 		bool touch( arEffector& effector );
 		bool _touch( arEffector& /*effector*/ );
-		void setScale(float scaleBy) {_length = _length*scaleBy; _height = _height*scaleBy; _width = _width*scaleBy;}
+		
+		void updateProjectFile();
+		void setScale(float scaleBy) {_length = _length*scaleBy; _height = _height*scaleBy; _width = _width*scaleBy; updateProjectFile();}
+		
+		void deleteObject();
+		void insertObject();
 		
 	private:
 		

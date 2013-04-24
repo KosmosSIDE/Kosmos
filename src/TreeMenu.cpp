@@ -315,7 +315,7 @@ int TreeMenu::findNode(char*)
 		return;
 
 	}
-
+/*
 	//Method for forwaed navigation
 	static void forwardNav(TreeMenu *node)
 	{
@@ -340,6 +340,8 @@ int TreeMenu::findNode(char*)
 		
 		return;
 	}
+*/
+	
 	//method to construct the menu
 	TreeMenu* TreeMenu::makeMenu(TreeMenu* rootNode)
 	{
@@ -494,7 +496,7 @@ int TreeMenu::findNode(char*)
 	bool TreeMenu::findDuplicate(string file,vector<string> tempDepend)
 	{
 		//bool result = false;
-		for(int i=0;i<tempDepend.size();i++)
+		for(unsigned int i=0;i<tempDepend.size();i++)
 		{
 			if(tempDepend[0].find(file)!=string::npos)
 			{

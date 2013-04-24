@@ -37,7 +37,7 @@ class ProjectManager
 		static char *trimtrailingwhitespaceinplace(char *str);//find a string in a string and replace with a string
 		
 		//remove a node (and all children) with atrribute name = attributeName
-		static void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue);
+		static void removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, const char* attributeValue);
 		/// this function writes to a header file
 		static void generateHeader(xml_node<> *node, ofstream &out);
 		/// this function writes to a codefile

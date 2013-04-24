@@ -91,7 +91,7 @@ void VirtualHandBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char*
 				cout << "\nwith\n" << flush;
 				cout << a->first_attribute("parent")->value() << " " << a->first_attribute("type")->value() << flush;
 				cout << "\n\n" << flush;
-				rapidxml::xml_node<> *child = codeTree.clone_node( a, node );
+				codeTree.clone_node( a, node );
 			}
 		}
 	}

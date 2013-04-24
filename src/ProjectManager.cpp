@@ -94,7 +94,7 @@ int inline ProjectManager::findAndReplace(string& source, const string& find, co
     int num=0;
     int fLen = find.size();
     int rLen = replace.size();
-    for (int pos=0; (pos=source.find(find, pos))!=string::npos; pos+=rLen)
+    for (unsigned int pos=0; (pos=source.find(find, pos))!=string::npos; pos+=rLen)
     {
         num++;
         source.replace(pos, fLen, replace);
@@ -103,7 +103,7 @@ int inline ProjectManager::findAndReplace(string& source, const string& find, co
 }
 
 //remove a node (and all children) with atrribute name = attributeName and attribute value = attributeValue
-void ProjectManager::removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, char* attributeValue)
+void ProjectManager::removeNodesWithAttribute(rapidxml::xml_node<> *node, char* attributeName, const char* attributeValue)
 {
 	rapidxml::xml_node<> *sib = node->next_sibling();
 	bool removed = false;
@@ -404,6 +404,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	vector<float> objp;
 	vector<float> objr;
 	vector<float> objscale;
+	vector<char *> objname;
 	//filenamev.push_back(filename);
 	
 	xml_node<> *userlocation = user->first_node("startingLocation");
@@ -415,6 +416,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		float h = atof(userlocation->first_node("heading")->value());
 		float p = atof(userlocation->first_node("pitch")->value());
 		float r = atof(userlocation->first_node("roll")->value());
+		char *name = user->first_node("name")->value();
 		
 		cout << "user set x..." << x << "\n" << flush;
 		cout << "user set y..." << y << "\n" << flush;
@@ -423,14 +425,16 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		cout << "user set p..." << p << "\n" << flush;
 		
 		objx.push_back(x);
-		objy.push_back(y+3);
+		objy.push_back(y+3.3); //for mrbody this should be y+3
 		objz.push_back(z);
 		objh.push_back(h);
-		objp.push_back(p-12);
+		objp.push_back(p+180); //for mrbody this should be p-12
 		objr.push_back(r);
-		objscale.push_back(4);
+		objscale.push_back(4); //for mrbody this should be 4
+		objname.push_back(name);
 		
-		string filename = "MrBodyWithHands.obj";
+		//string filename = "MrBodyWithHands.obj";
+		string filename = "batman.obj";
 		filenamev.push_back(filename);
 		string pathy = PATH+"Kosmos\\data\\obj";
 		pathv.push_back(pathy);
@@ -466,6 +470,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		float p = atof(objecties->first_node("pitch")->value());
 		float r = atof(objecties->first_node("roll")->value());
 		float s = atof(objecties->first_node("scale")->value());
+		char *name = objecties->first_node("name")->value();
 		
 		objx.push_back(x);
 		objy.push_back(y);
@@ -474,7 +479,7 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		objp.push_back(p);
 		objr.push_back(r);
 		objscale.push_back(s);
-		
+		objname.push_back(name);
 		/*
 			<resourceName>cello.obj</resourceName>
 			<x>0</x>
@@ -491,15 +496,15 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		}
 	}
 	
-	for( int i=0; i<filenamev.size(); ++i)
+	for( unsigned int i=0; i<filenamev.size(); ++i)
 	{
 		if (i==0)
 		{
-			userObject = Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],5);
+			userObject = Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],5,objname[i]);
 		}
 		else
 		{
-			Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i]);
+			Import::import(filenamev[i], objx[i], objy[i], objz[i], objh[i], objp[i], objr[i], objscale[i], pathv[i],2,objname[i]);
 		}
 	}
 	
@@ -511,11 +516,12 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	objp.clear();
 	objr.clear();
 	objscale.clear();
+	objname.clear();
 	pathv.clear();
 	
-	float wiimoteX = 2.0;
-	float wiimoteY = 4;
-	float wiimoteZ = -0.7;
+	float wiimoteX = 1.9; //2 for mrbody
+	float wiimoteY = 3.5; //4 for mrbody
+	float wiimoteZ = -0.6; //-0.7 for mrbody, negative moves closer
 	rightWiimote = new Object(4, 0.5, 0.5, 0.5, "MrWiimote.obj");
 	rightWiimote->normalize();
 	rightWiimote->setMatrix(ar_translationMatrix(wiimoteX, wiimoteY, wiimoteZ)); // initial position
@@ -701,7 +707,17 @@ void ProjectManager::findTemplateCallback(vector<string> args)
 	templateName = args[0];
 	cout << "template: " << templateName << "\n" << flush;
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
-	virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", SANDBOXPATH, true);
+	int length = templateName.length();
+	if (templateName[length-1] == 'e' && templateName[length-2] == 'd' && templateName[length-3] == 'i' && templateName[length-4] == 'k')
+	{
+		virtualdirectory.startBrowse("findprojdir", &ProjectManager::findProjectCallback,"Select project directory: ", SANDBOXPATH, true);
+	}
+	else
+	{
+		cout << "not a valid template file\n" << flush;
+		virtualdirectory.findingFile = false;
+	}
+	
 	cout << "findingfile: " << virtualdirectory.findingFile << "\n" << flush;
 }
 
@@ -753,24 +769,32 @@ void ProjectManager::loadProjectCallback(vector<string> args)
 	cout.flush();
 	unsigned found = projectDir.find_last_of("/\\");
 	string filename = projectDir.substr(found+1);
-	findAndReplace(projectDir, "\\\\"+filename, "");
-	printf("projectDir=%s\n",projectDir.c_str());
-	cout.flush();
-	found = projectDir.find_last_of("/\\");
-	string pname = projectDir.substr(found+1);
-	//remove .kproj
-	
-	//findAndReplace(pname, ".kproj", "");
-	printf("pname=%s\n",pname.c_str());
-	cout.flush();
-	setProjectName(pname);
-	
-	string projectFile = projectDir + "\\" + projectName + ".kproj";
-	printf("loading %s\n",projectFile.c_str());
-	cout.flush();
-	loadProject(projectFile);
-	printf("loaded %s\n",projectFile.c_str());
-	cout.flush();
+	int length = filename.length();
+	if (filename[length-1] == 'j' && filename[length-2] == 'o' && filename[length-3] == 'r' && filename[length-4] == 'p' && filename[length-5] == 'k')
+	{
+		findAndReplace(projectDir, "\\\\"+filename, "");
+		printf("projectDir=%s\n",projectDir.c_str());
+		cout.flush();
+		found = projectDir.find_last_of("/\\");
+		string pname = projectDir.substr(found+1);
+		//remove .kproj
+		
+		//findAndReplace(pname, ".kproj", "");
+		printf("pname=%s\n",pname.c_str());
+		cout.flush();
+		setProjectName(pname);
+		
+		string projectFile = projectDir + "\\" + projectName + ".kproj";
+		printf("loading %s\n",projectFile.c_str());
+		cout.flush();
+		loadProject(projectFile);
+		printf("loaded %s\n",projectFile.c_str());
+		cout.flush();
+	}
+	else
+	{
+		cout << "not a valid project file\n" << flush;
+	}
 }
 
 

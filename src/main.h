@@ -40,6 +40,8 @@ extern bool sandboxed;
 extern bool rightSelected;
 extern bool showFloor;
 
+extern int numObjects;
+
 extern TreeMenu *wiiNodeMenu;
 extern TreeMenu *userMenu;
 extern TreeMenu *objectMenu;

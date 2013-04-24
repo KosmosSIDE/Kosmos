@@ -166,7 +166,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			{
 				Object *oby = ((Object*)(*i));
 				oby->_selected = !oby->_selected;
-				if(oby->_selected)
+				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
 				{
 					currentPtr = objectMenu->forwardPtrs[0];
 				}
@@ -354,9 +354,6 @@ void LeftVirtualHand::drawTablet() const
 		glPushAttrib(GL_COLOR_BUFFER_BIT);
 			//glClearColor(0, 0, 0, 0); //tablet color
 			glColor3f(0.0, 0.0, 0.0);
-			
-			GLfloat height = 0.5f;
-			GLfloat width = 1.f;
 			
 			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
 			

@@ -43,6 +43,8 @@ vector<char> document;
 string templateName = "";
 string projectDir = "";
 
+int numObjects = 0;
+
 bool sandboxed = false;
 bool rightSelected = false;
 bool showFloor = true;
@@ -143,10 +145,6 @@ int clickSound;
 void setProjectName (string &pname) { projectName = pname; }
 
 
-void uselessCallback(vector<string> args)
-{
-	cout << "useless callback" << flush;
-}
 
 // start callback
 // Purposes:
@@ -226,10 +224,13 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		/*templateName = PATH+"Kosmos\\templates\\newProjectTemplate.kide";
+		templateName = PATH+"Kosmos\\templates\\newproject.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);*/
+		ProjectManager::findProjectCallback(projman);
+		
+		
+		
 	
 	wiiNodeMenu = new TreeMenu();
 	wiiNodeMenu = wiiNodeMenu->makeWiiMenu(wiiNodeMenu);
@@ -1119,6 +1120,53 @@ void goForward()
 			virtualdirectory.startBrowse("playSound", &playSound,"Select sound file to play: ", PATH);
 			tabletOn = false;
 		}
+		else if (strcmp(currentPtr->name.c_str(),"Delete")==0)
+		{
+			/*
+			vector< string >::it = curFiles.begin();
+			while(it != curFiles.end()) 
+			{
+				if(aConditionIsMet) 
+				{
+					it = curFiles.erase(it);
+				}
+				else ++it;
+			}
+			*/
+			vector<Object*> toDelete;
+		
+			vector<arInteractable*>::iterator i;
+			for(i=objects.begin(); i != objects.end(); ++i) 
+			{
+				cout<<"infor\n"<<flush;
+				Object* oby = ((Object*)(*i));
+				cout<<"oby set\n"<<flush;
+				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
+				{
+					cout<<"inif\n"<<flush;
+					toDelete.push_back(oby);
+					oby->deleteObject();
+					
+				}	
+				cout<<"endif\n"<<flush;
+			}
+			cout<<"endfor\n"<<flush;
+			
+			vector<Object*>::iterator ii;
+			for(ii=toDelete.begin(); ii != toDelete.end(); ++ii) 
+			{
+				cout<<"infor\n"<<flush;
+				Object* oby = ((Object*)(*ii));
+				cout<<"delete\n"<<flush;
+				std::vector<arInteractable*>::iterator position = std::find(objects.begin(), objects.end(), oby);
+				if (position != objects.end()) // == vector.end() means the element was not found
+				{
+					cout<<"erasing\n"<<flush;
+					objects.erase(position);
+					cout<<"erased\n"<<flush;
+				}
+			}
+		}
 		else if (strcmp(currentPtr->name.c_str(),"Horizontal")==0)
 		{
 			ostringstream lines;
@@ -1139,7 +1187,7 @@ void goForward()
 			{
 				codenode = codenode->next_sibling();
 			}
-			rapidxml::xml_node<> *horizontalMovementAppendNode = codeTree.clone_node( horizontalMovementNode, codenode );
+			codeTree.clone_node( horizontalMovementNode, codenode );
 			
 			char* val = codeTree.allocate_string("Horizontal");
 			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadUD")->value(val);
@@ -1166,7 +1214,7 @@ void goForward()
 			{
 				codenode = codenode->next_sibling();
 			}
-			rapidxml::xml_node<> *verticalMovementAppendNode = codeTree.clone_node( verticalMovementNode, codenode );
+			codeTree.clone_node( verticalMovementNode, codenode );
 			
 			char* val = codeTree.allocate_string("Vertical");
 			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadUD")->value(val);
@@ -1195,7 +1243,7 @@ void goForward()
 			{
 				codenode = codenode->next_sibling();
 			}
-			rapidxml::xml_node<> *strafeMovementAppendNode = codeTree.clone_node( strafeMovementNode, codenode );
+			codeTree.clone_node( strafeMovementNode, codenode );
 			
 			char* val = codeTree.allocate_string("Strafe");
 			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadLR")->value(val);
@@ -1224,7 +1272,7 @@ void goForward()
 			{
 				codenode = codenode->next_sibling();
 			}
-			rapidxml::xml_node<> *rotateMovementAppendNode = codeTree.clone_node( rotateMovementNode, codenode );
+			codeTree.clone_node( rotateMovementNode, codenode );
 			
 			char* val = codeTree.allocate_string("Rotate");
 			codeTree.first_node("project")->first_node("profile")->first_node("user")->first_node("movement")->first_node("dpadLR")->value(val);
