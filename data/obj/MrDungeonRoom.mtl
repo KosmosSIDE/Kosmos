@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 22.04.2013 16:59:27
+# File Created: 24.04.2013 20:49:46
 
 newmtl 01___Default
 	Ns 10.0000
@@ -12,5 +12,5 @@ newmtl 01___Default
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka stoneFloor.JPG
-	map_Kd stoneFloor.JPG
+	map_Ka stoneFloor.jpg
+	map_Kd stoneFloor.jpg
