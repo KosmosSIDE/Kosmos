@@ -307,16 +307,8 @@ void Object::draw()
 		}
 		else if(_type == 4) //wiimote
 		{
-			//glutWireCube(0.8);
 			loadedOBJ.draw();
-			/*if (this == rightWiimote && rightWiimote->_selected) //rightWiimote->getHighlight()
-			{
-				glutWireCube(1.01);
-			}
-			if (this == leftWiimote && leftWiimote->_selected) //rightWiimote->getHighlight()
-			{
-				glutWireCube(1.01);
-			}*/
+			
 			if (this->_selected)
 			{
 				glutWireCube(1.01);
@@ -329,35 +321,14 @@ void Object::draw()
 				glutWireCube(1.01);
 			}
 			loadedOBJ.draw();
-			//rightWiimote->loadedOBJ.normalizeModelSize();
-			glPushMatrix();
-				//glScalef(1/_length, 1/_height, 1/_width);
-				/*glTranslatef(3, 2, -1.6);
-				glRotatef(180, 0.0,1.0,0.0); //pitch
-				glRotatef(180, 0.0,0.0,1.0); //yaw/heading
-				glRotatef(-45, 1.0,0.0,0.0); //roll
-				//glScalef(0.5, 0.5, 0.5);
-				//glTranslatef(3, 2, -1.6);
-				rightWiimote->loadedOBJ.draw();
-				if (rightWiimote->_selected) //rightWiimote->getHighlight()
-				{
-					glutWireCube(1.01);
-				}*/
-			glPopMatrix();
-			glPushMatrix();
-				/*glScalef(1/_length, 1/_height, 1/_width);
-				glTranslatef(-3, 2, -1.6);
-				glRotatef(180, 0.0,1.0,0.0); //pitch
-				glRotatef(180, 0.0,0.0,1.0); //yaw/heading
-				glRotatef(-45, 1.0,0.0,0.0); //roll
-				//glScalef(0.5, 0.5, 0.5);
-				//glTranslatef(3, 2, -1.6);
-				leftWiimote->loadedOBJ.draw();
-				if (leftWiimote->_selected)
-				{
-					glutWireCube(1.01);
-				}*/
-			glPopMatrix();
+		}
+		else if(_type == 6) //hmd
+		{
+			if (this->_selected)
+			{
+				glutWireCube(1.01);
+			}
+			loadedOBJ.draw();
 		}
 		else if(_type > 2) { 
 			// Draw loaded OBJ file.
@@ -408,7 +379,7 @@ void Object::draw()
 // callback).
 bool Object::processInteraction( arEffector& effector )
 {
-	if(this == leftWiimote || this == rightWiimote || this == userObject)
+	if(this == leftWiimote || this == rightWiimote || this == userObject || this == headMountedDisplay)
 	{
 		// The interactable cannot be manipulated if it hasn't been enabled.
 		if (!_enabled)
@@ -466,6 +437,7 @@ bool Object::processInteraction( arEffector& effector )
 							rightSelected = true;
 							leftWiimote->_selected=false;
 							userObject->_selected = false;
+							headMountedDisplay->_selected = false;
 							currentPtr = wiiNodeMenu->forwardPtrs[0];
 							cout << "hi :3 changing menu?\n" << flush;
 						}
@@ -473,6 +445,7 @@ bool Object::processInteraction( arEffector& effector )
 						{
 							rightWiimote->_selected=false;
 							userObject->_selected = false;
+							headMountedDisplay->_selected = false;
 							rightSelected = false;
 							currentPtr = wiiNodeMenu->forwardPtrs[0];
 						}
@@ -480,7 +453,15 @@ bool Object::processInteraction( arEffector& effector )
 						{
 							leftWiimote->_selected=false;
 							rightWiimote->_selected=false;
+							headMountedDisplay->_selected = false;
 							currentPtr = userMenu->forwardPtrs[0];
+						}
+						else if(this == headMountedDisplay)
+						{
+							leftWiimote->_selected=false;
+							rightWiimote->_selected=false;
+							userObject->_selected = false;
+							currentPtr = hmdMenu->forwardPtrs[0];
 						}
 						else
 						{
@@ -488,6 +469,7 @@ bool Object::processInteraction( arEffector& effector )
 							leftWiimote->_selected=false;
 							rightWiimote->_selected=false;
 							userObject->_selected = false;
+							headMountedDisplay->_selected = false;
 						}
 					}
 					else
@@ -609,10 +591,6 @@ bool Object::processInteraction( arEffector& effector )
 
 bool Object::touch( arEffector& effector ) 
 {
-	/*if (this == rightWiimote || this == leftWiimote)
-	{
-		return true;
-	}*/
 
 	if (!_enabled)
 		return false;

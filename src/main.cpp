@@ -56,6 +56,7 @@ bool tabletOn = true;
 TreeMenu *wiiNodeMenu = NULL;
 TreeMenu *userMenu = NULL;
 TreeMenu *objectMenu = NULL;
+TreeMenu *hmdMenu = NULL;
 /*Changes by Harish Babu Arunachalam*/
 TreeMenu *nodeMenu = NULL;
 TreeMenu *parentMenu = NULL;
@@ -112,6 +113,7 @@ Object* _rightSelectedObject;
 Object* rightWiimote;
 Object* leftWiimote;
 Object* userObject;
+Object* headMountedDisplay;
 bool _rightMoving;
 bool _leftMovering;
 
@@ -241,6 +243,9 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	objectMenu = new TreeMenu();
 	TreeMenu::makeMenu(objectMenu, PATH+"Kosmos\\conf\\menuFileObject.xml");
 	
+	hmdMenu = new TreeMenu();
+	TreeMenu::makeMenu(hmdMenu, PATH+"Kosmos\\conf\\menuFileHMD.xml");
+	
 	/*Changes by Harish Babu Arunachalam*/
 	nodeMenu =  new TreeMenu();
 	currentPtr = new TreeMenu();
@@ -340,7 +345,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{
 			Object* obPointer = ((Object*)(*i));
-			if(obPointer->_selected && (obPointer != rightWiimote && obPointer != leftWiimote && obPointer != userObject))
+			if(obPointer->_selected && (obPointer != rightWiimote && obPointer != leftWiimote && obPointer != userObject && obPointer != headMountedDisplay))
 			{
 				obPointer->setScale(scaleBy);
 			}
@@ -402,6 +407,8 @@ void preExchange(arMasterSlaveFramework& framework) {
 		currentPtr = nodeMenu;
 		leftWiimote->_selected = false;
 		rightWiimote->_selected = false;
+		userObject->_selected = false;
+		headMountedDisplay->_selected = false;
 	}
 	
 	if(rightHand.getOnButton(2))
@@ -1124,7 +1131,7 @@ void goForward()
 			for(i=objects.begin(); i != objects.end(); ++i) 
 			{
 				Object* oby = ((Object*)(*i));
-				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
+				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject && oby!=headMountedDisplay)
 				{
 					toDelete.push_back(oby);
 					oby->deleteObject();

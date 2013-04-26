@@ -524,9 +524,13 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 	leftWiimote->normalize();
 	leftWiimote->setMatrix(ar_translationMatrix(-wiimoteX, wiimoteY, wiimoteZ)); // initial position
 	leftWiimote->setHPR(135,0,0);
-	//leftWiimote->disable();
-	//leftWiimote->_selected = false;
 	objects.push_back(leftWiimote);
+	
+	headMountedDisplay = new Object(6, 0.4, 0.4, 0.35, "MrVisor.obj");
+	headMountedDisplay->normalize();
+	headMountedDisplay->setMatrix(ar_translationMatrix(0, 5.85, -0.09)); // initial position
+	headMountedDisplay->setHPR(0,-90,0);
+	objects.push_back(headMountedDisplay);
 }
 
 // load a previously created file for editing

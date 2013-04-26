@@ -45,6 +45,7 @@ extern int numObjects;
 extern TreeMenu *wiiNodeMenu;
 extern TreeMenu *userMenu;
 extern TreeMenu *objectMenu;
+extern TreeMenu *hmdMenu;
 
 //Changes by Harish Babu Arunachalam
 extern TreeMenu *nodeMenu;

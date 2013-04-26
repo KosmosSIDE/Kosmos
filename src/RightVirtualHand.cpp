@@ -71,7 +71,7 @@ void RightVirtualHand::detectCollisions(arEffector& self, vector<arInteractable*
 		{
 			Object* oby = (Object*)closestObject;
 			oby->_selected = !oby->_selected;
-			if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
+			if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject && oby!=headMountedDisplay)
 			{
 				currentPtr = objectMenu->forwardPtrs[0];
 			}

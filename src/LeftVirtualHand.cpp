@@ -164,32 +164,10 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			{
 				Object *oby = ((Object*)(*i));
 				oby->_selected = !oby->_selected;
-				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
+				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject && oby!=headMountedDisplay)
 				{
 					currentPtr = objectMenu->forwardPtrs[0];
 				}
-				/*if(oby->_selected)
-				{
-					if(oby == rightWiimote)
-					{
-						rightSelected = true;
-						leftWiimote->_selected=false;
-						currentPtr = wiiNodeMenu->forwardPtrs[0];
-						cout << "hi :3 changing menu?\n" << flush;
-					}
-					else if(oby == leftWiimote)
-					{
-						rightWiimote->_selected=false;
-						rightSelected = false;
-						currentPtr = wiiNodeMenu->forwardPtrs[0];
-					}
-					else
-					{
-						currentPtr = nodeMenu;
-						leftWiimote->_selected=false;
-						rightWiimote->_selected=false;
-					}
-				}*/
 				selectionMode = 0;
 			}
 		}
@@ -255,28 +233,7 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			Object* oby = leftSelectedObjects.front();
 			//set the one object to selected
 			oby->_selected = !oby->_selected;
-			/*if(oby->_selected)
-			{
-				if(oby == rightWiimote)
-				{
-					rightSelected = true;
-					leftWiimote->_selected=false;
-					currentPtr = wiiNodeMenu->forwardPtrs[0];
-					cout << "hi :3 changing menu?\n" << flush;
-				}
-				else if(oby == leftWiimote)
-				{
-					rightWiimote->_selected=false;
-					rightSelected = false;
-					currentPtr = wiiNodeMenu->forwardPtrs[0];
-				}
-				else
-				{
-					currentPtr = nodeMenu;
-					leftWiimote->_selected=false;
-					rightWiimote->_selected=false;
-				}
-			}*/
+			
 		}
 		else
 		{

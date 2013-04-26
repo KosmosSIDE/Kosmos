@@ -1,0 +1,13 @@
+<menus>
+  <menu level="0" hasChild="Y">
+		<options>
+			<option level="1" hasChild="N">
+				<name>Unavailable</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+			</option>
+		</options>
+	</menu>
+</menus>
