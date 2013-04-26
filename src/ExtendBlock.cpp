@@ -52,13 +52,11 @@ void ExtendBlock::insertBlock(vector<string> args)
 
 void ExtendBlock::addExtendToProfile(bool isRightHand)
 {
-	cout << "adding extend to profile\n" << flush;
+	//cout << "adding extend to profile\n" << flush;
 	
 	rapidxml::xml_node<>* handNode = (isRightHand?codeTree.first_node()->first_node("profile")->first_node()->first_node("rightHand"):codeTree.first_node()->first_node("profile")->first_node()->first_node("leftHand"));
-	cout << "value:"<<handNode->first_node("block")->first_node("name")->value()<<"\n"<<flush;
 	handNode->first_node("block")->first_node("name")->value(codeTree.allocate_string(isRightHand?"rextend\0":"lextend\0"));
 	handNode->first_node("block")->first_node("type")->value(codeTree.allocate_string("extend"));
-	cout << "value:"<<handNode->first_node("block")->first_node("name")->value()<<"\n"<<flush;
 }
 
 void ExtendBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, bool isRightHand)

@@ -87,7 +87,6 @@ bool LeftVirtualHand::requestGrab( arInteractable* grabee )
 {
 	if (grabee == rightWiimote || grabee == leftWiimote)
 	{
-		//cout << "handy\n" << flush;
 		if (_grabbedObject == grabee) 
 		{
 			return true;
@@ -157,7 +156,6 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 	}
 	if(selectionMode == 3 && ar_pollingInteraction(self, objectlist)) //if it interacted
 	{
-		//cout << "hit an object" << '\n';
 		//find out which object it interacted with
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
@@ -387,9 +385,7 @@ void LeftVirtualHand::drawTablet() const
 		//draw text (i*200.0f, string(menuitem),(i==j?true:false))
 		//Changes by Harish Babu Arunachalam
 		if(currentPtr->noOf_FwdPtrs>0)
-		{	
-		//cout<<"inside draw functuion of leftVirtualHand - pointer Name is "<<currentPtr->forwardPtrs[0]->name<<endl<<flush;
-		//cout<<"290 draw functuion of leftVirtualHand - no of attributes is "<<currentPtr->noOf_FwdPtrs<<endl<<flush;
+		{
 			for(int i=0;i<currentPtr->noOf_FwdPtrs;i++)
 			{
 				/*if(i==treeIndex)

@@ -249,8 +249,7 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	nodeMenu = nodeMenu->makeMenu(nodeMenu);
 	nodeMenu->name = "menus";
 	nodeMenu->level = -1;
-//	cout<<" 219 nodeMenu name "<<nodeMenu->name<<endl<<flush;
-//	cout<<" 220 nodeMenu children "<<nodeMenu->noOf_FwdPtrs<<endl<<flush;
+	
 	nodeMenu = nodeMenu->forwardPtrs[0];
 	parentMenu = nodeMenu;
 	currentPtr = parentMenu;
@@ -331,16 +330,12 @@ void preExchange(arMasterSlaveFramework& framework) {
 	}
 	else if(scalingActive)
 	{
-		//cout << "left hand xyz "<<leftHand.getX()<<" "<<leftHand.getY()<<" "<<leftHand.getZ()<<"\n"<<flush;
-		//cout << "right hand xyz "<<rightHand.getX()<<" "<<rightHand.getY()<<" "<<rightHand.getZ()<<"\n"<<flush;
 		float xdist = rightHand.getX() - leftHand.getX();
 		float ydist = rightHand.getY() - leftHand.getY();
 		float zdist = rightHand.getZ() - leftHand.getZ();
 		float currentDist = sqrt(xdist*xdist+ydist*ydist+zdist*zdist);
 		float scaleBy = currentDist / distBetweenHands;
-		//cout << "scaling by "<<scaleBy<<"\n"<<flush;
 		distBetweenHands = currentDist;
-		//foreach object != wiimote && != user
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{
@@ -350,7 +345,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 				obPointer->setScale(scaleBy);
 			}
 		}
-		//	if _selected then scale by scaleBy
 	}
 	
 	
@@ -369,7 +363,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	/*if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
 	{
 		pressedImport = currentTime;
-	//	cout<<"\n before Go Back function call\n"<<flush;
 	//Harish Babu Arunachalam
 	//call back navigation function for TreeMenu
 		goBack();
@@ -388,7 +381,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	//Harish Babu Arunachalam
 	//call upward navigation function for TreeMenu
 		pressedImport = currentTime;
-		cout<<"before go Up \n "<<endl<<flush;
 		//currentPtr->printValues(currentPtr);
 		goUp();
 				
@@ -398,7 +390,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	//Harish Babu Arunachalam
 	//call downward navigation function for TreeMenu
 		pressedImport = currentTime;
-		cout<<"\n\n Before go down\n"<<endl<<flush;
 		goDown();
 	}*/
 	if(leftHand.getOnButton(5))
@@ -427,7 +418,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if((!virtualdirectory.findingFile) && tabletOn && leftHand.getOnButton(8) && (currentTime-pressedMenu)>thresholdMenu)
 	{
 		pressedMenu = currentTime;
-	//	cout<<"\n before Go Back function call\n"<<flush;
 	//Harish Babu Arunachalam
 	//call back navigation function for TreeMenu
 		goBack();
@@ -446,7 +436,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	//Harish Babu Arunachalam
 	//call upward navigation function for TreeMenu
 		pressedMenu = currentTime;
-		//cout<<"before go Up \n "<<endl<<flush;
 		//currentPtr->printValues(currentPtr);
 		goUp();
 				
@@ -456,7 +445,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	//Harish Babu Arunachalam
 	//call downward navigation function for TreeMenu
 		pressedMenu = currentTime;
-		//cout<<"\n\n Before go down\n"<<endl<<flush;
 		goDown();
 	}
 	else if(virtualdirectory.findingFile)
@@ -485,7 +473,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 			}
 			
 			dirButtonPress = currentTime;
-			//cout << "wth" << flush;
 		}
 		/*else if (rightHand.getOnButton(5))
 		{
@@ -497,7 +484,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if (rightHand.getOnButton(10) && (currentTime-handButtonPress)>150)
 	{
 		bool tempy = (rightHand.ray==true)?false:true;
-		cout << "changed hand" << tempy << rightHand.ray << "\n" << flush;
+		//cout << "changed hand" << tempy << rightHand.ray << "\n" << flush;
 		
 		//rightHand.~RightVirtualHand();
 		//rightHand = new (&rightHand) RightVirtualHand(tempy, "handy.obj"); 
@@ -964,9 +951,7 @@ void draw(arMasterSlaveFramework& framework) {
 	
 	if(virtualdirectory.findingFile)
 	{
-		//cout << "starting vd.draw\n" << flush;
 		virtualdirectory.draw();
-		//cout << "end vd.draw\n" << flush;
 	}
 	
 	// Draw the objects.
@@ -1023,11 +1008,11 @@ void playSound(vector<string> args)
 /*Method to navigate forward for TreeMenu*/
 void goForward()
 {
-	cout<<"curTreeLevel "<<curTreeLevel<<endl<<flush;
+	//cout<<"curTreeLevel "<<curTreeLevel<<endl<<flush;
 
 	//currentPtr->printValues(currentPtr);
-	cout<<"currentPointer name is "<<currentPtr->name<<endl<<flush;
-	cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
+	//cout<<"currentPointer name is "<<currentPtr->name<<endl<<flush;
+	//cout<<"treeIndex value is "<<treeIndex<<endl<<flush;
 	if(currentPtr->noOf_FwdPtrs>0)
 	{
 		bool leaf = true;
@@ -1138,32 +1123,23 @@ void goForward()
 			vector<arInteractable*>::iterator i;
 			for(i=objects.begin(); i != objects.end(); ++i) 
 			{
-				cout<<"infor\n"<<flush;
 				Object* oby = ((Object*)(*i));
-				cout<<"oby set\n"<<flush;
 				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
 				{
-					cout<<"inif\n"<<flush;
 					toDelete.push_back(oby);
 					oby->deleteObject();
 					
-				}	
-				cout<<"endif\n"<<flush;
+				}
 			}
-			cout<<"endfor\n"<<flush;
 			
 			vector<Object*>::iterator ii;
 			for(ii=toDelete.begin(); ii != toDelete.end(); ++ii) 
 			{
-				cout<<"infor\n"<<flush;
 				Object* oby = ((Object*)(*ii));
-				cout<<"delete\n"<<flush;
 				std::vector<arInteractable*>::iterator position = std::find(objects.begin(), objects.end(), oby);
 				if (position != objects.end()) // == vector.end() means the element was not found
 				{
-					cout<<"erasing\n"<<flush;
 					objects.erase(position);
-					cout<<"erased\n"<<flush;
 				}
 			}
 		}
@@ -1288,7 +1264,6 @@ void goForward()
 		{
 			currentPtr = nodeMenu;
 		}
-		cout<<"inside goForward() \n"<<flush;
 		treeIndex = 0;
 	}
 }
@@ -1296,7 +1271,6 @@ void goForward()
 /*Method to navigate backward for TreeMenu*/
 void goBack()
 {
-	//cout<<"backwardPointer name "<<currentPtr->backwardPtr->name<<endl<<flush;
 	//Check if the backward navigation has reached the root node - check for currentPtr level.
 	treeIndex=0;
 		if(currentPtr->level==-1)
@@ -1306,7 +1280,6 @@ void goBack()
 			currentPtr = parentMenu;		//current pointer is the parent pointer
 			parentMenu = parentMenu->backwardPtr; // parent pointer is parent's backward pointer
 			curTreeLevel = currentPtr->level; //current tree level is one less
-			cout<<"inside goBack\n";
 		}
 	return;
 }
@@ -1325,7 +1298,6 @@ void goUp()
 		}		
 	return;
 	*/
-	//cout << "idk what im doing:"<<currentPtr->noOf_FwdPtrs<<"\n"<<flush;
 	treeIndex = (treeIndex-1+currentPtr->noOf_FwdPtrs)%currentPtr->noOf_FwdPtrs;
 }
 
@@ -1338,7 +1310,6 @@ void goDown()
 		else
 			treeIndex++;
 	return;*/
-	//cout << "idk what im doing:"<<currentPtr->noOf_FwdPtrs<<"\n"<<flush;
 	treeIndex = (treeIndex+1)%currentPtr->noOf_FwdPtrs;
 }
 

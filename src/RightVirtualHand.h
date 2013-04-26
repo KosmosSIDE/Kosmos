@@ -35,7 +35,6 @@ class RightVirtualHand:public arEffector {
 		}
 		
 			ray = rayray;
-			cout << "ray:" << ray << "\n" << flush;
 			// Set "tip" or point of interaction. This is primarily for rays.
 			setTipOffset(arVector3(0, 0, 0));
 			

@@ -67,11 +67,8 @@ void RightVirtualHand::detectCollisions(arEffector& self, vector<arInteractable*
 		_selector.setMaxDistance(closestDistance);
 		setInteractionSelector(_selector);
 		
-		//cout << "object was selected?" << '\n';
-		
 		if(getOnButton(1) == 1)
 		{
-			//cout << "object was selected" << '\n';
 			Object* oby = (Object*)closestObject;
 			oby->_selected = !oby->_selected;
 			if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject)
@@ -198,7 +195,6 @@ void RightVirtualHand::reInitialize(bool rayray, const string& filename)
 	}
 	
 		ray = rayray;
-		cout << "ray:" << ray << "\n" << flush;
 		// Set "tip" or point of interaction. This is primarily for rays.
 		setTipOffset(arVector3(0, 0, 0));
 		

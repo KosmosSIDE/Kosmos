@@ -216,8 +216,8 @@ int TreeMenu::findNode(char*)
 			//Find the attributes of the node and populate it to the tree menu
 			node = populateAttr(node,tempXmlNode->first_node("attrList"));
 
-			cout<<"node comparison "<<(tempXmlNode==xmlNode->last_node())<<endl;
-			cout<<" \t temp xml node value "<<tempXmlNode->name()<<" -- xmlnode last node "<<xmlNode->first_node()->last_node()->name()<<endl;
+			//cout<<"node comparison "<<(tempXmlNode==xmlNode->last_node())<<endl;
+			//cout<<" \t temp xml node value "<<tempXmlNode->name()<<" -- xmlnode last node "<<xmlNode->first_node()->last_node()->name()<<endl;
 
 			//while the current node is not the last node, goto the next sibling
 			while((tempXmlNode!=xmlNode->first_node()->last_node())&&(tempXmlNode!=NULL))
@@ -237,7 +237,7 @@ int TreeMenu::findNode(char*)
 			node->forwardPtrs[ptrCount++] = createMenu(xmlNode);
 		}
 		node->noOf_FwdPtrs = ptrCount;
-		cout<<" node return Name is "<<node->name<<endl;
+		//cout<<" node return Name is "<<node->name<<endl;
 		return node;
 	}
 	
@@ -285,7 +285,7 @@ int TreeMenu::findNode(char*)
 			char* attribval = attribNode->value();
 			//Assign the name of attribute to attribute pointer
 			attrib->attributeName = attribval;
-			cout<<" attribute value is "<<attribval<<endl;
+			//cout<<" attribute value is "<<attribval<<endl;
 			processNode->attPtr[processNode->noOfAttributes++] = attrib;
 			attribNode = attribNode->next_sibling();
 
@@ -350,7 +350,6 @@ int TreeMenu::findNode(char*)
 		string fileName = PATH+"Kosmos\\conf\\menuFile.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
-		cout<<"inside make menu \n\n"<<flush;
 		myfile.open (fileName.c_str(), ifstream::in);
 		
 		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
@@ -366,14 +365,12 @@ int TreeMenu::findNode(char*)
 		rootNode->backwardPtr = rootNode;
 		//Assign the forward pointer of root node to the sub nodes
 		rootNode->forwardPtrs[rootNode->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
-		
-		//cout<<"name of the node is "<<tempNode->name()<<endl;
 		//Assign the name of the root node of tree menu to name of the node
 		rootNode->name=tempNode->name();
-		cout<<" name of the root node is "<<rootNode->name<<endl;
+		//cout<<" name of the root node is "<<rootNode->name<<endl;
 		
 		//Print the values of the root node of TreeMenu
-		printValues(rootNode);
+	//	printValues(rootNode);
 		
 		return rootNode;
 	}
@@ -384,7 +381,6 @@ int TreeMenu::findNode(char*)
 		string fileName = PATH+"Kosmos\\conf\\menuFileUser.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
-		cout<<"inside make menu \n\n"<<flush;
 		myfile.open (fileName.c_str(), ifstream::in);
 		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
 		documenty.push_back('\0');
@@ -396,12 +392,11 @@ int TreeMenu::findNode(char*)
 		userMenu->backwardPtr = userMenu;
 		//Assign the forward pointer of root node to the sub nodes
 		userMenu->forwardPtrs[userMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
-		//cout<<"name of the node is "<<tempNode->name()<<endl;
 		//Assign the name of the root node of tree menu to name of the node
 		userMenu->name=tempNode->name();
-		cout<<" name of the root node is "<<userMenu->name<<endl;
+		//cout<<" name of the root node is "<<userMenu->name<<endl;
 		//Print the values of the root node of TreeMenu
-		printValues(userMenu);
+	//	printValues(userMenu);
 		return userMenu;
 	}
 	
@@ -411,7 +406,6 @@ int TreeMenu::findNode(char*)
 		string fileName = PATH+"Kosmos\\conf\\menuFileWiiMote.xml";
 		xml_document <> xml;
 		xml_node <> *tempNode;
-		cout<<"inside make menu \n\n"<<flush;
 		myfile.open (fileName.c_str(), ifstream::in);
 		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
 		documenty.push_back('\0');
@@ -423,12 +417,11 @@ int TreeMenu::findNode(char*)
 		wiiNodeMenu->backwardPtr = wiiNodeMenu;
 		//Assign the forward pointer of root node to the sub nodes
 		wiiNodeMenu->forwardPtrs[wiiNodeMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
-		//cout<<"name of the node is "<<tempNode->name()<<endl;
 		//Assign the name of the root node of tree menu to name of the node
 		wiiNodeMenu->name=tempNode->name();
-		cout<<" name of the root node is "<<wiiNodeMenu->name<<endl;
+		//cout<<" name of the root node is "<<wiiNodeMenu->name<<endl;
 		//Print the values of the root node of TreeMenu
-		printValues(wiiNodeMenu);
+	//	printValues(wiiNodeMenu);
 		return wiiNodeMenu;
 	}
 	
@@ -438,7 +431,6 @@ int TreeMenu::findNode(char*)
 		ifstream myfile;
 		xml_document <> xml;
 		xml_node <> *tempNode;
-		cout<<"inside make menu \n\n"<<flush;
 		myfile.open (fileName.c_str(), ifstream::in);
 		
 		vector<char> documenty((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
@@ -455,12 +447,11 @@ int TreeMenu::findNode(char*)
 		//Assign the forward pointer of root node to the sub nodes
 		toSet->forwardPtrs[toSet->noOf_FwdPtrs++] = toSet->createMenu(tempNode->first_node());
 		
-		//cout<<"name of the node is "<<tempNode->name()<<endl;
 		//Assign the name of the root node of tree menu to name of the node
 		toSet->name=tempNode->name();
 		
 		//Print the values of the root node of TreeMenu
-		toSet->printValues(toSet);
+	//	toSet->printValues(toSet);
 		
 	}
 
@@ -483,11 +474,9 @@ int TreeMenu::findNode(char*)
 				if(!findDuplicate(str,dependFile))
 				{
 					dependFile.push_back(str);
-					cout<<"  "<<dependFile[0]<<endl;
+					//cout<<"  "<<dependFile[0]<<endl;
 				}
-				//cout<<"string found -- "<<str;
 			}
-			//cout<<str<<" -- ";
 		}
 		return dependFile;
 	}
@@ -500,7 +489,7 @@ int TreeMenu::findNode(char*)
 		{
 			if(tempDepend[0].find(file)!=string::npos)
 			{
-				cout<<"duplicate found "<<endl;
+				//cout<<"duplicate found "<<endl;
 				return true;
 			}
 		}
@@ -513,7 +502,6 @@ int TreeMenu::findNode(char*)
 {
 	int value;
 
-	cout<<"enter the value\n";
 	cin>>value;
 
 	makeMenu();

@@ -110,12 +110,12 @@ void ProjectManager::removeNodesWithAttribute(rapidxml::xml_node<> *node, char* 
 	if (node->first_attribute() != 0)
 	{
 		rapidxml::xml_attribute<> *attr = node->first_attribute(attributeName);
-		cout << "Node has attribute: " << attr->name() << ", with value: " << attr->value() << "\n";
+		//cout << "Node has attribute: " << attr->name() << ", with value: " << attr->value() << "\n";
 		if (strcmp(attributeValue, attr->value()) == 0)
 		{
 			rapidxml::xml_node<> *parent = node->parent();
 			parent->remove_node(node);
-			cout << "node has been removed" << "\n";
+			//cout << "node has been removed" << "\n";
 			removed = true;
 		}
 	}
@@ -259,7 +259,7 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 		if (strcmp(node->first_node("type")->value(),"external") == 0)
 		{
 			//do nothing
-			cout << "found external file: " << node->first_node("name")->value() << "\n";
+			//cout << "found external file: " << node->first_node("name")->value() << "\n";
 		}
 		else if (strcmp(node->first_node("type")->value(),"plaintext") == 0)
 		{
@@ -270,7 +270,7 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 			ProjectManager::findAndReplace(output, "&projName;",projectName);
 			myfile << output;
 			myfile.close();
-			cout << "write to plaintext file: " << newpath << "\n";
+			//cout << "write to plaintext file: " << newpath << "\n";
 		}
 		else if (strcmp(node->first_node("type")->value(),"makefile") == 0)
 		{
@@ -281,7 +281,7 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 			findAndReplace(output, "&projName;",projectName);
 			myfile << output;
 			myfile.close();
-			cout << "write to plaintext file: " << newpath << "\n";
+			//cout << "write to plaintext file: " << newpath << "\n";
 		}
 		else if (strcmp(node->first_node("type")->value(),"codefile") == 0)
 		{
@@ -292,7 +292,7 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 			generateCode(node->first_node("codeblocks")->first_node("codeblock"), myfile);
 			myfile.close();
 			
-			cout << "write to codefile file: " << newpath << "\n";
+			//cout << "write to codefile file: " << newpath << "\n";
 			
 			
 		}
@@ -305,7 +305,7 @@ void ProjectManager::generateRecur(xml_node<> *node, string &path)
 			generateHeader(node->first_node("codeblocks")->first_node("codeblock"), myfile);
 			myfile.close();
 			
-			cout << "write to header file: " << newpath << "\n";
+			//cout << "write to header file: " << newpath << "\n";
 		}
 		
 		if(node->next_sibling() != 0)
@@ -418,12 +418,6 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		float r = atof(userlocation->first_node("roll")->value());
 		char *name = user->first_node("name")->value();
 		
-		cout << "user set x..." << x << "\n" << flush;
-		cout << "user set y..." << y << "\n" << flush;
-		cout << "user set z..." << z << "\n" << flush;
-		cout << "user set h..." << h << "\n" << flush;
-		cout << "user set p..." << p << "\n" << flush;
-		
 		objx.push_back(x);
 		objy.push_back(y+3.3); //for mrbody this should be y+3
 		objz.push_back(z);
@@ -449,11 +443,6 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 		cout << "loading object..." << "\n" << flush;
 		//filename = "";
 		// get xyzhpr and import object
-		cout << "wth: " << objecties->first_node()->value() << "\n" << flush;
-		cout << "wth: " << objecties->first_node("name") << "\n" << flush;
-		cout << "wth: " << objecties->first_node("name")->value() << "\n" << flush;
-		cout << "wth: " << objecties->first_node("resourceName") << "\n" << flush;
-		cout << "wth: " << objecties->first_node("resourceName")->value() << "\n" << flush;
 		
 		string filename = objecties->first_node("resourceName")->value();
 		filenamev.push_back(filename);
@@ -544,11 +533,10 @@ void ProjectManager::loadEnvironment(xml_document<> &doc)
 void ProjectManager::loadProject(string &filename)
 {
 	initialize(filename);
-	//cout << "\n\n\n pname doc: " << doc.first_node()->name() << "\n\n\n" << flush;
-	cout << "\n\n\n pname ctr: " << codeTree.first_node()->name() << "\n\n\n" << flush;
+	//cout << "\n\n\n pname ctr: " << codeTree.first_node()->name() << "\n\n\n" << flush;
 	//load into environment
 	loadEnvironment(codeTree);
-	cout << "finished load environment" << "\n" << flush;
+	//cout << "finished load environment" << "\n" << flush;
 }
 
 /// <summary>
@@ -740,14 +728,12 @@ void ProjectManager::findProjectCallback(vector<string> args)
 	importy.push_back("C:\\obj\\");
 	Import::importCallback(importy);*/
 	
-	string projectFile = projectDir + "\\" + projectName + ".kproj";
-	saveProject(projectFile);
+//	string projectFile = projectDir + "\\" + projectName + ".kproj";
+//	saveProject(projectFile);
 	
 	//cout << codeTree;
 	
-	cout << "generate recur" << "\n" << flush;
-	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
-	cout << "finished generate recur" << "\n" << flush;
+//	generateRecur(codeTree.first_node()->first_node()->first_node(), projectDir); //output code, folder, etc
 	
 	/*
 	vector<string> importy;
@@ -762,26 +748,26 @@ void ProjectManager::findProjectCallback(vector<string> args)
 
 void ProjectManager::loadProjectCallback(vector<string> args)
 {
-	printf("attempting to load project...i hope\n");
-	cout.flush();
+	//printf("attempting to load project...i hope\n");
+	//cout.flush();
 	projectDir = args[0];
-	printf("projectDir=%s\n",projectDir.c_str());
-	cout.flush();
+	//printf("projectDir=%s\n",projectDir.c_str());
+	//cout.flush();
 	unsigned found = projectDir.find_last_of("/\\");
 	string filename = projectDir.substr(found+1);
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'o' && filename[length-3] == 'r' && filename[length-4] == 'p' && filename[length-5] == 'k')
 	{
 		findAndReplace(projectDir, "\\\\"+filename, "");
-		printf("projectDir=%s\n",projectDir.c_str());
-		cout.flush();
+		//printf("projectDir=%s\n",projectDir.c_str());
+		//cout.flush();
 		found = projectDir.find_last_of("/\\");
 		string pname = projectDir.substr(found+1);
 		//remove .kproj
 		
 		//findAndReplace(pname, ".kproj", "");
-		printf("pname=%s\n",pname.c_str());
-		cout.flush();
+		//printf("pname=%s\n",pname.c_str());
+		//cout.flush();
 		setProjectName(pname);
 		
 		string projectFile = projectDir + "\\" + projectName + ".kproj";

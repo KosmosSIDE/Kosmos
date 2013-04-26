@@ -374,7 +374,6 @@ void Object::draw()
 				musicNote.draw();
 			*/
 				
-				//cout << "drawing note" << '\n';
 				glPushMatrix();
 				
 				float scale = 2.f;
@@ -460,7 +459,6 @@ bool Object::processInteraction( arEffector& effector )
 				{
 					_ungrab();
 					_selected = !_selected;
-					cout << "handy\n" << flush;
 					if(_selected)
 					{
 						if(this == rightWiimote)
@@ -613,7 +611,6 @@ bool Object::touch( arEffector& effector )
 {
 	/*if (this == rightWiimote || this == leftWiimote)
 	{
-		cout << "stop touching me\n" << flush;
 		return true;
 	}*/
 

@@ -40,8 +40,7 @@ class Object:public arInteractableThing {
 			// Read OBJ file if provided.
 			if(filename != "") 
 			{
-				cout << "loading " << filename << "..." << '\n';
-				cout.flush();
+				cout << "loading " << filename << "..." << '\n' << flush;
 				if(!loadedOBJ.readOBJ(filename,path)) 
 				{ 
 					cout << "Cound not load OBJ file: " << filename << '\n';

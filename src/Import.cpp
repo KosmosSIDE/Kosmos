@@ -106,7 +106,6 @@ void Import::importCallback(vector<string> args)
 	cout << "fetching dependencies\n" << flush;
 	vector<string> dependencies = TreeMenu::getDependency(topath);
 	
-	cout << "replacing filenames\n" << flush;
 	findAndReplace(frompath, filename.substr(0,filename.size()-4)+".mtl", "");
 	findAndReplace(topath, filename.substr(0,filename.size()-4)+".mtl", "");
 	cout << "iterating through\n" << flush;
