@@ -63,6 +63,7 @@ OBJS := \
   ProjectManager$(OBJ_SUFFIX) \
   ExtendBlock$(OBJ_SUFFIX) \
   VirtualHandBlock$(OBJ_SUFFIX) \
+  SquadBlock$(OBJ_SUFFIX) \
   TreeMenu$(OBJ_SUFFIX)
 
 # It is possible to add flags to the compile line like so. All executables

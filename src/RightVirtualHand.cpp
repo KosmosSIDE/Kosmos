@@ -67,7 +67,7 @@ void RightVirtualHand::detectCollisions(arEffector& self, vector<arInteractable*
 		_selector.setMaxDistance(closestDistance);
 		setInteractionSelector(_selector);
 		
-		if(getOnButton(1) == 1)
+		if(getOnButton(10) == 1)
 		{
 			Object* oby = (Object*)closestObject;
 			oby->_selected = !oby->_selected;

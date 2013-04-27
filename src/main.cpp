@@ -34,6 +34,7 @@
 #include "TreeMenu.h"
 #include "ExtendBlock.h"
 #include "VirtualHandBlock.h"
+#include "SquadBlock.h"
 
 using namespace rapidxml;
 
@@ -226,10 +227,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		templateName = PATH+"Kosmos\\templates\\newproject.kide";
+		/*templateName = PATH+"Kosmos\\templates\\newproject.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);*/
 		
 		
 		
@@ -411,11 +412,12 @@ void preExchange(arMasterSlaveFramework& framework) {
 		headMountedDisplay->_selected = false;
 	}
 	
-	if(rightHand.getOnButton(2))
+	if(rightHand.getOnButton(5))
 	{
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{
+			currentPtr = nodeMenu;
 			Object* oby = ((Object*)(*i));
 			oby->_selected = false;
 		}
@@ -488,7 +490,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		}*/
 	}
 	
-	if (rightHand.getOnButton(10) && (currentTime-handButtonPress)>150)
+	if (rightHand.getOnButton(4) && (currentTime-handButtonPress)>150)
 	{
 		bool tempy = (rightHand.ray==true)?false:true;
 		//cout << "changed hand" << tempy << rightHand.ray << "\n" << flush;
@@ -1037,7 +1039,7 @@ void goForward()
 			virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
 			tabletOn = false;
 		}
-		else if (strcmp(currentPtr->name.c_str(),"Object")==0)
+		else if (strcmp(currentPtr->name.c_str(),"Import")==0)
 		{
 			virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ", OBJECTPATH);
 			tabletOn = false;
@@ -1091,6 +1093,25 @@ void goForward()
 				vector<string> handy;
 				handy.push_back("left");
 				VirtualHandBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
+		}
+		else if (strcmp(currentPtr->name.c_str(),"SQUAD")==0)
+		{
+			if(rightSelected)
+			{
+				cout << "replacing right hand with squad\n" << flush;
+				vector<string> handy;
+				handy.push_back("right");
+				SquadBlock::insertBlock(handy);
+				ProjectManager::save();
+			}
+			else
+			{
+				cout << "replacing left hand with squad\n" << flush;
+				vector<string> handy;
+				handy.push_back("left");
+				SquadBlock::insertBlock(handy);
 				ProjectManager::save();
 			}
 		}

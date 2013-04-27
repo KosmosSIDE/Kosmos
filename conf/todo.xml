@@ -1,0 +1,135 @@
+<option level="1" hasChild="Y">
+				<name>Position</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="Y">
+						<name>Rotation</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>Heading</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>Pitch</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>Roll</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
+					</option>
+					<option level="2" hasChild="Y">
+						<name>Translation</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>TranslateX</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>TranslateY</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+							<option level="3" hasChild="N">
+								<name>TranslateZ</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Sound</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="N">
+						<name>Trigger</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Loop</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Help</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
+					<option level="2" hasChild="Y">
+						<name>New object</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+						<options>
+							<option level="3" hasChild="N">
+								<name>use import->obj</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						</options>
+					</option>
+					<option level="2" hasChild="N">
+						<name>Tutorial</name>
+						<attrList>
+							<attr>4</attr>
+						</attrList>
+					</option>
+				</options>
+			</option>
+					<option level="2" hasChild="N">
+						<name>Snap</name>
+						<attrList>
+							<attr>3</attr>
+						</attrList>
+					</option>
+					
+			
+			
+							<option level="3" hasChild="N">
+								<name>GeneratedProject</name>
+								<attrList>
+									<attr>Color</attr>
+									<attr>Texture</attr>
+								</attrList>
+							</option>
+						

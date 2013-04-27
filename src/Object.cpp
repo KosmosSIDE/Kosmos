@@ -179,7 +179,7 @@ void Object::updateProjectFile()
 	float z = angles[2];
 	
 	//TODO: update the xml
-cout << "obj has moved update xml...\n" << flush;
+//cout << "obj has moved update xml...\n" << flush;
 	
 	ostringstream lines;
 
@@ -196,7 +196,7 @@ cout << "obj has moved update xml...\n" << flush;
 	rapidxml::xml_node<>* mainStartObjectNode = mainStartObjectDoc.first_node();
 	//rapidxml::xml_node<> *mainStartObjectAppendNode = codeTree.clone_node( mainStartObjectNode );
 	rapidxml::xml_node<> *firstCodeBlock = codeTree.first_node("project")->first_node("directory")->first_node("directory")->next_sibling()->next_sibling()->first_node("file")->next_sibling()->next_sibling()->first_node("codeblocks")->first_node("codeblock");
-cout << "find code block..."<<name<<"\n" << flush;
+//cout << "find code block..."<<name<<"\n" << flush;
 	rapidxml::xml_node<> *cloney = firstCodeBlock->next_sibling()->next_sibling()->first_node("functioncode")->first_node();
 	while(cloney->first_attribute("parent") == 0 || strcmp(cloney->first_attribute("parent")->value(),name.c_str()) != 0)
 	{
@@ -204,7 +204,7 @@ cout << "find code block..."<<name<<"\n" << flush;
 	}
 	codeTree.clone_node( mainStartObjectNode, cloney );
 	
-	cout << "added obj to main.start...\n" << flush;
+//	cout << "added obj to main.start...\n" << flush;
 	// prepend to main.start callback
 	/*
 							<code parent="cello">
@@ -227,7 +227,7 @@ cout << "find code block..."<<name<<"\n" << flush;
 		cloney = cloney->next_sibling(); 
 	}
 	codeTree.clone_node( mainGlobalObjectNode, cloney );
-	cout << "added obj to main.global vars...\n" << flush;
+//	cout << "added obj to main.global vars...\n" << flush;
 	// append to main.global vars
 	/*
 						<code parent="cello">

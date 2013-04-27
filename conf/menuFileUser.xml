@@ -53,49 +53,7 @@
 						</options>
 					</option>
 				</options>
-			</option>
-			<option level="1" hasChild="Y">
-				<name>Import</name>
-				<attrList>
-					<attr>1</attr>
-					<attr>2</attr>
-				</attrList>
-				<options>
-					<option level="2" hasChild="N">
-						<name>Object</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-					</option>
-				</options>
-			</option>
-			<option level="1" hasChild="Y">
-				<name>Settings</name>
-				<attrList>
-					<attr>1</attr>
-					<attr>2</attr>
-				</attrList>
-				<options>
-					<option level="2" hasChild="N">
-						<name>Snap</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-					</option>
-					<option level="2" hasChild="N">
-						<name>Turkey</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-					</option>
-					<option level="2" hasChild="N">
-						<name>Pop</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-					</option>
-				</options>
-			</option>
+			</option>	
 		</options>
 	</menu>
 </menus>

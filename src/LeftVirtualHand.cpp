@@ -312,12 +312,12 @@ void LeftVirtualHand::drawTablet() const
 			
 			glRotatef(-90, 1.0,0.0,0.0); //tablet rotation
 			
-			glTranslatef(1.0,1.0,-4); // last one is dist from you
+			glTranslatef(0.0,1.0,-2); // last one is dist from you, first is leftright, middle is updown
 			
 			glPushMatrix();
 			/////////////////new tablet
 			glRotatef(90, 0.0,0.0,1.0); //tablet rotation
-			glRotatef(90, 1.0,0.0,0.0); //tablet rotation
+			glRotatef(99, 1.0,0.0,0.0); //tablet rotation
 			glRotatef(90, 0.0,1.0,0.0); //tablet rotation
 			glScalef(0.5, 0.5, 0.5);
 			glTranslatef(0.0, -3.0, 0.0);
@@ -372,7 +372,8 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 		glScalef(0.001, 0.001, 0.001);
 		glTranslatef(0.0, ypos, 0.0);//1.5);
 		//glPushAttrib(GL_COLOR_BUFFER_BIT);
-		glColor3f(0, 0, 0);			
+		
+		glColor3f(0, 0, 0);
 			int lenghOfQuote = min((int)text.length(),300);
 			glPushMatrix();			
 				//first one is left right text move (-) left (+) right, third number is the text moving closer to the screen as it gets lower
@@ -380,7 +381,7 @@ void LeftVirtualHand::drawText(float ypos, string text, bool selected) const
 				if(selected)
 				{
 					//glPushAttrib(GL_COLOR_BUFFER_BIT);
-					glColor3f(0.9, 0, 0.0);
+					glColor3f(1, .5, .5);
 				}
 				if(lenghOfQuote < 300)
 				{

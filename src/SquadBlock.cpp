@@ -60,7 +60,7 @@ void SquadBlock::addSquadToProfile(bool isRightHand)
 	handNode->first_node("block")->first_node("type")->value(codeTree.allocate_string("squad"));
 }
 
-void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, , bool isRightHand)
+void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* blockName, bool isRightHand)
 {
 	if (node->first_attribute() != 0)
 	{
@@ -87,7 +87,7 @@ void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* block
 	}
 	if (node->next_sibling() != 0)
 	{
-		replaceNodesByAttribute(node->next_sibling(), blockName, , isRightHand);
+		replaceNodesByAttribute(node->next_sibling(), blockName, isRightHand);
 	}
 }
 

@@ -2,51 +2,6 @@
   <menu level="0" hasChild="Y">
 		<options>
 			<option level="1" hasChild="Y">
-				<name>Help</name>
-				<attrList>
-					<attr>1</attr>
-					<attr>2</attr>
-				</attrList>
-				<options>
-					<option level="2" hasChild="Y">
-						<name>New object</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-						<options>
-							<option level="3" hasChild="N">
-								<name>use import->obj</name>
-								<attrList>
-									<attr>Color</attr>
-									<attr>Texture</attr>
-								</attrList>
-							</option>
-						</options>
-					</option>
-					<option level="2" hasChild="N">
-						<name>Tutorial</name>
-						<attrList>
-							<attr>4</attr>
-						</attrList>
-					</option>
-				</options>
-			</option>
-			<option level="1" hasChild="Y">
-				<name>Import</name>
-				<attrList>
-					<attr>1</attr>
-					<attr>2</attr>
-				</attrList>
-				<options>
-					<option level="2" hasChild="N">
-						<name>Object</name>
-						<attrList>
-							<attr>3</attr>
-						</attrList>
-					</option>
-				</options>
-			</option>
-			<option level="1" hasChild="Y">
 				<name>Project</name>
 				<attrList>
 					<attr>1</attr>
@@ -80,18 +35,27 @@
 				</options>
 			</option>
 			<option level="1" hasChild="Y">
-				<name>Settings</name>
+				<name>Import</name>
 				<attrList>
 					<attr>1</attr>
 					<attr>2</attr>
 				</attrList>
 				<options>
 					<option level="2" hasChild="N">
-						<name>Snap</name>
+						<name>Object</name>
 						<attrList>
 							<attr>3</attr>
 						</attrList>
 					</option>
+				</options>
+			</option>
+			<option level="1" hasChild="Y">
+				<name>Settings</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+				<options>
 					<option level="2" hasChild="N">
 						<name>Show Floor</name>
 						<attrList>
@@ -106,13 +70,6 @@
 						<options>
 							<option level="3" hasChild="N">
 								<name>Session</name>
-								<attrList>
-									<attr>Color</attr>
-									<attr>Texture</attr>
-								</attrList>
-							</option>
-							<option level="3" hasChild="N">
-								<name>GeneratedProject</name>
 								<attrList>
 									<attr>Color</attr>
 									<attr>Texture</attr>
