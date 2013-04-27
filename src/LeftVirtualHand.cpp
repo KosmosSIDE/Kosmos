@@ -107,8 +107,7 @@ bool LeftVirtualHand::requestGrab( arInteractable* grabee )
 			}
 		}
 		_grabbedObject = grabee; // ASSIGNMENT
-		//((Object*)grabee)->_selected = !((Object*)grabee)->_selected;
-		//return false;
+		
 		return true;
 	}
 	else
@@ -163,11 +162,12 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			if(ar_pollingInteraction(self, *i))
 			{
 				Object *oby = ((Object*)(*i));
-				oby->_selected = !oby->_selected;
+				oby->selectObject();
+				/*oby->_selected = !oby->_selected;
 				if(oby->_selected && oby!=rightWiimote && oby!=leftWiimote && oby!=userObject && oby!=headMountedDisplay)
 				{
 					currentPtr = objectMenu->forwardPtrs[0];
-				}
+				}*/
 				selectionMode = 0;
 			}
 		}
@@ -232,7 +232,8 @@ void LeftVirtualHand::extend(arEffector& self, vector<arInteractable*>& objects,
 			selectionMode = 0;
 			Object* oby = leftSelectedObjects.front();
 			//set the one object to selected
-			oby->_selected = !oby->_selected;
+			//oby->_selected = !oby->_selected;
+			oby->selectObject();
 			
 		}
 		else
@@ -340,28 +341,22 @@ void LeftVirtualHand::drawTablet() const
 		//let index j be the selected item
 		//foreach menu item in menu
 		//draw text (i*200.0f, string(menuitem),(i==j?true:false))
-		//Changes by Harish Babu Arunachalam
 		if(currentPtr->noOf_FwdPtrs>0)
 		{
+			if (displaySuccess)
+			{
+				glPushMatrix();
+					glTranslatef(-0.3, 0.0, 0.1);
+					drawText(600.0f, "Success",false);
+				glPopMatrix();
+			}
+			
 			for(int i=0;i<currentPtr->noOf_FwdPtrs;i++)
 			{
-				/*if(i==treeIndex)
-				{	
-					drawText(0.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name,true);
-				}
-				else
-				{
-					drawText(0.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name);
-				}*/
 				drawText(400.0f+i*(-200.0f), currentPtr->forwardPtrs[i]->name,(i==treeIndex?true:false));
 			}
 		
 		}
-		//End of changes by Harish Babu Arunachalam
-		//drawText(200.0f, currentPtr->forwardPtrs[0]->name);
-		//drawText(400.0f, currentPtr->forwardPtrs[1]->name);
-		//drawText(-200.0f, currentPtr->forwardPtrs[1]->name);
-		//drawText(200.0f, string("import"));
 	glPopMatrix();
 
 }

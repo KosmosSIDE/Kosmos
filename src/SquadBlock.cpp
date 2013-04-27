@@ -76,7 +76,7 @@ void SquadBlock::replaceNodesByAttribute(rapidxml::xml_node<> *node, char* block
 				{
 					a = a->next_sibling();
 				}
-				rapidxml::xml_node<> *child = codeTree.clone_node( a, node );
+				codeTree.clone_node( a, node );
 			}
 		}
 	}

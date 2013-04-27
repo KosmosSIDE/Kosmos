@@ -48,6 +48,7 @@ class VirtualDirectory
 	
 	private:
 		void openDir(string directory);
+		void onSuccess(string);
 };
 
 #endif

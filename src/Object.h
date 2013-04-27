@@ -110,7 +110,8 @@ class Object:public arInteractableThing {
 		void setScale(float scaleBy) {_length = _length*scaleBy; _height = _height*scaleBy; _width = _width*scaleBy; updateProjectFile();}
 		
 		void deleteObject();
-		void insertObject();
+		void insertObject(float x, float y, float z);
+		void selectObject();
 		
 	private:
 		

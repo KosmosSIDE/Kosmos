@@ -95,7 +95,7 @@ cout<<"delete...done\n"<<flush;
 	
 }
 
-void Object::insertObject()
+void Object::insertObject(float x=0, float y=4, float z=-8)
 {
 
 	unsigned found = filenm.find_last_of("/\\");
@@ -104,7 +104,7 @@ void Object::insertObject()
 	ostringstream lines;
 
 	lines << "<code parent=\"" << name << "\">" << endl;
-	lines << "the" << name << ".setMatrix(ar_translationMatrix(0, 4, -8));" << endl;
+	lines << "the" << name << ".setMatrix(ar_translationMatrix("<<x<<", "<<y<<", "<<z<<"));" << endl;
 	lines << "objects.push_back(&amp;the" << name << ");" << endl;
 	lines << "</code>" << endl;
 	std::string mainStartObjectStr = lines.str();
@@ -143,8 +143,11 @@ Object theCello(3, 0.5, 0.5, 0.5, &quot;cello.obj&quot;);
 						</code>
 	*/
 	
-	std::string src2 = "<object><type>OBJ</type><name>"+name+"</name><resourceName>"+filename+"</resourceName>"
-		"<x>0</x><y>4</y><z>-8</z><heading>0</heading><pitch>0</pitch><roll>0</roll><scale>1</scale></object>";
+	ostringstream buffie;
+
+	buffie << "<object><type>OBJ</type><name>"<<name<<"</name><resourceName>"<<filename<<"</resourceName>";
+	buffie << "<x>"<<x<<"</x><y>"<<y<<"</y><z>"<<z<<"</z><heading>0</heading><pitch>0</pitch><roll>0</roll><scale>1</scale></object>";
+	std::string src2 = buffie.str();
 	std::vector<char> data(src2.begin(), src2.end());
 	data.push_back( '\0' );// make it zero-terminated as per RapidXml's docs
 	rapidxml::xml_document<> profiledoc;
@@ -371,6 +374,77 @@ void Object::draw()
 	glPopMatrix();
 }
 
+
+void Object::selectObject()
+{
+	_selected = !_selected;
+	if(_selected)
+	{
+		if(this==rightWiimote||this==leftWiimote||this==userObject||this==headMountedDisplay)
+		{
+			vector<arInteractable*>::iterator i;
+			for(i=objects.begin(); i != objects.end(); ++i) 
+			{
+				Object* oby = ((Object*)(*i));
+				if(oby!=this)
+				{
+					oby->_selected = false;
+				}
+			}
+
+			if(this == rightWiimote)
+			{
+				rightSelected = true;
+				currentPtr = wiiNodeMenu->forwardPtrs[0];
+			}
+			else if(this == leftWiimote)
+			{
+				rightSelected = false;
+				currentPtr = wiiNodeMenu->forwardPtrs[0];
+			}
+			else if(this == userObject)
+			{
+				currentPtr = userMenu->forwardPtrs[0];
+			}
+			else if(this == headMountedDisplay)
+			{
+				currentPtr = hmdMenu->forwardPtrs[0];
+			}
+		}
+		else
+		{
+			currentPtr = objectMenu->forwardPtrs[0];
+			leftWiimote->_selected=false;
+			rightWiimote->_selected=false;
+			userObject->_selected = false;
+			headMountedDisplay->_selected = false;
+		}
+	}
+	else
+	{
+		if(this==rightWiimote||this==leftWiimote||this==userObject||this==headMountedDisplay)
+		{
+			currentPtr = nodeMenu;
+		}
+		else
+		{
+			currentPtr = nodeMenu;
+			vector<arInteractable*>::iterator i;
+			for(i=objects.begin(); i != objects.end(); ++i) 
+			{
+				Object* oby = ((Object*)(*i));
+				if(oby!=this && oby->_selected)
+				{
+					currentPtr = objectMenu->forwardPtrs[0];
+				}
+			}
+		}
+	}
+}
+
+
+
+
 // Main method. Let the
 // effector manipulate the interactable. If not
 // already touching the object, touch it. If we try to
@@ -429,55 +503,7 @@ bool Object::processInteraction( arEffector& effector )
 				if (grabbed())
 				{
 					_ungrab();
-					_selected = !_selected;
-					if(_selected)
-					{
-						if(this == rightWiimote)
-						{
-							rightSelected = true;
-							leftWiimote->_selected=false;
-							userObject->_selected = false;
-							headMountedDisplay->_selected = false;
-							currentPtr = wiiNodeMenu->forwardPtrs[0];
-							cout << "hi :3 changing menu?\n" << flush;
-						}
-						else if(this == leftWiimote)
-						{
-							rightWiimote->_selected=false;
-							userObject->_selected = false;
-							headMountedDisplay->_selected = false;
-							rightSelected = false;
-							currentPtr = wiiNodeMenu->forwardPtrs[0];
-						}
-						else if(this == userObject)
-						{
-							leftWiimote->_selected=false;
-							rightWiimote->_selected=false;
-							headMountedDisplay->_selected = false;
-							currentPtr = userMenu->forwardPtrs[0];
-						}
-						else if(this == headMountedDisplay)
-						{
-							leftWiimote->_selected=false;
-							rightWiimote->_selected=false;
-							userObject->_selected = false;
-							currentPtr = hmdMenu->forwardPtrs[0];
-						}
-						else
-						{
-							currentPtr = nodeMenu;
-							leftWiimote->_selected=false;
-							rightWiimote->_selected=false;
-							userObject->_selected = false;
-							headMountedDisplay->_selected = false;
-						}
-					}
-					else
-					{
-						currentPtr = nodeMenu;
-						leftWiimote->_selected=false;
-						rightWiimote->_selected=false;
-					}
+					this->selectObject();
 				}
 			} 
 			else 
@@ -565,8 +591,10 @@ bool Object::processInteraction( arEffector& effector )
 				if (effector.requestGrab( this )) 
 				{
 					_grabEffector = &effector;  // ASSIGNMENT
-						rightWiimote->_selected = false;
-						leftWiimote->_selected = false;
+					leftWiimote->_selected=false;
+					rightWiimote->_selected=false;
+					userObject->_selected = false;
+					headMountedDisplay->_selected = false;
 				} 
 				else 
 				{

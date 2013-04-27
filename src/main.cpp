@@ -50,6 +50,7 @@ bool sandboxed = false;
 bool rightSelected = false;
 bool showFloor = true;
 bool scalingActive = false;
+bool displaySuccess = false;
 float distBetweenHands = 0.0;
 
 bool tabletOn = true;
@@ -102,6 +103,7 @@ static double pressedMenu = 0.0;
 const double thresholdMenu = 0.0;//250.0;
 static double dirButtonPress = 0.0;
 static double handButtonPress = 0.0;
+static double timeCommand = 0.0;
 
 
 list<Object*> leftSelectedObjects;
@@ -227,10 +229,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		/*templateName = PATH+"Kosmos\\templates\\newproject.kide";
+		templateName = PATH+"Kosmos\\templates\\newproject.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);*/
+		ProjectManager::findProjectCallback(projman);
 		
 		
 		
@@ -330,6 +332,16 @@ void preExchange(arMasterSlaveFramework& framework) {
 		}
 	}
 	
+	if(displaySuccess && timeCommand == 0.0)
+	{
+		timeCommand = currentTimeGlobal;
+	}
+	else if((displaySuccess && (currentTimeGlobal-timeCommand > 5000)) || anyButton)
+	{
+		displaySuccess=false;
+		timeCommand = 0.0;
+	}
+	
 	if( scalingActive && anyButton)
 	{
 		scalingActive = false;
@@ -366,38 +378,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 	// in milliseconds
 	double currentTime = framework.getTime();
 
-	/*if((!virtualdirectory.findingFile) && rightHand.getOnButton(0) && (currentTime-pressedImport)>1000)
-	{
-		pressedImport = currentTime;
-	//Harish Babu Arunachalam
-	//call back navigation function for TreeMenu
-		goBack();
-	//	virtualdirectory.startBrowse("import", &Import::importCallback, "Select obj to import: ");
-	}
-	else if((!virtualdirectory.findingFile) && rightHand.getOnButton(1) && (currentTime-pressedImport)>1000)
-	{
-		pressedImport = currentTime;
-	//Harish Babu Arunachalam
-	//call forward navigation function for TreeMenu
-		goForward();
-		//virtualdirectory.startBrowse("template", &ProjectManager::findTemplateCallback,"Select template file: ", TEMPLATEPATH);
-	}
-	else if( rightHand.getOnButton(2) && (currentTime-pressedImport)>1000)
-	{
-	//Harish Babu Arunachalam
-	//call upward navigation function for TreeMenu
-		pressedImport = currentTime;
-		//currentPtr->printValues(currentPtr);
-		goUp();
-				
-	}
-	else if(rightHand.getOnButton(3)&&(currentTime-pressedImport)>1000)
-	{
-	//Harish Babu Arunachalam
-	//call downward navigation function for TreeMenu
-		pressedImport = currentTime;
-		goDown();
-	}*/
 	if(leftHand.getOnButton(5))
 	{
 		tabletOn = !tabletOn;
@@ -417,10 +397,11 @@ void preExchange(arMasterSlaveFramework& framework) {
 		vector<arInteractable*>::iterator i;
 		for(i=objects.begin(); i != objects.end(); ++i) 
 		{
-			currentPtr = nodeMenu;
 			Object* oby = ((Object*)(*i));
 			oby->_selected = false;
 		}
+		currentPtr = nodeMenu;
+		virtualdirectory.findingFile = false;
 	}
 	
 	
@@ -483,11 +464,6 @@ void preExchange(arMasterSlaveFramework& framework) {
 			
 			dirButtonPress = currentTime;
 		}
-		/*else if (rightHand.getOnButton(5))
-		{
-			pressedImport = currentTime;
-			virtualdirectory.findingFile = false;
-		}*/
 	}
 	
 	if (rightHand.getOnButton(4) && (currentTime-handButtonPress)>150)
@@ -1135,17 +1111,6 @@ void goForward()
 		}
 		else if (strcmp(currentPtr->name.c_str(),"Delete")==0)
 		{
-			/*
-			vector< string >::it = curFiles.begin();
-			while(it != curFiles.end()) 
-			{
-				if(aConditionIsMet) 
-				{
-					it = curFiles.erase(it);
-				}
-				else ++it;
-			}
-			*/
 			vector<Object*> toDelete;
 		
 			vector<arInteractable*>::iterator i;
@@ -1168,6 +1133,18 @@ void goForward()
 				if (position != objects.end()) // == vector.end() means the element was not found
 				{
 					objects.erase(position);
+				}
+			}
+		}
+		else if (strcmp(currentPtr->name.c_str(),"Disable move")==0)
+		{
+			vector<arInteractable*>::iterator i;
+			for(i=objects.begin(); i != objects.end(); ++i) 
+			{
+				Object* oby = ((Object*)(*i));
+				if(oby->_selected)
+				{
+					oby->enable(!oby->enabled());
 				}
 			}
 		}
@@ -1290,7 +1267,9 @@ void goForward()
 		}
 		if(leaf)
 		{
-			currentPtr = nodeMenu;
+			//currentPtr = nodeMenu;
+			currentPtr = currentPtr->backwardPtr;
+			displaySuccess = true;
 		}
 		treeIndex = 0;
 	}
@@ -1301,12 +1280,13 @@ void goBack()
 {
 	//Check if the backward navigation has reached the root node - check for currentPtr level.
 	treeIndex=0;
-		if(currentPtr->level==-1)
+		if(currentPtr->level==0)//-1)
 			return;
 		else
 		{
-			currentPtr = parentMenu;		//current pointer is the parent pointer
-			parentMenu = parentMenu->backwardPtr; // parent pointer is parent's backward pointer
+			//currentPtr = parentMenu;		//current pointer is the parent pointer
+			//parentMenu = parentMenu->backwardPtr; // parent pointer is parent's backward pointer
+			currentPtr = currentPtr->backwardPtr;
 			curTreeLevel = currentPtr->level; //current tree level is one less
 		}
 	return;

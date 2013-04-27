@@ -66,6 +66,21 @@ void VirtualDirectory::downPressed()
 	cout.flush();
 }
 
+void VirtualDirectory::onSuccess(string chosenFile)
+{
+	currentIndex = 0;
+	vector<string> filenamev;
+	filenamev.push_back(chosenFile);
+	filenamev.push_back(dirName);
+	printf("%s\n%s\n",chosenFile.c_str(),dirName.c_str());
+	cout.flush();
+	findingFile = false;
+	displaySuccess = true;
+	tabletOn = true;
+	sandboxed = false;
+	cf.call(callback,filenamev);
+}
+
 ///choose a file or directory, if a directory is chosen then move into it
 void VirtualDirectory::selectFile()
 {
@@ -97,16 +112,7 @@ void VirtualDirectory::selectFile()
 		else
 		{
 			//printf("\t FILE\n");
-			currentIndex = 0;
-			vector<string> filenamev;
-			filenamev.push_back(chosenFile);
-			filenamev.push_back(dirName);
-			printf("%s\n%s\n",chosenFile.c_str(),dirName.c_str());
-			cout.flush();
-			findingFile = false;
-			sandboxed = false;
-			tabletOn = true;
-			cf.call(callback,filenamev);
+			onSuccess(chosenFile);
 		}
 	}
 }
@@ -133,27 +139,11 @@ void VirtualDirectory::selectDirectory()
 	{
 		if(S_ISDIR(st.st_mode))
 		{
-			//printf("\t DIRECTORY\n");
-			currentIndex = 0;
-			vector<string> filenamev;
-			filenamev.push_back(chosenFile);
-			filenamev.push_back(dirName);
-			findingFile = false;
-			sandboxed = false;
-			tabletOn = true;
-			cf.call(callback,filenamev);
+			onSuccess(chosenFile);
 		}
 		else
 		{
-			//printf("\t FILE\n");
-			currentIndex = 0;
-			vector<string> filenamev;
-			filenamev.push_back(chosenFile);
-			filenamev.push_back(dirName);
-			findingFile = false;
-			sandboxed = false;
-			tabletOn = true;
-			cf.call(callback,filenamev);
+			onSuccess(chosenFile);
 		}
 	}
 }

@@ -18,6 +18,9 @@ extern Object* leftWiimote;
 extern Object* headMountedDisplay;
 extern Object* userObject;
 
+
+
+
 extern VirtualDirectory virtualdirectory;
 
 #endif

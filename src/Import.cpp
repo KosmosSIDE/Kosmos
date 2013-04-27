@@ -30,14 +30,14 @@ int inline Import::findAndReplace(string& source, const string& find, const stri
 ///import obj from filename and given path...the filename is the full path but
 /// we need path for the mtl, i guess we could parse from filename but this is
 /// how i chose to do it
-Object* Import::import(const string &filename,const string &path = "data/obj")
+Object* Import::import(const string &filename,const string &path = "data/obj", float x=0, float y=4, float z=-8)
 {
 	int length = filename.length();
 	if (filename[length-1] == 'j' && filename[length-2] == 'b' && filename[length-3] == 'o')
 	{
 		Object* newObj = new Object(2,1,1,1,filename,path);
 		newObj->normalize();
-		newObj->setMatrix(ar_translationMatrix(0, 4, -8)); // initial position
+		newObj->setMatrix(ar_translationMatrix(x, y, z)); // initial position
 		objects.push_back(newObj);
 		
 		return newObj;
@@ -66,6 +66,11 @@ Object* Import::import(const string &filename, float x, float y, float z, float 
 ///callback for use via the callback class
 void Import::importCallback(vector<string> args)
 {
+	float xpos = rightHand.getX();
+	float ypos = rightHand.getY();
+	float zpos = rightHand.getZ()+5;
+
+
 	int length = args[0].length();
 	if (args[0][length-1] == 'j' && args[0][length-2] == 'b' && args[0][length-3] == 'o')
 	{
@@ -79,13 +84,13 @@ void Import::importCallback(vector<string> args)
 	
 	if(args.size() > 1)
 	{
-		Object* oby = import(args[0],args[1]);
-		oby->insertObject();
+		Object* oby = import(args[0],args[1],xpos,ypos,zpos);
+		oby->insertObject(xpos,ypos,zpos);
 	}
 	else
 	{
 		Object* oby = import(args[0]);
-		oby->insertObject();
+		oby->insertObject(xpos,ypos,zpos);
 	}
 	
 	

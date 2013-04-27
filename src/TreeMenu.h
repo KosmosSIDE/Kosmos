@@ -51,7 +51,7 @@ public:
 	TreeMenu* createNode();
 	TreeMenu* deleteNode();
 	int findNode(TreeMenu*);
-	TreeMenu* createMenu(xml_node<> *);
+	TreeMenu* createMenu(xml_node<> *, TreeMenu*);
 	int getIntValue(char*);
 	TreeMenu* populateAttr(TreeMenu* , xml_node<>*);
 	static void makeMenu(TreeMenu *toSet, string fileName);

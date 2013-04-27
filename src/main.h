@@ -39,6 +39,9 @@ extern bool tabletOn;
 extern bool sandboxed;
 extern bool rightSelected;
 extern bool showFloor;
+extern bool displaySuccess;
+
+
 
 extern int numObjects;
 

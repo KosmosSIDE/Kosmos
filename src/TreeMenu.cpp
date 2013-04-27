@@ -133,14 +133,14 @@ int TreeMenu::findNode(char*)
 
 
 	/*method to construct the navigation menu node*/
-	TreeMenu* TreeMenu::createMenu(xml_node<> *xmlNode)
+	TreeMenu* TreeMenu::createMenu(xml_node<> *xmlNode,TreeMenu *parent)
 	{
 		if(xmlNode == NULL)
 		{
 			return NULL;
 		}
 		//Declare treemenu nodes, xml document nodes
-		TreeMenu *node,*tempNode;
+		TreeMenu *node;
 		xml_node <> *tempXmlNode;
 		
 		//declare level, child information, name of the xml Node
@@ -164,8 +164,7 @@ int TreeMenu::findNode(char*)
 		int ptrCount = 0;
 		//initialize TreeMenu nodes
 		node = new TreeMenu();
-		tempNode = new TreeMenu();
-		node->backwardPtr = bkdPtr;
+		node->backwardPtr = parent;//bkdPtr;
 
 		//set the value of the node to Menu if the node is menu
 		if(strcmp(xmlNode->name(),"menu")==0)
@@ -179,7 +178,6 @@ int TreeMenu::findNode(char*)
 			xmlAtt = xmlNode->first_attribute("level");
 			level = (xmlAtt->value());
 			//level = level;
-		//	cout<<"level inside createMenu "<<level<<endl;
 			xmlAtt = xmlNode->first_attribute("hasChild");
 			//Check if the node has child attributes
 			hasChild = (xmlAtt->value());
@@ -206,8 +204,8 @@ int TreeMenu::findNode(char*)
 			//tempOptionNode = tempXmlNode->first_node("option");
 			TreeMenu *tempPtr;
 			bkdPtr = node;
-			//call createMenu method
-			tempPtr = createMenu(tempXmlNode);
+			
+			tempPtr = createMenu(tempXmlNode, node);
 			if(tempPtr!=NULL)
 			{
 				//Assign the children nodes to forward pointer
@@ -223,7 +221,7 @@ int TreeMenu::findNode(char*)
 			while((tempXmlNode!=xmlNode->first_node()->last_node())&&(tempXmlNode!=NULL))
 			{
 				tempXmlNode = tempXmlNode->next_sibling();
-				tempPtr = createMenu(tempXmlNode);
+				tempPtr = createMenu(tempXmlNode, node);
 				if(tempPtr!=NULL)
 				{
 					node->forwardPtrs[ptrCount++] =	tempPtr;
@@ -234,7 +232,7 @@ int TreeMenu::findNode(char*)
 		else if (strcmp(hasChild,"0")==0)
 		{
 			xmlNode = xmlNode->first_node();
-			node->forwardPtrs[ptrCount++] = createMenu(xmlNode);
+			node->forwardPtrs[ptrCount++] = createMenu(xmlNode, node);
 		}
 		node->noOf_FwdPtrs = ptrCount;
 		//cout<<" node return Name is "<<node->name<<endl;
@@ -364,7 +362,7 @@ int TreeMenu::findNode(char*)
 		bkdPtr = rootNode;
 		rootNode->backwardPtr = rootNode;
 		//Assign the forward pointer of root node to the sub nodes
-		rootNode->forwardPtrs[rootNode->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
+		rootNode->forwardPtrs[rootNode->noOf_FwdPtrs++] = createMenu(tempNode->first_node(), rootNode);
 		//Assign the name of the root node of tree menu to name of the node
 		rootNode->name=tempNode->name();
 		//cout<<" name of the root node is "<<rootNode->name<<endl;
@@ -389,9 +387,10 @@ int TreeMenu::findNode(char*)
 		userMenu->backwardPtr = NULL;
 		//Get the node 'MENUS' from the XML file
 		tempNode = xml.first_node("menus");
+		bkdPtr = userMenu;
 		userMenu->backwardPtr = userMenu;
 		//Assign the forward pointer of root node to the sub nodes
-		userMenu->forwardPtrs[userMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
+		userMenu->forwardPtrs[userMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node(), userMenu);
 		//Assign the name of the root node of tree menu to name of the node
 		userMenu->name=tempNode->name();
 		//cout<<" name of the root node is "<<userMenu->name<<endl;
@@ -414,9 +413,10 @@ int TreeMenu::findNode(char*)
 		wiiNodeMenu->backwardPtr = NULL;
 		//Get the node 'MENUS' from the XML file
 		tempNode = xml.first_node("menus");
+		bkdPtr = wiiNodeMenu;
 		wiiNodeMenu->backwardPtr = wiiNodeMenu;
 		//Assign the forward pointer of root node to the sub nodes
-		wiiNodeMenu->forwardPtrs[wiiNodeMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node());
+		wiiNodeMenu->forwardPtrs[wiiNodeMenu->noOf_FwdPtrs++] = createMenu(tempNode->first_node(), wiiNodeMenu);
 		//Assign the name of the root node of tree menu to name of the node
 		wiiNodeMenu->name=tempNode->name();
 		//cout<<" name of the root node is "<<wiiNodeMenu->name<<endl;
@@ -445,7 +445,7 @@ int TreeMenu::findNode(char*)
 		bkdPtr = toSet;
 		toSet->backwardPtr = toSet;
 		//Assign the forward pointer of root node to the sub nodes
-		toSet->forwardPtrs[toSet->noOf_FwdPtrs++] = toSet->createMenu(tempNode->first_node());
+		toSet->forwardPtrs[toSet->noOf_FwdPtrs++] = toSet->createMenu(tempNode->first_node(), toSet);
 		
 		//Assign the name of the root node of tree menu to name of the node
 		toSet->name=tempNode->name();

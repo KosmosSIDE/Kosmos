@@ -15,6 +15,13 @@
 					<attr>2</attr>
 				</attrList>
 			</option>
+			<option level="1" hasChild="N">
+				<name>Disable move</name>
+				<attrList>
+					<attr>1</attr>
+					<attr>2</attr>
+				</attrList>
+			</option>
 		</options>
 	</menu>
 </menus>
