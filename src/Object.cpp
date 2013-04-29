@@ -97,10 +97,11 @@ cout<<"delete...done\n"<<flush;
 
 void Object::insertObject(float x=0, float y=4, float z=-8)
 {
+	cout << "filenm = "<<filenm<<"\n"<<flush;
 
 	unsigned found = filenm.find_last_of("/\\");
 	string filename = filenm.substr(found+1);
-	
+	cout << "filename = "<<filename<<"\n"<<flush;
 	ostringstream lines;
 
 	lines << "<code parent=\"" << name << "\">" << endl;

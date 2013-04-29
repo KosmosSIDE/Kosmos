@@ -229,10 +229,10 @@ bool start(arMasterSlaveFramework& framework, arSZGClient& client )
 	
 	
 	
-		templateName = PATH+"Kosmos\\templates\\newproject.kide";
+		/*templateName = PATH+"Kosmos\\templates\\newproject.kide";
 		vector<string> projman;
 		projman.push_back(SANDBOXPATH+"newproj");
-		ProjectManager::findProjectCallback(projman);
+		ProjectManager::findProjectCallback(projman);*/
 		
 		
 		
@@ -386,10 +386,13 @@ void preExchange(arMasterSlaveFramework& framework) {
 	if(leftHand.getOnButton(10))
 	{
 		currentPtr = nodeMenu;
-		leftWiimote->_selected = false;
-		rightWiimote->_selected = false;
-		userObject->_selected = false;
-		headMountedDisplay->_selected = false;
+		if(leftWiimote&&rightWiimote&&userObject&&headMountedDisplay)
+		{
+			leftWiimote->_selected = false;
+			rightWiimote->_selected = false;
+			userObject->_selected = false;
+			headMountedDisplay->_selected = false;
+		}
 	}
 	
 	if(rightHand.getOnButton(5))
@@ -675,7 +678,7 @@ void preExchange(arMasterSlaveFramework& framework) {
 		//  else redistribute objects
 	}
 	
-	button1 = leftHand.getButton(1);
+	button1 = leftHand.getButton(4);
 
 	if(button1) //button is down
 	{

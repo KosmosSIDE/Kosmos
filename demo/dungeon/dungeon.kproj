@@ -1,0 +1,2015 @@
+<project>
+	<directory>
+		<name>&amp;projName;</name>
+		<directory>
+			<name>build</name>
+			<directory>
+				<name>makefiles</name>
+				<file>
+					<name>Makefile.my_app</name>
+					<type>makefile</type>
+					<text>
+# Source files are located relative to the final Makefile location
+# this line needs to come *before* the Makefile.defines inclusion.
+# The ../../src is correct for the standard portable application
+# development directory tree (which lets you develop for all supported
+# szg platforms simultaneously). Don&apos;t change this line.
+VPATH=../../src
+
+# this includes all the definitions. The Syzygy SDK has a file,
+# Makefile.vars, that defines the specific compilation and linking
+# methods for each platform in a modular fashion. This line is one
+# reason you must define $SZGHOME to use the Syzygy SDK.
+# Don&apos;t change this line.
+include $(SZGHOME)/build/make/Makefile.vars
+
+
+# Just leave this here until we figure out a nicer way to do this (sigh). Needed for
+# linking arTeapotGraphicsPlugin.
+POST_LINK_LINE = $(LIB_SEARCH_FLAGS) $(SZG_LIBRARY_LIBS) $(SZG_OPTIONAL_LIBS) $(SZG_LINK_LIBS)
+
+
+# ALL is the default target that gets built when you just type
+# &apos;make&apos;.
+# Every executable file should be listed below, seperated by spaces.
+# NOTE: you must use the $(EXE) suffix for compatibility between Unix
+# and Win32.
+ALL := &amp;projName;$(EXE)
+
+
+# Makefile.rules defines standard target rules like &quot;clean&quot;
+# or &quot;create-install&quot;.  This file is seperated from Makefile.vars
+# because make is fussy about rules&apos; order. Don&apos;t change this line.
+include $(SZGHOME)/build/make/Makefile.rules
+
+# Here should go any object files you need compiled to link with your
+# executable. For example, suppose that the &apos;skeleton&apos; program,
+# besides the main source file &apos;skeleton.cpp&apos;, also depended on files
+# called &apos;skull.cpp&apos; and &apos;ribs.cpp&apos;. Then we would list the
+# _object_ files that should be created from those files as follows:
+#
+# OBJS := skull$(OBJ_SUFFIX) ribs$(OBJ_SUFFIX)
+#
+# Further down, this tells make that these object files need to be
+# linked together with skeleton.cpp to build the skeleton program.
+# Make knows how to build an object file from a cpp file (it gets
+# told that in Makefile.vars), so it does that automatically.
+#
+# The format foo$(OBJ_SUFFIX) ensures portability; the appropriate
+# suffix gets inserted on each platform, .obj on Windows and .o
+# on Unix.
+# 
+# If you have no intermediate objects, it is OK for this to be blank, i.e.
+#
+# OBJS := 
+#
+OBJS := \
+  Object$(OBJ_SUFFIX) \
+  LeftVirtualHand$(OBJ_SUFFIX) \
+  RightVirtualHand$(OBJ_SUFFIX)
+
+# It is possible to add flags to the compile line like so. All executables
+# and objects will be compiled with this flag.
+# COMPILE_FLAGS += -DMY_COMPILE_FLAG
+
+# Include directories (i.e. containing additional header files)
+# can be added like so:
+# SZG_INCLUDE += \
+#	-I$(MY_INCLUDE_DIRECTORY_1)
+#	-I$(MY_INCLUDE_DIRECTORY_2)
+
+# Additional libraries can be added like so:
+# SZG_OPTIONAL_LIBS += $(MY_NEW_LIBRARY_1) $(MY_NEW_LIBRARY_2)
+
+# The lines below tell make how to build each program. There must
+# be one for each target listed as part of the ALL target.
+#
+# my_app$(EXE): my_app$(OBJ_SUFFIX) $(OBJS) $(SZG_LIBRARY_DEPS)
+#	$(SZG_USR_FIRST) my_app$(OBJ_SUFFIX) $(OBJS) $(SZG_USR_SECOND)
+#	$(COPY)
+#
+# Note that # the main source file doesn&apos;t necessarily have to have
+# the same # name as the executable; if not change the
+# my_app$(OBJ_SUFFIX) # instances appropriately.
+#
+# Note also that if you have some object files that are not
+# common to both programs, you could create separate OBJ lists,
+# e.g. OBJS1 and OBJS2, above.
+#
+# The variable $(SZG_USR_FIRST) contains the linker name, linker
+# options and link libraries, if the platform is Windows. If the
+# platform is Unix-based, it does not contain the link libraries,
+# which instead appear in $(SZG_USR_SECOND), which is blank in the
+# Windows case.  The $(COPY) line copies the built executable into
+# your $SZGBIN directory where all of your Syzygy-related executables
+# are stored.
+#	
+
+&amp;projName;$(EXE): main$(OBJ_SUFFIX) $(OBJS) $(SZG_LIBRARY_DEPS)
+	$(SZG_USR_FIRST) main$(OBJ_SUFFIX) $(OBJS) $(SZG_USR_SECOND)
+	$(COPY)
+					</text>
+				</file>
+			</directory>
+			<directory>
+				<name>win32</name>
+				<file>
+					<name>Makefile</name>
+					<type>plaintext</type>
+					<text>
+MACHINE=WIN32
+include ../makefiles/Makefile.my_app
+					</text>
+				</file>
+			</directory>
+		</directory>
+		<directory>
+			<name>data</name>
+			<directory>
+				<name>obj</name>
+				<file>
+					<name>cello.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>cello.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>cellotexture1.jpg</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>handy.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>handy.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MusicNote.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MusicNote.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>piano.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>piano.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>staff.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>staff.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>violin.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>violin.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>violin_texture.jpg</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrDungeonRoom.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrDungeonRoom.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>stoneFloor.jpg</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrBookshelf.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrBookshelf.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrCreepyBook.obj</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+				<file>
+					<name>MrCreepyBook.mtl</name>
+					<type>external</type>
+					<locationType>filesystem</locationType>
+				</file>
+			</directory>
+			<directory>
+				<name>sounds</name>
+			</directory>
+		</directory>
+		<directory>
+			<name>src</name>
+			<file>
+				<name>LeftVirtualHand.cpp</name>
+				<type>codefile</type>
+				<codeblocks>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;LeftVirtualHand.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code/>
+					</codeblock>
+					<codeblock>
+						<name>justSomeFunctions</name>
+						<type>code</type>
+						<code>
+/* dotProd, dif and magn copied from http://stackoverflow.com/questions/10768142/verify-if-point-is-inside-a-cone-in-3d-space
+ credit to: furikuretsu
+*/
+static float dotProd(float a[], float b[])
+{
+    return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+}
+/*
+static float* dif(float a[], float b[])
+{
+	float retval [] = {a[0]-b[0],a[1]-b[1],a[2]-b[2]};
+    return retval;
+}
+*/
+static float magn(float a[])
+{
+    return (float) (sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]));
+}
+
+/**
+ * @param x coordinates of point to be tested 
+ * @param t coordinates of apex point of cone
+ * @param b coordinates of center of basement circle
+ * @param aperture in radians
+ 
+ Code copied from http://stackoverflow.com/questions/10768142/verify-if-point-is-inside-a-cone-in-3d-space
+ credit to: furikuretsu
+ 
+ altered to suit this purpose
+ 
+ */
+static bool isLyingInCone(float x[], float t[], float b[], float radius, float height)
+{
+	float aperture = 2.f * atan(radius/height);
+
+    // This is for our convenience
+    float halfAperture = aperture/2.f;
+
+    // Vector pointing to X point from apex
+    float apexToXVect[] = {t[0]-x[0],t[1]-x[1],t[2]-x[2]};
+
+    // Vector pointing from apex to circle-center point.
+    float axisVect[] = {t[0]-b[0],t[1]-b[1],t[2]-b[2]};
+
+    // X is lying in cone only if it&apos;s lying in 
+    // infinite version of its cone -- that is, 
+    // not limited by &quot;round basement&quot;.
+    // We&apos;ll use dotProd() to 
+    // determine angle between apexToXVect and axis.
+    
+	bool isInInfiniteCone = dotProd(apexToXVect,axisVect)/magn(apexToXVect)/magn(axisVect) &gt; cos(halfAperture);
+	
+	// We can safely compare cos() of angles 
+    // between vectors instead of bare angles.
+
+
+    return isInInfiniteCone;
+}
+						</code>
+					</codeblock>
+					<codeblock parent="lextend" type="preexchangeMain">
+						<name>extend</name>
+						<type>function</type>
+						<documentation>
+// Left hand effector&apos;s extend function for multiple objects.
+// Purpose:
+//		- Extends effector until it touches an object or reaches the maximum length.						
+						</documentation>
+						<declaration>
+void LeftVirtualHand::extend(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects, float maxLength)
+						</declaration>
+						<functioncode>
+							<code>
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+
+	// Reset tip to 0.0 ft. length.
+	_currentLength = 0.0;
+	setTipOffset(arVector3(0, 0, -_currentLength));
+
+	list&lt;arInteractable*&gt; objectlist;
+	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
+	
+	// Check if the maximum length has been reached or an object has been touched.
+	while(_currentLength &lt; maxLength &amp;&amp; !ar_pollingInteraction(self, objectlist)) {
+		// If not, increase tip length by interaction distance.
+		_currentLength += _interactionDistance;
+		setTipOffset(arVector3(0, 0, -_currentLength));
+	}
+	if(selectionMode == 3 &amp;&amp; ar_pollingInteraction(self, objectlist)) //if it interacted
+	{
+		//cout &lt;&lt; &quot;hit an object&quot; &lt;&lt; &apos;\n&apos;;
+		//find out which object it interacted with
+		vector&lt;arInteractable*&gt;::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			if(ar_pollingInteraction(self, *i))
+			{
+				Object *oby = ((Object*)(*i));
+				oby-&gt;_selected = !oby-&gt;_selected;
+				selectionMode = 0;
+			}
+		}
+		selectionMode = 0;
+	}
+	else if(selectionMode==3)
+	{
+		selectionMode = 0;
+	}
+	else if(selectionMode == 1)
+	{
+				
+		leftSelectedObjects.clear();
+		upSelectedObjects.clear();
+		rightSelectedObjects.clear();
+		downSelectedObjects.clear();
+		int numObjects = 0;
+	
+		vector&lt;arInteractable*&gt;::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			// get object location
+			Object* oby = ((Object*)(*i));
+			arMatrix4 objLoc = oby-&gt;getMatrix();
+			// if object is in cone, then add to selected list
+			float x[] = {objLoc[12], objLoc[13], objLoc[14]};
+			float height = getLength();
+			float radius = height/2.f;
+			arMatrix4 tp = getBaseMatrix();
+			arMatrix4 bm = getMatrix();
+			float t[] = {tp[12],tp[13],tp[14]};
+			float b[] = {bm[12],bm[13],bm[14]};
+			
+			if(isLyingInCone(x, t, b, radius, height))
+			{
+				if((numObjects) % 4 == 0)
+				{
+					leftSelectedObjects.push_back(oby);
+				}
+				else if(numObjects % 4 == 1)
+				{
+					upSelectedObjects.push_back(oby);
+				}
+				else if(numObjects % 4 == 2)
+				{
+					rightSelectedObjects.push_back(oby);
+				}
+				else if(numObjects % 4 == 3)
+				{
+					downSelectedObjects.push_back(oby);
+				}
+				++numObjects;
+			}
+		}
+		if(numObjects == 0)
+		{
+			selectionMode = 0;
+		}
+		else if(numObjects == 1)
+		{
+			//if only one object, select it
+			selectionMode = 0;
+			Object* oby = leftSelectedObjects.front();
+			//set the one object to selected
+			oby-&gt;_selected = !oby-&gt;_selected;
+		}
+		else
+		{
+			//else selectionMode = 2, selected lists have all the items
+			selectionMode = 2;
+		}		
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock parent="lextend" type="drawMain">
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// Left hand effector&apos;s draw function.
+						</documentation>
+						<declaration>
+void LeftVirtualHand::draw()
+						</declaration>
+						<functioncode>
+							<code>
+	// Always start with glPushMatrix to avoid matrix multiplications done here from
+	// affecting other portions of the scene.
+	glPushMatrix();
+							</code>
+							<code>
+		// Set to center of effector.
+		glMultMatrixf(getCenterMatrix().v);
+		// Scale to make 1 ft. cube into a 2&quot; x 2&quot; rod with current length in ft.
+		glScalef(2.0/12.0, 2.0/12.0, _currentLength);
+		// Draw the left hand red.
+		glColor3f(1.0, 0.0, 0.0);
+		// Create the 1 ft. cube.
+		if(!handy)
+		{
+			glutSolidCube(1.0);
+		}
+		else
+		{
+			loadedOBJ.draw();
+		}
+		// Superimpose slightly larger black wireframe cube to make it easier to see shape.
+		glColor3f(0.0, 0.0, 0.0); //TODO fix the bug that the color is left as red here and draws a red square
+		if (!handy)
+		{
+			glColor3f(0.0, 0.0, 0.0);
+			glutWireCube(1.01);
+		}
+							</code>
+							<code>
+		if(coneselection == true)
+		{
+			glScalef(12.0/2.0, 12.0/2.0, 1/_currentLength);
+			glColor3f(1.0, 1.0, 0.0);
+			//GLdouble base=min(1*_currentLength,10.0f);
+			GLdouble base=_currentLength/2.0;
+			GLdouble height=1*_currentLength;
+			GLint slices =50;
+			GLint stacks =50;
+			glTranslatef(0.0,0.0,-height/2.0f);
+			glutSolidCone(base,height,slices,stacks);
+			glTranslatef(0.0,0.0,height/2.0f);
+			glScalef(2.0/12.0, 2.0/12.0, _currentLength);
+		}
+	// Always finish with glPopMatrix to match glPushMatrix above.
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>getLength</name>
+						<type>function</type>
+						<documentation/>
+						<declaration>
+float LeftVirtualHand::getLength()
+						</declaration>
+						<functioncode>
+							<code>
+	return _currentLength;
+							</code>
+						</functioncode>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>LeftVirtualHand.h</name>
+				<type>headerfile</type>
+				<codeblocks>
+					<codeblock>
+						<name>beginMacroGuard</name>
+						<type>code</type>
+						<code>
+#ifndef LEFTVIRTUALHAND_H
+#define LEFTVIRTUALHAND_H
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;main.h&quot;
+#include &quot;Object.h&quot;
+#include &quot;selectedObjects.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code/>
+					</codeblock>
+					<codeblock>
+						<name>classDefinition</name>
+						<type>classDefinition</type>
+						<documentation>
+// LeftVirtualHand class
+// Purpose:
+//		- Creates a dynamic pointer to represent the left hand and provide for asynchronous
+//		  translations and rotations.
+						</documentation>
+						<declaration>
+class LeftVirtualHand:public arEffector
+						</declaration>
+						<public>
+							<code>
+	public:
+		float getLength();
+		
+							</code>
+							<code parent="lextend" type="preexchangeHeader">
+		// Manipulator to make the effector extend until it touches an object or reaches
+		// a maximum length (15 ft. by default).
+		void extend(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects, float maxLength = 15.0);
+							</code>
+							<code parent="lextend" type="drawHeader">
+		// Draw a representation for the left hand.
+		void draw() ;//const;
+							</code>
+						</public>
+						<constructor parent="lextend" type="constructor">
+							<name>lhandconstructor</name>
+							<type>function</type>
+							<documentation>
+		// Default constructor. 
+		// Parameters for arEffector are:
+		//		matrixIndex - index of matrix to use as position (2 is the left hand)
+		//		numButtons - number of buttons to use from device array (11 buttons for Wiimote)
+		//		loButton - index in device array of desired first button, (11 for left Wiimote)
+		//				   which gets mapped to virtual button index 0 by default 
+		//		buttonOffset - offset for mapping virtual buttons (0 for no offset)
+		//		numAxes - number of axes to use from device (2 axes for Wiimote)
+		//		loAxis - index in device array of desired first axis, (2 for left Wiimote)
+		//				 which gets mapped to virtual axis index 0 by default
+		//		axisOffset - offset for mapping virtual axes (0 for no offset)
+							</documentation>
+							<declaration>
+		LeftVirtualHand(const string&amp; filename = &quot;&quot;):arEffector(2, 11, 11, 0, 2, 2, 0)
+							</declaration>
+							<functioncode>
+								<code>
+		handy = false;
+		if(filename != &quot;&quot;) {
+			handy = true;
+			if(!loadedOBJ.readOBJ(filename,&quot;data/obj&quot;)) { 
+				cout &lt;&lt; &quot;Cound not load OBJ file: &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+				handy = false;
+			}
+		}
+		
+			// Set &quot;tip&quot; or point of interaction. Make ray initially 5 ft. long because we&apos;re going
+			// to dynamically extend it to whatever object it touches first.
+			_currentLength = 5.0;
+			setTipOffset(arVector3(0, 0, -_currentLength));
+			
+			// Set to interact with closest object within 0.5 ft. of tip.
+			// See szg/src/interaction/arInteractionSelector.h for alternative ways to select objects.
+			_interactionDistance = 0.5;
+			setInteractionSelector(arDistanceInteractionSelector(_interactionDistance));
+			
+			// Create grab condition when &quot;A&quot; button is pressed more than 0.5 to 
+			// translate and rotate the selected object.
+			// Wiimote index/button pairs:
+			//		0	&quot;2&quot;
+			//		1	&quot;1&quot;
+			//		2	&quot;B&quot;
+			//		3	&quot;A&quot;
+			//		4	&quot;-&quot;
+			//		5	&quot;+&quot;
+			//		6	&quot;L&quot;
+			//		7	&quot;D&quot;
+			//		8	&quot;R&quot;
+			//		9	&quot;U&quot;
+			//		10	&quot;H&quot; or Home
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandRelativeDrag());
+								</code>
+							</functioncode>
+						</constructor>
+						<private>
+							<code>
+	private:
+		float _size;								// effector size (length, height, and width)
+		arDistanceInteractionSelector _selector;	// distance selector
+		float _currentLength;
+		float _interactionDistance;
+		
+		bool handy;
+		arOBJRenderer loadedOBJ;
+							</code>
+						</private>
+					</codeblock>
+					<codeblock>
+						<name>endMacroGuard</name>
+						<type>code</type>
+						<code>
+#endif
+						</code>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>main.cpp</name>
+				<type>codefile</type>
+				<codeblocks>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+//************************************************************************************************
+// Name:		&amp;projName;
+// Version:		1.0
+// Description:	This arMasterSlaveFramework application does stuff
+// this application was created with Kosmos spatial IDE
+//************************************************************************************************
+
+// The precompiled header include MUST appear as the first non-commented line. See 
+// arCallingConventions.h for details.
+#include &quot;arPrecompiled.h&quot;
+
+// Includes for a MasterSlave framework application with interactable things.
+#define SZG_DO_NOT_EXPORT
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;arMasterSlaveFramework.h&quot;
+#include &quot;arInteractableThing.h&quot;
+#include &quot;arInteractionUtilities.h&quot;
+#include &quot;arNavigationUtilities.h&quot;
+#include &quot;arGlut.h&quot;
+#include &quot;arOBJ.h&quot;
+#include &quot;main.h&quot;
+#include &quot;Object.h&quot;
+#include &quot;LeftVirtualHand.h&quot;
+#include &quot;RightVirtualHand.h&quot;
+#include &quot;selectedObjects.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code>
+// Feet to local units conversion.
+// For example, if you use centimeters to create your models, then set this to 12*2.54 or 30.48 to
+// account for 12 inches per foot and 2.54 centimeters per inch.
+// By default, Syzygy uses feet so this is set to 1.0.
+const float FEET_TO_LOCAL_UNITS = 1.0;
+
+// Near and far clipping plane distances
+const float nearClipDistance = 0.1 * FEET_TO_LOCAL_UNITS;
+const float farClipDistance = 100.0 * FEET_TO_LOCAL_UNITS;
+
+// decides whether the &apos;flashlight&apos; is currently on
+bool coneselection = false;
+
+//used to animate music note
+double currentTimeGlobal; //in millis
+arOBJRenderer musicNotey;
+
+int selectionMode = 0; //0 means null, 1 means just entered, 2 means in selection, 3 means just point and click
+
+// has it been pressed
+static int button1 = 0;
+// how long has it been pressed
+static double pressed1 = 0.0;
+// how long do we need to hold it
+const double threshold = 1000.0;    // in millis
+
+
+list&lt;Object*&gt; leftSelectedObjects;
+list&lt;Object*&gt; upSelectedObjects;
+list&lt;Object*&gt; rightSelectedObjects;
+list&lt;Object*&gt; downSelectedObjects;
+
+
+
+
+
+// Global objects, instruments
+						</code>
+						<code>
+
+// List of objects.
+vector&lt;arInteractable*&gt; objects;
+
+// Global effectors.
+						</code>
+						<code parent="rvhand" type="declaration">
+RightVirtualHand rightHand(&quot;handy.obj&quot;); // loads obj for hand
+						</code>
+						<code parent="lextend" type="declaration">
+LeftVirtualHand leftHand(&quot;staff.obj&quot;);
+						</code>
+						<code>
+
+// Global sound variables.
+int soundTransformID;
+int clickSound;
+
+						</code>
+						<code parent="MrDungeonRoom5">Object theMrDungeonRoom5(2,37.3094,37.3094,37.3094, &quot;MrDungeonRoom.obj&quot;);</code>
+						<code parent="MrBookshelf6">Object theMrBookshelf6(2,1.84366,1.84366,1.84366, &quot;MrBookshelf.obj&quot;);</code>
+						<code parent="MrCreepyBook7">Object theMrCreepyBook7(2,0.813935,0.813935,0.813935, &quot;MrCreepyBook.obj&quot;);</code>
+					</codeblock>
+					<codeblock>
+						<name>startCallback</name>
+						<type>function</type>
+						<documentation>
+// start callback
+// Purposes:
+// 		- Register shared memory by adding transfer fields. This is to syncronize cluster-based 
+//		  systems, hence we don&apos;t need to do this. But there&apos;s a few examples anyway.
+// 		- Set up navigation through the framework by specifying translation conditions, rotation
+//		  conditions, translation speed, and rotation speed. We provide a couple examples here.
+//		- Initialize any global variables specific to your application.
+// Notes: 
+//		DO NOT initialize OpenGL here. The start callback is called before window creation. 
+//		Instead initialize OpenGL in the windowStartGL callback.
+						</documentation>
+						<declaration>
+bool start(arMasterSlaveFramework&amp; framework, arSZGClient&amp; client )
+						</declaration>
+						<functioncode>
+							<code parent="MrCreepyBook7">
+	theMrCreepyBook7.setMatrix(ar_translationMatrix(-3,4,-7));
+	objects.push_back(&amp;theMrCreepyBook7);
+							</code>
+							<code parent="MrBookshelf6">
+	theMrBookshelf6.setMatrix(ar_translationMatrix(-3,3,-7));
+	objects.push_back(&amp;theMrBookshelf6);
+							</code>
+							<code parent="MrDungeonRoom5">
+	theMrDungeonRoom5.setMatrix(ar_translationMatrix(0,4,-5));
+	objects.push_back(&amp;theMrDungeonRoom5);
+							</code>
+							<code>
+	// Register shared memory. Not needed for non-cluster-based systems.
+	// framework.addTransferField(char* name, void* address, arDataType type, int numElements);
+	vector&lt;arInteractable*&gt;::iterator i;
+	for(i=objects.begin(); i != objects.end(); ++i) 
+	{
+		Object* obj = ((Object*)(*i));
+		obj->loadedOBJ.normalizeModelSize();
+		ostringstream ostr;
+		ostr &lt;&lt; &quot;objMatrix&quot; &lt;&lt; &amp;i;
+		arMatrix4 obM = obj-&gt;matrix;
+		framework.addTransferField(ostr.str(), &amp;obM, AR_FLOAT, 16);
+	}
+	
+	// Set up navigation. 
+							</code>
+							<code parent="dpadUD">
+	// A traditional pointing technique using the joystick with left and right rotating the scene.
+	// Translate along Z-axis (forwards/backwards) if joystick is pressed more than 20% along axis 1.
+	framework.setNavTransCondition(&apos;z&apos;, AR_EVENT_AXIS, 1, 0.2);
+							</code>
+							<code parent="dpadLR">
+	// Rotate around Y-axis (vertical) if joystick is pressed more than 20% along axis 0.
+	//framework.setNavRotCondition(&apos;y&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR ROTATE
+	framework.setNavTransCondition(&apos;x&apos;, AR_EVENT_AXIS, 0, 0.2);  //FOR STRAFING
+							</code>
+							<code parent="transSpeed">
+	// Set translation speed to 5 feet/second.
+	framework.setNavTransSpeed(5.0);
+							</code>
+							<code parent="rotSpeed">
+	// Set rotation speed to 30 degrees/second.
+	framework.setNavRotSpeed(30.0);
+							</code>
+							<code>
+	
+	
+	// Initialize application variables here.
+	
+	// Move object&apos;s to initial positions.
+							</code>
+							<code>
+	
+	// Create sound transform.
+	soundTransformID = dsTransform(&quot;world&quot;, framework.getNavNodeName(), ar_scaleMatrix(1.0));
+	// Parameters are:
+	//		name - string name for sound
+	//		transformName - string name for dsTransform
+	//		loopType - 1 for continuous, -1 for one-time, 0 to stop
+	//		loudness - float from 0.0 (quiet) to 1.0 (max)
+	//		positionVector - vector position of sound origin
+	// Create loop for click sound.
+	clickSound = dsLoop(&quot;click&quot;, &quot;world&quot;, &quot;click.mp3&quot;, 0, 1.0, arVector3(0, 0, 0));
+	
+	musicNotey.readOBJ(&quot;MusicNote.obj&quot;,&quot;data/obj&quot;);
+	
+	
+	// Return true if everything is initialized correctly.
+	return true;
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>windowStartGL</name>
+						<type>function</type>
+						<documentation>
+// windowStartGL callback
+// Purposes:
+// 		- Initialize each window (a Syzygy application can have more than one window).
+//		- Initialize OpenGL.
+						</documentation>
+						<declaration>
+void windowStartGL(arMasterSlaveFramework&amp; framework, arGUIWindowInfo* windowInfo)
+						</declaration>
+						<functioncode>
+							<code>
+	// Initialize OpenGL. Set clear color to black.
+	glClearColor(1, 1, 1, 0);
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>windowEvent</name>
+						<type>function</type>
+						<documentation>
+// windowEvent callback
+// Purposes:
+//		- Process window events, such as resizing
+// Notes:
+//		The values are defined in src/graphics/arGUIDefines.h.
+//		arGUIWindowInfo is in arGUIInfo.h.
+//		The window manager is in arGUIWindowManager.h.
+						</documentation>
+						<declaration>
+void windowEvent(arMasterSlaveFramework&amp; framework, arGUIWindowInfo* windowInfo)
+						</declaration>
+						<functioncode>
+							<code>
+	// Process window events. Here, we handle window resizing.
+	if(windowInfo-&gt;getState() == AR_WINDOW_RESIZE) {
+		const int windowID = windowInfo-&gt;getWindowID();
+#ifdef UNUSED
+		const int x = windowInfo-&gt;getPosX();
+		const int y = windowInfo-&gt;getPosY();
+#endif
+		const int width = windowInfo-&gt;getSizeX();
+		const int height = windowInfo-&gt;getSizeY();
+		framework.getWindowManager()-&gt;setWindowViewport(windowID, 0, 0, width, height);
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>preExchange</name>
+						<type>function</type>
+						<documentation>
+// preExchange callback
+// Purposes:
+//		- Handle navigation updates.
+//		- Process user input.
+//		- Set random variables.
+//		- Update shared memory.
+// Notes:
+//		This is only called on the master node of the cluster and before shared memory is 
+//		transferred to the slave nodes.
+						</documentation>
+						<declaration>
+void preExchange(arMasterSlaveFramework&amp; framework)
+						</declaration>
+						<functioncode>
+							<code>
+	// Handle navigation update. The resulting navigation matrix is automatically transferred
+	// to the slave nodes.
+	framework.navUpdate();
+	
+	currentTimeGlobal = framework.getTime();
+	
+	double currentTime = framework.getTime();
+	
+	// Process user input.
+	
+	
+	// Update shared memory.
+	
+	// Transfer data about objects to slave nodes.
+	
+							</code>
+							<code parent="rvhand" type="callPreexchangeMain">
+	// Detect right hand collisions.
+	rightHand.detectCollisions(rightHand, objects);
+							</code>
+							<code parent="lextend" type="callPreexchangeMain">
+	// Extend left ray to collision point.
+	leftHand.extend(leftHand, objects);
+							</code>
+							<code>
+	// Update input state (placement matrix &amp; button states) of our effectors.
+	rightHand.updateState(framework.getInputState());
+	leftHand.updateState(framework.getInputState());
+	// Handle any interaction with the objects (see interaction/arInteractionUtilities.h).
+	
+	list&lt;arInteractable*&gt; objectlist;
+	std::copy(objects.begin (), objects.end (), std::back_inserter(objectlist));
+	
+	ar_pollingInteraction(rightHand, objectlist);
+	ar_pollingInteraction(leftHand, objectlist);
+	
+	
+	// Play click sound if right hand has grabbed an object.
+	if(rightHand.getGrabbedObject() != 0) 
+	{
+		dsLoop(clickSound, &quot;click.mp3&quot;, -1, 1.0, arVector3(0, 0, 0));
+	}
+	// Or reset the trigger
+	else 
+	{
+		dsLoop(clickSound, &quot;click.mp3&quot;, 0, 1.0, arVector3(0, 0, 0));
+	}
+	
+	
+	
+	// Update shared memory.
+	
+	// Transfer data about objects to slave nodes.
+
+	vector&lt;arInteractable*&gt;::iterator i;
+	for(i=objects.begin(); i != objects.end(); ++i) 
+	{
+		Object* oby = ((Object*)(*i));
+		oby-&gt;matrix = oby-&gt;getMatrix();
+	}
+
+	
+	arMatrix4 navMatrix = ar_getNavMatrix();
+	
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>postExchange</name>
+						<type>function</type>
+						<documentation>
+// postExchange callback
+// Purposes:
+//		- Update effectors based on input state transferred from master node.
+//		- Synchronize slave nodes with master node based on transferred data. This is not necessary
+//		  for our system, but here&apos;s an example for cluster-based systems.
+						</documentation>
+						<declaration>
+void postExchange(arMasterSlaveFramework&amp; framework)
+						</declaration>
+						<functioncode>
+							<code>
+	// Presumably the master node already is up-to-date, so we ignore it.
+	if(!framework.getMaster()) {
+		
+		// Update effectors.
+		rightHand.updateState(framework.getInputState());
+		leftHand.updateState(framework.getInputState());
+		
+		// Synchronize shared memory.
+		vector&lt;arInteractable*&gt;::iterator i;
+		for(i=objects.begin(); i != objects.end(); ++i) 
+		{
+			Object* oby = ((Object*)(*i));
+			oby-&gt;setMatrix(oby-&gt;matrix.v);
+		}
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>renderPremitive</name>
+						<type>function</type>
+						<documentation>
+/*
+Thanks to swiftless tutorials: http://www.swiftless.com/tutorials/opengl/square.html
+For code on drawing a square
+
+This function draws a square with separating lines for quadrants
+*/
+						</documentation>
+						<declaration>
+void renderPrimitive (float distance, bool separationLines = true) 
+						</declaration>
+						<functioncode>
+							<code>
+	glPushMatrix();
+	glLoadIdentity(); // Load the Identity Matrix to reset our drawing locations  
+	  
+	glTranslatef(0.0f, 0.0f, distance); // Push eveything 5 units back into the scene, otherwise we won&apos;t see the primitive  
+	glPushAttrib(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.941, 0.902, 0.549);
+	glBegin(GL_QUADS); // Start drawing a quad primitive  
+	  
+	glVertex3f(-1.0f, -1.0f, 0.0f); // The bottom left corner  
+	glVertex3f(-1.0f, 1.0f, 0.0f); // The top left corner  
+	glVertex3f(1.0f, 1.0f, 0.0f); // The top right corner  
+	glVertex3f(1.0f, -1.0f, 0.0f); // The bottom right corner  
+	  
+	glEnd();  
+	glPopAttrib();
+	/*
+	Thanks to Gavin: http://www.opengl.org/discussion_boards/showthread.php/124875-How-to-draw-a-line-using-OpenGL-programme
+	For code on drawing lines
+	*/
+	if (separationLines)
+	{
+		glTranslatef(0.0f, 0.0f, 0.1f);
+		glPushAttrib(GL_LINE_BIT);
+		glLineWidth(2.5); 
+		glColor3f(1.0, 0.0, 0.0);
+		glBegin(GL_LINES);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(0.95f, 0.95f, 0.0f);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(-0.95f, 0.95f, 0.0f);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(0.95f, -0.95f, 0.0f);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(-0.95f, -0.95f, 0.0f);
+		glEnd();
+		glPopAttrib();
+	}
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>drawObjects</name>
+						<type>function</type>
+						<documentation/>
+						<declaration>
+void drawObjects(float distance)
+						</declaration>
+						<functioncode>
+							<code>
+	glPushMatrix();
+	glLoadIdentity(); // Load the Identity Matrix to reset our drawing locations  
+	  
+	glTranslatef(0.0f, 0.0f, distance+0.2f);
+	
+	glScalef(0.3f,0.3f,0.3f);
+	
+	int count = 0;
+	list&lt;Object*&gt;::iterator i;
+	for(i=leftSelectedObjects.begin(); i != leftSelectedObjects.end(); ++i) 
+	//if(leftSelectedObjects.size() &gt; 0)
+	{
+		/*
+		Object* oby = leftSelectedObjects.front();
+		arOBJRenderer* ren = oby-&gt;getOBJ();
+		ren-&gt;draw();
+		*/
+		//leftSelectedObjects.front()-&gt;getOBJ().draw();
+		glPushMatrix();
+		Object* oby = ((Object*)(*i));
+		
+		++count;
+		glTranslatef(-1.5f*(leftSelectedObjects.size()/count), 0.0f, 0.0f);
+		
+		
+		glScalef(oby-&gt;getLength()/leftSelectedObjects.size(), oby-&gt;getHeight()/leftSelectedObjects.size(), oby-&gt;getWidth()/leftSelectedObjects.size());
+		arOBJRenderer* ren = oby-&gt;getOBJ();
+		ren-&gt;draw();
+		glPopMatrix();
+	}
+	count = 0;
+	for(i=upSelectedObjects.begin(); i != upSelectedObjects.end(); ++i) 
+	{
+		glPushMatrix();
+		Object* oby = ((Object*)(*i));
+		
+		++count;
+		glTranslatef(0.0f, 1.5f*(upSelectedObjects.size()/count), 0.0f);
+		
+		glScalef(oby-&gt;getLength()/upSelectedObjects.size(), oby-&gt;getHeight()/upSelectedObjects.size(), oby-&gt;getWidth()/upSelectedObjects.size());
+		arOBJRenderer* ren = oby-&gt;getOBJ();
+		ren-&gt;draw();
+		glPopMatrix();
+	}
+	count = 0;
+	for(i=rightSelectedObjects.begin(); i != rightSelectedObjects.end(); ++i) 
+	{
+		glPushMatrix();
+		Object* oby = ((Object*)(*i));
+		
+		++count;
+		glTranslatef(1.5f*(rightSelectedObjects.size()/count), 0.0f, 0.0f);
+		
+		glScalef(oby-&gt;getLength()/rightSelectedObjects.size(), oby-&gt;getHeight()/rightSelectedObjects.size(), oby-&gt;getWidth()/rightSelectedObjects.size());
+		arOBJRenderer* ren = oby-&gt;getOBJ();
+		ren-&gt;draw();
+		glPopMatrix();
+	}
+	count = 0;
+	for(i=downSelectedObjects.begin(); i != downSelectedObjects.end(); ++i) 
+	{
+		glPushMatrix();
+		Object* oby = ((Object*)(*i));
+		
+		++count;
+		glTranslatef(0.0f, -1.5f*(downSelectedObjects.size()/count), 0.0f);
+		
+		glScalef(oby-&gt;getLength()/downSelectedObjects.size(), oby-&gt;getHeight()/downSelectedObjects.size(), oby-&gt;getWidth()/downSelectedObjects.size());
+		arOBJRenderer* ren = oby-&gt;getOBJ();
+		ren-&gt;draw();
+		glPopMatrix();
+	}
+	
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// draw callback
+// Purposes:
+//		- Load the navigation matrix to reflect frame&apos;s navigation
+//		- Use OpenGL to generate computer graphics.
+						</documentation>
+						<declaration>
+void draw(arMasterSlaveFramework&amp; framework)
+						</declaration>
+						<functioncode>
+							<code>
+	// Load the navigation matrix.
+	framework.loadNavMatrix();
+	
+	// Generate graphics.
+	if(selectionMode == 2)
+	{
+		renderPrimitive(-2.5f); // draws square with quadrants
+		drawObjects(-2.5f); // draw the mini versions
+	}
+	
+	vector&lt;arInteractable*&gt;::iterator i;
+	for(i=objects.begin(); i != objects.end(); ++i) 
+	{
+		Object* oby = ((Object*)(*i));
+		oby-&gt;draw();
+	}
+
+	
+	// Draw the effectors.
+	rightHand.draw();
+	leftHand.draw();
+	
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock>
+						<name>main</name>
+						<type>function</type>
+						<documentation>
+// main entry to MasterSlave application
+						</documentation>
+						<declaration>
+int main(int argc, char** argv)
+						</declaration>
+						<functioncode>
+							<code>
+	// Declare a MasterSlave framework.
+	arMasterSlaveFramework framework;
+	// Inform the framework what units you&apos;re using.
+	framework.setUnitConversion(FEET_TO_LOCAL_UNITS);
+	// Set the clipping plane distances.
+	framework.setClipPlanes(nearClipDistance, farClipDistance);
+	// Set start callback to register shared memory, set up navigation, and initialize variables.
+	framework.setStartCallback(start);
+	// Set windowStartGL callback to initialize OpenGL.
+	framework.setWindowStartGLCallback(windowStartGL);
+	// Set windowEvent callback to handle window events, like resizing.
+	framework.setWindowEventCallback(windowEvent);
+	// Set preExchange callback for master to process before shared memory is exchanged.
+	framework.setPreExchangeCallback(preExchange);
+	// Set postExchange callback for slaves to update themselves based on shared memory.
+	framework.setPostExchangeCallback(postExchange);
+	// Set draw callback for computer graphics.
+	framework.setDrawCallback(draw);
+	
+	// Initialize MasterSlave framework.
+	if(!framework.init(argc, argv)) {
+		return 1;
+	}
+	
+	// Start framework. Never returns unless something goes wrong.
+	return framework.start() ? 0 : 1;
+							</code>
+						</functioncode>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>main.h</name>
+				<type>headerfile</type>
+				<codeblocks>
+					<codeblock>
+						<name>beginMacroGuard</name>
+						<type>code</type>
+						<code>
+#ifndef MAIN_H
+#define MAIN_H
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+// The precompiled header include MUST appear as the first non-commented line. See 
+// arCallingConventions.h for details.
+#include &quot;arPrecompiled.h&quot;
+
+#define SZG_DO_NOT_EXPORT
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;arMasterSlaveFramework.h&quot;
+#include &quot;arInteractableThing.h&quot;
+#include &quot;arInteractionUtilities.h&quot;
+#include &quot;arNavigationUtilities.h&quot;
+#include &quot;arGlut.h&quot;
+#include &quot;arOBJ.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code>
+extern double currentTimeGlobal;
+// music note to be used for animation
+extern arOBJRenderer musicNotey;
+extern bool coneselection;
+extern int selectionMode;
+extern vector&lt;arInteractable*&gt; objects;
+
+void renderPrimitive (float distance, bool separationLines);
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>endMacroGuard</name>
+						<type>code</type>
+						<code>
+#endif
+						</code>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>Object.cpp</name>
+				<type>codefile</type>
+				<codeblocks>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;Object.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code/>
+					</codeblock>
+					<codeblock>
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// Interactable object&apos;s draw function.
+						</documentation>
+						<declaration>
+void Object::draw()
+						</declaration>
+						<functioncode>
+							<code>
+  	// Always start with glPushMatrix to avoid matrix multiplications done here from
+	// affecting other portions of the scene.
+	glPushMatrix();
+		// Multiply by object&apos;s matrix.
+		glMultMatrixf( getMatrix().v );
+		// Scale to meet length, height, and width requirements.
+		glScalef(_length, _height, _width);
+		// Set color based on whether object has been selected.
+		glColor3f(0.0, 1.0, 0.0);
+		// Draw solid based on type.
+		if(_type == 0) {
+			// Create 1 ft. cube with black or highlighted wireframe.
+			glutSolidCube(1.0);
+			if(getHighlight()) { glColor3f(1.0, 1.0, 0.0); }
+			else { glColor3f(0.0, 0.0, 0.0); }
+			glutWireCube(1.01);
+		}
+		else if(_type == 1) {
+			// Create 1 ft. diameter sphere with black or highlighted wireframe.
+			glutSolidSphere(0.5, 16, 16);
+			if(getHighlight()) { glColor3f(1.0, 1.0, 0.0); }
+			else { glColor3f(0.0, 0.0, 0.0); }
+			glutWireSphere(0.505, 16, 16);
+		}
+		else if(_type == 2) { 
+			// Draw loaded OBJ file.
+			loadedOBJ.draw();			
+		}
+		else if(_type &gt; 2) { 
+			// Draw loaded OBJ file.
+			loadedOBJ.draw();
+			if (_selected)
+			{
+				//draw little music notes
+			/*	arOBJRenderer musicNote;
+				musicNote.readOBJ(&quot;MusicNote.obj&quot;,&quot;data&quot;);
+				musicNote.draw();
+			*/
+				
+				//cout &lt;&lt; &quot;drawing note&quot; &lt;&lt; &apos;\n&apos;;
+				glPushMatrix();
+				
+				float scale = 2.f;
+				
+				glScalef(scale/_length, scale/_height, scale/_width);
+			
+				int timetrans = (int)(currentTimeGlobal/100);
+				int modded = timetrans % 100;
+				float ytranslat = (float)((float)modded / 100.0f)/scale;
+				
+				float xtranslat = (float)((float)(2-((int(currentTimeGlobal/1000)) % 5))/4.0f)/scale;
+				
+				glTranslatef(xtranslat,ytranslat,1.0f);
+				//loadedOBJ.draw();
+				musicNotey.draw();
+				//glTranslatef(-xtranslat,-ytranslat,-1.0f);
+				
+				//glScalef(_length, _height, _width);
+				glPopMatrix();
+			}
+		}
+			
+	// Always finish with glPopMatrix to match glPushMatrix above.
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>Object.h</name>
+				<type>headerfile</type>
+				<codeblocks>
+					<codeblock>
+						<name>beginMacroGuard</name>
+						<type>code</type>
+						<code>
+#ifndef OBJECT_H
+#define OBJECT_H
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;main.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code/>
+					</codeblock>
+					<codeblock>
+						<name>constructor</name>
+						<type>code</type>
+						<code>
+// Object class
+// Purpose:
+//		- Creates an interactable object based on provided dimensions.
+class Object:public arInteractableThing {
+	
+	//extern double currentTimeGlobal;
+	
+	public:
+	
+		bool _selected;
+		
+		// Object&apos;s loaded OBJ file
+		arOBJRenderer loadedOBJ;
+		arMatrix4 matrix;
+	
+		// Default constructor. 
+		// Parameters are:
+		//		type - 0 for cube, 1 for sphere, 2 for loaded OBJ file
+		//		length - length (X-axis) of object
+		//		height - height (Y-axis) of object
+		//		width - width (Z-axis) of object
+		Object(int type = 0, float length = 1.0, float height = 1.0, float width = 1.0, const string&amp; filename = &quot;&quot;, const string&amp; path =&quot;data/obj&quot;):arInteractableThing() 
+		{
+			// Track values.
+			_type = type;
+			_length = length;
+			_height = height;
+			_width = width;
+			_selected = false;
+			// Read OBJ file if provided.
+			if(filename != &quot;&quot;) 
+			{
+				cout &lt;&lt; &quot;loading &quot; &lt;&lt; filename &lt;&lt; &quot;...&quot; &lt;&lt; &apos;\n&apos;;
+				cout.flush();
+				if(!loadedOBJ.readOBJ(filename,path)) 
+				{ 
+					cout &lt;&lt; &quot;Cound not load OBJ file: &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+					_type = -1;
+				}
+				else if(_type == 0) 
+				{
+					// Set type to loaded file
+					_type = 2;
+				}
+				else
+				{
+					cout &lt;&lt; &quot;loaded &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+				}
+			}
+			// invalid type and file combination
+			else if(_type &gt;= 2) { _type = -1; }
+		}
+		
+		// Draw the object&apos;s representation.
+		void draw();
+		
+		// Get object&apos;s type.
+		int getType() { return _type; }
+		
+		// Get object&apos;s length, height, or width.
+		float getLength() { return _length; }
+		float getHeight() { return _height; }
+		float getWidth() { return _width; }
+		arOBJRenderer* getOBJ() { return &amp;loadedOBJ; }
+		
+	private:
+		
+		// Object&apos;s type (0 for cube, 1 for sphere, 2 for loaded object)
+		int _type;
+		// Object&apos;s length, height, and width.
+		float _length;
+		float _height;
+		float _width;
+		
+		
+		//bool _selected;
+};
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>endMacroGuard</name>
+						<type>code</type>
+						<code>
+#endif
+						</code>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>RightVirtualHand.cpp</name>
+				<type>codefile</type>
+				<codeblocks>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;RightVirtualHand.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>justSomeFunctions</name>
+						<type>code</type>
+						<code>
+/* dotProd, dif and magn copied from http://stackoverflow.com/questions/10768142/verify-if-point-is-inside-a-cone-in-3d-space
+ credit to: furikuretsu
+*/
+static float dotProd(float a[], float b[])
+{
+    return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+}
+/*
+static float* dif(float a[], float b[])
+{
+	float retval [] = {a[0]-b[0],a[1]-b[1],a[2]-b[2]};
+    return retval;
+}
+*/
+static float magn(float a[])
+{
+    return (float) (sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]));
+}
+
+/**
+ * @param x coordinates of point to be tested 
+ * @param t coordinates of apex point of cone
+ * @param b coordinates of center of basement circle
+ * @param aperture in radians
+ 
+ Code copied from http://stackoverflow.com/questions/10768142/verify-if-point-is-inside-a-cone-in-3d-space
+ credit to: furikuretsu
+ 
+ altered to suit this purpose
+ 
+ */
+static bool isLyingInCone(float x[], float t[], float b[], float radius, float height)
+{
+	float aperture = 2.f * atan(radius/height);
+
+    // This is for our convenience
+    float halfAperture = aperture/2.f;
+
+    // Vector pointing to X point from apex
+    float apexToXVect[] = {t[0]-x[0],t[1]-x[1],t[2]-x[2]};
+
+    // Vector pointing from apex to circle-center point.
+    float axisVect[] = {t[0]-b[0],t[1]-b[1],t[2]-b[2]};
+
+    // X is lying in cone only if it&apos;s lying in 
+    // infinite version of its cone -- that is, 
+    // not limited by &quot;round basement&quot;.
+    // We&apos;ll use dotProd() to 
+    // determine angle between apexToXVect and axis.
+    
+	bool isInInfiniteCone = dotProd(apexToXVect,axisVect)/magn(apexToXVect)/magn(axisVect) &gt; cos(halfAperture);
+	
+	// We can safely compare cos() of angles 
+    // between vectors instead of bare angles.
+
+
+    return isInInfiniteCone;
+}
+						</code>
+					</codeblock>
+					<codeblock parent="rvhand" type="preexchangeMain">
+						<name>detectCollisions</name>
+						<type>function</type>
+						<documentation>
+// Right hand effector&apos;s collision detection function for multiple objects.
+// Purpose:
+//		- Determine closest object (based on center) that effector is touching.
+// Notes:
+//		The list must be a list of Object instances, defined above.
+//		This function does not account for rotation of the object or the effector.
+						</documentation>
+						<declaration>
+void RightVirtualHand::detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects)
+						</declaration>
+						<functioncode>
+							<code>
+	// Return if grabbing an object.
+	if(getGrabbedObject() != 0) return;
+	
+	// Set maximum distance for testing collision dection to 1000 ft.
+	float maxDistance = 1000.0;
+	
+	// Track closest object and its distance. No object is initially closest.
+	arInteractable* closestObject = 0;
+	float closestDistance = maxDistance;
+	
+	// Step through list of objects and test each one for collisions.
+	for(vector&lt;arInteractable*&gt;::iterator it=objects.begin(); it != objects.end(); ++it) {
+	
+		// Get information about object&apos;s position and dimensions.
+		const arMatrix4 objectMatrix = (*it)-&gt;getMatrix();
+		arMatrix4 objectTransMatrix = ar_extractTranslationMatrix(objectMatrix);
+		const float objectX = objectTransMatrix[12];
+		const float objectY = objectTransMatrix[13];
+		const float objectZ = objectTransMatrix[14];
+		const float objectLength = ((Object*)(*it))-&gt;getLength();
+		const float objectHeight = ((Object*)(*it))-&gt;getHeight();
+		const float objectWidth = ((Object*)(*it))-&gt;getWidth();
+		
+		// Get information about effector&apos;s position and dimensions. 
+		arMatrix4 effectorTransMatrix = ar_extractTranslationMatrix(getMatrix());
+		const float effectorX = effectorTransMatrix[12];
+		const float effectorY = effectorTransMatrix[13];
+		const float effectorZ = effectorTransMatrix[14];
+		const float effectorLength = _size;
+		const float effectorHeight = _size;
+		const float effectorWidth = _size;
+		
+		// Determine if effector is within object along X-axis.
+		if((objectX - objectLength/2.0) &lt;= (effectorX + effectorLength/2.0) &amp;&amp; (effectorX - effectorLength/2.0) &lt;= (objectX + objectLength/2.0)) {
+		// Determine if effector is within object along Y-axis.
+		if((objectY - objectHeight/2.0) &lt;= (effectorY + effectorHeight/2.0) &amp;&amp; (effectorY - effectorHeight/2.0) &lt;= (objectY + objectHeight/2.0)) {
+		// Determine if effector is within object along Z-axis.
+		if((objectZ - objectWidth/2.0) &lt;= (effectorZ + effectorWidth/2.0) &amp;&amp; (effectorZ - effectorWidth/2.0) &lt;= (objectZ + objectWidth/2.0)) {
+		
+			// Collision detected. Now use selector to determine distance to center of the object.
+			_selector.setMaxDistance(maxDistance);
+			float objectDistance = _selector.calcDistance(self, objectMatrix);
+			
+			// Determine if object is closest so far.
+			if(objectDistance &lt; closestDistance) {
+				// If so, remember object and distance to object.
+				closestObject = *it;
+				closestDistance = objectDistance;
+			}
+		}}}
+	}
+	
+	// Check if an object was touched.
+	if(closestObject != 0) {
+		// If so, set selector&apos;s distance to match object&apos;s distance.
+		_selector.setMaxDistance(closestDistance);
+		setInteractionSelector(_selector);
+		
+		//cout &lt;&lt; &quot;object was selected?&quot; &lt;&lt; &apos;\n&apos;;
+		
+		if(getOnButton(1) == 1)
+		{
+			//cout &lt;&lt; &quot;object was selected&quot; &lt;&lt; &apos;\n&apos;;
+			Object* oby = (Object*)closestObject;
+			oby-&gt;_selected = !oby-&gt;_selected;
+		}
+	}
+	else {
+		// If not, set selector&apos;s distance to size of effector.
+		_selector.setMaxDistance(_size);
+		setInteractionSelector(_selector);
+	}
+							</code>
+						</functioncode>
+					</codeblock>
+					<codeblock parent="rvhand" type="drawMain">
+						<name>draw</name>
+						<type>function</type>
+						<documentation>
+// Right hand effector&apos;s draw function.
+						</documentation>
+						<declaration>
+void RightVirtualHand::draw()
+						</declaration>
+						<functioncode>
+							<code>
+	// Always start with glPushMatrix to avoid matrix multiplications done here from
+	// affecting other portions of the scene.
+	glPushMatrix();
+		// Set to center of effector.
+		glMultMatrixf(getCenterMatrix().v);
+		// Scale to make 1 ft. cube into a 0.5 ft. cube to match interaction distance.
+	//	glScalef(0.5, 0.5, 0.5);
+		// Draw the right hand red.
+	//	glColor3f(1.0, 0.0, 0.0);
+		// Create the 1 ft. cube.
+	//	glutSolidCube(1.0);
+		// Superimpose slightly larger black wireframe cube to make it easier to see shape.
+	//	glColor3f(0.0, 0.0, 0.0);
+	//	glutWireCube(1.01);
+		glRotatef(180,0,1,0);
+		glRotatef(90,0,0,1);
+		glScalef(-1,1,1);
+		loadedOBJ.draw();
+	
+	// Always finish with glPopMatrix to match glPushMatrix above.
+	glPopMatrix();
+							</code>
+						</functioncode>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>RightVirtualHand.h</name>
+				<type>headerfile</type>
+				<codeblocks>
+					<codeblock>
+						<name>beginMacroGuard</name>
+						<type>code</type>
+						<code>
+#ifndef RIGHTVIRTUALHAND_H
+#define RIGHTVIRTUALHAND_H
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;main.h&quot;	
+#include &quot;Object.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code/>
+					</codeblock>
+					<codeblock>
+						<name>classDefinition</name>
+						<type>classDefinition</type>
+						<documentation>
+// RightVirtualHand class
+// Purpose:
+//		- Creates a 0.5 ft. cube to represent the right hand.
+//		- Provides for asynchronous translations and rotations.
+//		- Uses basic collision detection for better object grabbing.
+// Notes:
+//		Extends the arEffector class (szg/src/interaction/arEffector.h).
+						</documentation>
+						<declaration>
+class RightVirtualHand:public arEffector
+						</declaration>
+						<public>
+							<code>
+	public:
+							</code>
+							<code parent="rvhand" type="preexchangeHeader">
+		// Resizes distance selector for basic collision detection.
+		void detectCollisions(arEffector&amp; self, vector&lt;arInteractable*&gt;&amp; objects);
+							</code>
+							<code parent="rvhand" type="drawHeader">
+		// Draw a representation for the right hand.
+		void draw() ;//const;
+							</code>
+						</public>
+						<constructor parent="rvhand" type="constructor">
+							<name>rhandconstructor</name>
+							<type>function</type>
+							<documentation>
+		// Default constructor. 
+		// Parameters for arEffector are:
+		//		matrixIndex - index of matrix to use as position (1 is the right hand)
+		//		numButtons - number of buttons to use from device array (11 buttons for Wiimote)
+		//		loButton - index in device array of desired first button, (0 for right Wiimote)
+		//				   which gets mapped to virtual button index 0 by default 
+		//		buttonOffset - offset for mapping virtual buttons (0 for no offset)
+		//		numAxes - number of axes to use from device (2 axes for Wiimote)
+		//		loAxis - index in device array of desired first axis, (0 for right Wiimote)
+		//				 which gets mapped to virtual axis index 0 by default
+		//		axisOffset - offset for mapping virtual axes (0 for no offset)
+							</documentation>
+							<declaration>
+		RightVirtualHand(const string&amp; filename = &quot;&quot;):arEffector(1, 11, 0, 0, 2, 0, 0)
+							</declaration>
+							<functioncode>
+								<code>
+		if(filename != &quot;&quot;) {
+			if(!loadedOBJ.readOBJ(filename, &quot;data/obj&quot;)) { 
+				cout &lt;&lt; &quot;Cound not load OBJ file: &quot; &lt;&lt; filename &lt;&lt; &apos;\n&apos;;
+			}
+		}
+		
+		
+			// Set &quot;tip&quot; or point of interaction. This is primarily for rays.
+			setTipOffset(arVector3(0, 0, 0));
+			
+			// Set to interact with closest object within 0.5 ft. of tip using a distance selector.
+			// See szg/src/interaction/arInteractionSelector.h for alternative selectors.
+			_size = 0.5;
+			_selector.setMaxDistance(_size);
+			setInteractionSelector(_selector);
+			
+			// Create grab condition when &quot;A&quot; button is pressed more than 0.5 to 
+			// translate the selected object without rotating it.
+			// Wiimote index/button pairs:
+			//		0	&quot;2&quot;
+			//		1	&quot;1&quot;
+			//		2	&quot;B&quot;
+			//		3	&quot;A&quot;
+			//		4	&quot;-&quot;
+			//		5	&quot;+&quot;
+			//		6	&quot;L&quot;
+			//		7	&quot;D&quot;
+			//		8	&quot;R&quot;
+			//		9	&quot;U&quot;
+			//		10	&quot;H&quot; or Home
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 3, 0.5), arWandTranslationDrag());
+			
+			// Create grab condition when &quot;B&quot; button is pressed more than 0.5 to 
+			// rotate and translate the selected object.
+			setDrag(arGrabCondition(AR_EVENT_BUTTON, 2, 0.5), arWandRelativeDrag());
+								</code>
+							</functioncode>
+						</constructor>
+						<private>
+							<code>
+	private:
+	
+		float _size;								// effector size (length, height, and width)
+		arDistanceInteractionSelector _selector;	// distance selector
+		
+		float _currentLength;
+		float _interactionDistance;
+		
+		bool handy;
+		arOBJRenderer loadedOBJ;
+							</code>
+						</private>
+					</codeblock>
+					<codeblock>
+						<name>endMacroGuard</name>
+						<type>code</type>
+						<code>
+#endif
+						</code>
+					</codeblock>
+				</codeblocks>
+			</file>
+			<file>
+				<name>selectedObjects.h</name>
+				<type>headerfile</type>
+				<codeblocks>
+					<codeblock>
+						<name>beginMacroGuard</name>
+						<type>code</type>
+						<code>
+#ifndef SELECTEDOBJECTS_H
+#define SELECTEDOBJECTS_H
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>summaryAndInclude</name>
+						<type>include</type>
+						<code>
+#include &quot;Object.h&quot;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>globalVars</name>
+						<type>code</type>
+						<code>
+extern list&lt;Object*&gt; leftSelectedObjects;
+extern list&lt;Object*&gt; upSelectedObjects;
+extern list&lt;Object*&gt; rightSelectedObjects;
+extern list&lt;Object*&gt; downSelectedObjects;
+						</code>
+					</codeblock>
+					<codeblock>
+						<name>endMacroGuard</name>
+						<type>code</type>
+						<code>
+#endif
+						</code>
+					</codeblock>
+				</codeblocks>
+			</file>
+		</directory>
+		<file>
+			<name>Makefile</name>
+			<type>plaintext</type>
+			<text>
+include $(SZGHOME)/build/make/Makefile.toprule
+
+			</text>
+		</file>
+		<file>
+			<name>README.txt</name>
+			<type>plaintext</type>
+			<text>
+This directory is a build template for user applications. Copy it wherever
+you want, replace the source files and modify build/makefiles/Makefile.my_app
+appropriately.
+
+To build, type &apos;make&apos; in the top directory, i.e. in &apos;skeleton&apos;.
+&apos;make clean&apos; to clean up.
+
+Build targets are specified in build/makefiles/Makefile.my_app.
+
+For the build to work, you must set $SZGHOME (pointing to the top-level
+directory of your syzygy install). Of course, you must have built the
+Syzygy libraries first.
+
+You will also want to set $SZGBIN (which indicates the directory in which
+executables will be copied). If you don&apos;t set it, the exeutable for this
+project will end up in szg/build/&lt;platform&gt; e.g. szg/build/win32 on
+Windows.
+Finally, if you are using external libraries
+(such as sound), you will need to set $SZGEXTERNAL appropriately. Please
+see the syzygy documentation.
+
+skeleton.cpp is a simple, old-style master/slave application. It uses
+some fancy user-interaction classes, but those can easily be ignored/removed.
+In particular, if you just want to do simple things with user input you can
+query the framework directly (using e.g. getButton( &lt;index #&gt; )) instead
+of using an effector.
+
+oopskel.cpp is an object-oriented version of the same, in which the
+arMasterSlaveFramework is subclassed and callback methods (those
+starting with on...()) are overridden instead of installing
+callback functions.
+
+arTeapotGraphicsPlugin.cpp is a scene-graph (szgrender) plugin, to show
+how to use the skeleton to build a shared library.
+			</text>
+		</file>
+	</directory>
+	<profile>
+		<user>
+			<name>user1</name>
+			<startingLocation>
+				<x>0</x>
+				<y>0</y>
+				<z>0</z>
+				<heading>0</heading>
+				<pitch>0</pitch>
+				<roll>0</roll>
+			</startingLocation>
+			<movement>
+				<dpadUD>
+					horizontal
+				</dpadUD>
+				<dpadLR>
+					strafing
+				</dpadLR>
+				<transSpeed>
+					5.0
+				</transSpeed>
+				<rotSpeed>
+					30.0
+				</rotSpeed>
+			</movement>
+			<head/>
+			<rightHand>
+				<device>
+					<name>wiimote</name>
+				</device>
+				<block>
+					<name>rvhand</name>
+					<type>vhand</type>
+				</block>
+			</rightHand>
+			<leftHand>
+				<device>
+					<name>wiimote</name>
+				</device>
+				<block>
+					<name>lextend</name>
+					<type>extend</type>
+				</block>
+			</leftHand>
+		</user>
+		<object>
+			<type>OBJ</type>
+			<name>MrDungeonRoom5</name>
+			<resourceName>MrDungeonRoom.obj</resourceName>
+			<x>0</x>
+			<y>4</y>
+			<z>-5</z>
+			<heading>-0</heading>
+			<pitch>0</pitch>
+			<roll>0</roll>
+			<scale>37.3094</scale>
+		</object>
+		<object>
+			<type>OBJ</type>
+			<name>MrBookshelf6</name>
+			<resourceName>MrBookshelf.obj</resourceName>
+			<x>-3</x>
+			<y>3</y>
+			<z>-7</z>
+			<heading>-0</heading>
+			<pitch>0</pitch>
+			<roll>0</roll>
+			<scale>1.84366</scale>
+		</object>
+		<object>
+			<type>OBJ</type>
+			<name>MrCreepyBook7</name>
+			<resourceName>MrCreepyBook.obj</resourceName>
+			<x>-3</x>
+			<y>4</y>
+			<z>-7</z>
+			<heading>-0</heading>
+			<pitch>0</pitch>
+			<roll>-1.5708</roll>
+			<scale>0.813935</scale>
+		</object>
+	</profile>
+</project>
+
