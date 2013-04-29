@@ -3,6 +3,10 @@ Kosmos
 
 **Important**: before running this project it should be correctly setup.
 Any sound files should be copied to the rsc folder of Aszgard. The constants.h should be modified to reflect proper paths.
+On the same level as Kosmos there should be a 'sandbox' folder and any projects created will go in there, a new folder should be
+created for each project before entering Kosmos. As an example, if Kosmos is at .../projects/Kosmos or .../projects/Prototype then
+there should exist a folder .../projects/sandbox and .../projects/sandbox/myNewProject  
+Before doing anything in the environment you should create or load a project. ie. do not import before creating a project.
 Have fun!
 
 An <a href="http://syzygy.isl.uiuc.edu/aszgard/index.html" title="Aszgard page">Aszgard</a> application.
