@@ -47,6 +47,34 @@ The SQUAD works by filtering through objects in certain quadrants (areas, sepera
 ie. If the top quadrant contains more than one item, and you press the up arrow, then  
 	the items in the top quadrant will redistribute themselves in all the quadrants.  
   
+Left Hand Device:  
+•	A virtual tablet is co-located to the left hand and arm  
+•	A text menu displays on the virtual tablet  
+•	The ‘Home’ button turns the virtual menu on and off  
+•	2 DOF for menu navigation (the Wiimote D-pad)  
+•	Select button while in the menu is ‘forward’ on the D-pad or the ‘A’ button.  
+•	Ray-Casting  
+•	The programmer can swap Ray-Casting for Sphere casting QUAD-menu, a progressive refinement technique, for individual object selection by pressing the ‘-’  
+  
+Right Hand Device:  
+•	Virtual Hand  
+•	3 DOF programmer navigation (point and fly), forward, reverse, and left and right panning  
+•	Swap from Virtual Hand to Ray-Casting by pressing the ‘+’ button on the Wiimote  
+  
+Functionality for prototype end-user selection techniques:  
+•	The programmer can select either of the Wiimotes on the Avatar, then through the menu, assign one of three distinct User Interactions that can be later used by the end-user in the programmed environment  
+•	Virtual Hand  
+•	Ray-Casting  
+•	SQUAD  
+•	Ability to import OBJs into environment through menu selections and the local files  
+•	Scale objects in the environment  
+•	Delete objects in the environment  
+•	Load a default template or prior Kosmos project  
+•	Ability to map user movement (i.e. decide how user can move)  
+•	Ability to output (export) runnable code in an Aszgard format  
+
+  
+  
 **Running notes**
 --------------
 *Note*: in order for the music to work the mp3 files need to be copied from the data/music folder into aszgard5/szg/rsc  
