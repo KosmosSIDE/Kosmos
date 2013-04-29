@@ -12,8 +12,8 @@ This project is an IDE for developing Aszgard applications.
 
 **Features**
 --------------
-- *Project*
-The tablet has a project menu, this is used to create, save, load and generate projects.
+- *Project*  
+The tablet has a project menu, this is used to create, save, load and generate projects.  
 Note: all templates end with '.kide' and all project files end in '.kproj'  
 Creating a new project works by selecting a template, if you are unsure which to use, use blankProject.kide  
 Saving a project saves the project file to the directory it was created or loaded from. It does NOT generate the code.  
